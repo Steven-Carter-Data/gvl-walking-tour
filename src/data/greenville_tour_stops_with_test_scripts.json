@@ -1,0 +1,180 @@
+{
+  "tour_id": "falls-park-greenville-mvp",
+  "currency": "USD",
+  "price": 9.99,
+  "stops": [
+    {
+      "id": "liberty-bridge-falls-park-entrance",
+      "order": 1,
+      "title": "Liberty Bridge — Falls Park Entrance",
+      "coordinates": {
+        "lat": 34.844718,
+        "lng": -82.400642
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Welcome to the Liberty Bridge overlooking Falls Park. Placeholder: Introduce Greenville's renaissance, the bridge's design, and how this tour works.",
+      "audio_url": "https://example.com/audio/liberty-bridge-intro.mp3",
+      "image_urls": [
+        "https://example.com/images/liberty-bridge-1.jpg",
+        "https://example.com/images/liberty-bridge-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "reedy-river-falls-and-old-mill-ruins",
+      "order": 2,
+      "title": "Reedy River Falls and Old Mill Ruins",
+      "coordinates": {
+        "lat": 34.844779,
+        "lng": -82.401699
+      },
+      "radius_m": 30,
+      "duration_sec_estimate": 300,
+      "description": "Face the waterfall from the lower path and explore the nearby brick and stone remnants. Placeholder: Textile era to park restoration; environmental cleanup, cotton mills, industry, and the Reedy's working past.",
+      "audio_url": "https://example.com/audio/reedy-river-falls-and-mill-ruins.mp3",
+      "image_urls": [
+        "https://example.com/images/reedy-falls-1.jpg",
+        "https://example.com/images/reedy-falls-2.jpg",
+        "https://example.com/images/mill-ruins-1.jpg",
+        "https://example.com/images/mill-ruins-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "west-end-historic-gateway",
+      "order": 3,
+      "title": "West End Historic District Gateway",
+      "coordinates": {
+        "lat": 34.8428,
+        "lng": -82.4051
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Transition from river park to Main Street. Placeholder: Revitalization of the West End and adaptive reuse.",
+      "audio_url": "https://example.com/audio/west-end-gateway.mp3",
+      "image_urls": [
+        "https://example.com/images/west-end-1.jpg",
+        "https://example.com/images/west-end-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "peace-center-plaza",
+      "order": 5,
+      "title": "Peace Center Plaza",
+      "coordinates": {
+        "lat": 34.8470,
+        "lng": -82.4015
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 210,
+      "description": "Stand near the plaza fountains. Placeholder: From warehouse district to performing arts hub; cultural heartbeat of Greenville.",
+      "audio_url": "https://example.com/audio/peace-center.mp3",
+      "image_urls": [
+        "https://example.com/images/peace-center-1.jpg",
+        "https://example.com/images/peace-center-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "shoeless-joe-jackson-statue",
+      "order": 4,
+      "title": "Shoeless Joe Jackson Statue",
+      "coordinates": {
+        "lat": 34.8421,
+        "lng": -82.4086
+      },
+      "radius_m": 25,
+      "duration_sec_estimate": 210,
+      "description": "At S Main & Augusta. Placeholder: Joe Jackson's early life, baseball stardom, and local legacy.",
+      "audio_url": "https://example.com/audio/shoeless-joe.mp3",
+      "image_urls": [
+        "https://example.com/images/shoeless-joe-1.jpg",
+        "https://example.com/images/shoeless-joe-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "wyche-pavilion",
+      "order": 6,
+      "title": "Wyche Pavilion",
+      "coordinates": {
+        "lat": 34.8474,
+        "lng": -82.4012
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Open-air brick pavilion on the river. Placeholder: Carriage factory history and community events today.",
+      "audio_url": "https://example.com/audio/wyche-pavilion.mp3",
+      "image_urls": [
+        "https://example.com/images/wyche-pavilion-1.jpg",
+        "https://example.com/images/wyche-pavilion-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "historic-main-street-one-city-plaza",
+      "order": 7,
+      "title": "Historic Main Street — One City Plaza",
+      "coordinates": {
+        "lat": 34.8510,
+        "lng": -82.3996
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Pedestrian-friendly Main Street. Placeholder: Urban design decisions, shade trees, local businesses, and plazas.",
+      "audio_url": "https://example.com/audio/main-street.mp3",
+      "image_urls": [
+        "https://example.com/images/main-street-1.jpg",
+        "https://example.com/images/main-street-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "old-county-courthouse-poinsett-view",
+      "order": 8,
+      "title": "Old County Courthouse / Poinsett Hotel View",
+      "coordinates": {
+        "lat": 34.8516,
+        "lng": -82.3987
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Corner of Main & Court Streets. Placeholder: Poinsett Hotel's legacy and civic architecture around Court Street.",
+      "audio_url": "https://example.com/audio/courthouse-poinsett.mp3",
+      "image_urls": [
+        "https://example.com/images/poinsett-1.jpg",
+        "https://example.com/images/courthouse-1.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "falls-park-gardens-closing",
+      "order": 9,
+      "title": "Falls Park Gardens (Closing Stop)",
+      "coordinates": {
+        "lat": 34.8443,
+        "lng": -82.4015
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Near the bridge entrance in the gardens. Placeholder: Recap Greenville's transformation and invite further exploration.",
+      "audio_url": "https://example.com/audio/closing-gardens.mp3",
+      "image_urls": [
+        "https://example.com/images/falls-park-gardens-1.jpg",
+        "https://example.com/images/falls-park-gardens-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    }
+  ]
+}

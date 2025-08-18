@@ -1,0 +1,368 @@
+/* Import Basecamp Data Analytics Fonts from theme.json */
+@import url('https://fonts.googleapis.com/css2?family=Anton:wght@400;700;800&family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Epilogue', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #e5e3dc;
+  color: #303636;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Basecamp Data Analytics Design System - Using basecamp_theme.json colors */
+:root {
+  /* Colors from basecamp_theme.json */
+  --bc-bg: #e5e3dc;
+  --bc-text: #303636;
+  --bc-accent: #d4967d;
+  --bc-accent-contrast: #ffffff;
+  --bc-muted: #303636;
+  --bc-border: #495a58;
+  
+  /* Brand colors from theme */
+  --bc-primary: #495a58;
+  --bc-primary-contrast: #ffffff;
+  --bc-surface-card: #ffffff;
+  --bc-surface-muted: #303636;
+  --bc-text-on-dark: #ffffff;
+  --bc-text-secondary: #495a58;
+  --bc-text-muted: #d4967d;
+  
+  /* Button colors from theme */
+  --bc-btn-primary-bg: #d4967d;
+  --bc-btn-primary-text: #ffffff;
+  --bc-btn-secondary-bg: #e5e3dc;
+  --bc-btn-secondary-text: #303636;
+  
+  /* Map colors from theme */
+  --bc-map-marker: #d4967d;
+  --bc-map-geofence: rgba(212, 150, 125, 0.25);
+}
+
+/* Typography - From basecamp_theme.json */
+body {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+  color: var(--bc-text);
+  background-color: var(--bc-bg);
+}
+
+/* Bold heading font from theme.json */
+.bc-heading {
+  font-family: 'Anton', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--bc-text-on-dark);
+}
+
+.bc-body-text {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Utility Classes with Basecamp Theme */
+.min-h-screen { min-height: 100vh; }
+.h-screen { height: 100vh; }
+.bg-bc-bg { background-color: var(--bc-bg); }
+.bg-bc-primary { background-color: var(--bc-primary); }
+.bg-bc-accent { background-color: var(--bc-accent); }
+.bg-bc-surface { background-color: var(--bc-surface-card); }
+.bg-bc-muted { background-color: var(--bc-surface-muted); }
+.bg-opacity-10 { background-color: rgba(255, 255, 255, 0.1); }
+.bg-opacity-20 { background-color: rgba(0, 0, 0, 0.2); }
+
+.text-bc-on-dark { color: var(--bc-text-on-dark); }
+.text-bc-primary { color: var(--bc-text); }
+.text-bc-secondary { color: var(--bc-text-secondary); }
+.text-bc-muted { color: var(--bc-text-muted); }
+.text-bc-accent { color: var(--bc-accent); }
+
+/* BDA-style gradient header - Dark with mountain/outdoor theme */
+.gradient-header {
+  background: linear-gradient(135deg, var(--bda-darker-bg) 0%, var(--bda-dark-bg) 100%);
+}
+
+/* Basecamp Typography Classes from theme.json */
+.bc-brand-text {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  color: var(--bc-accent);
+}
+
+.bc-title {
+  font-family: 'Anton', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.bc-h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+}
+
+.bc-h2 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+}
+
+.bc-h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Basecamp accent underline */
+.bc-underline {
+  border-bottom: 4px solid var(--bc-accent);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* Basecamp Button Styles from theme.json */
+.bc-btn-primary {
+  background: var(--bc-btn-primary-bg);
+  color: var(--bc-btn-primary-text);
+  border: none;
+  border-radius: 16px;
+  padding: 18px 36px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.bc-btn-primary:hover {
+  background: var(--bc-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+}
+
+.bda-btn-secondary {
+  background: var(--bda-btn-secondary-bg);
+  color: var(--bda-btn-secondary-text);
+  border: 2px solid var(--bda-orange-accent);
+  border-radius: 8px;
+  padding: 14px 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Basecamp theme utilities */
+.bc-primary-bg { 
+  background-color: var(--bc-primary);
+}
+.bc-muted-bg { 
+  background-color: var(--bc-surface-muted);
+}
+.bc-card-bg {
+  background-color: var(--bc-surface-card);
+}
+.text-bc-on-dark { color: var(--bc-text-on-dark); }
+.text-bc-accent { color: var(--bc-accent); }
+.text-bc-muted { color: var(--bc-text-muted); }
+.text-bc-primary { color: var(--bc-text); }
+.text-bc-secondary { color: var(--bc-text-secondary); }
+
+.shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+.shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+.border { border: 1px solid #e5e7eb; }
+.border-white { border-color: #ffffff; }
+.border-opacity-20 { border-color: rgba(255, 255, 255, 0.2); }
+.border-gray-200 { border-color: #e5e7eb; }
+.border-gray-600 { border-color: #4b5563; }
+.border-green-200 { border-color: #bbf7d0; }
+
+.rounded-full { border-radius: 50%; }
+.rounded-xl { border-radius: 0.75rem; }
+.rounded-2xl { border-radius: 1rem; }
+
+.p-4 { padding: 1rem; }
+.p-6 { padding: 1.5rem; }
+.p-8 { padding: 2rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.px-8 { padding-left: 2rem; padding-right: 2rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.py-5 { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+.py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+.py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mr-3 { margin-right: 0.75rem; }
+.mr-4 { margin-right: 1rem; }
+.ml-4 { margin-left: 1rem; }
+
+.w-12 { width: 3rem; }
+.w-16 { width: 4rem; }
+.w-20 { width: 5rem; }
+.w-3 { width: 0.75rem; }
+.h-12 { height: 3rem; }
+.h-16 { height: 4rem; }
+.h-20 { height: 5rem; }
+.h-3 { height: 0.75rem; }
+.w-full { width: 100%; }
+
+.flex { display: flex; }
+.flex-1 { flex: 1 1 0%; }
+.flex-col { flex-direction: column; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.space-y-6 > * + * { margin-top: 1.5rem; }
+
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+.text-4xl { font-size: 2.25rem; }
+
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-black { font-weight: 900; }
+.font-light { font-weight: 300; }
+
+.leading-tight { line-height: 1.25; }
+.leading-relaxed { line-height: 1.625; }
+.tracking-wide { letter-spacing: 0.025em; }
+.uppercase { text-transform: uppercase; }
+
+.overflow-hidden { overflow: hidden; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+.max-w-lg { max-width: 32rem; }
+.max-w-md { max-width: 28rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+.opacity-20 { opacity: 0.2; }
+.opacity-90 { opacity: 0.9; }
+
+.transition-colors { transition-property: color, background-color, border-color; }
+.transition-all { transition-property: all; }
+.duration-200 { transition-duration: 200ms; }
+
+.hover\\:bg-blue-700:hover { background-color: #1d4ed8; }
+.hover\\:bg-green-700:hover { background-color: #15803d; }
+.hover\\:bg-indigo-700:hover { background-color: #3730a3; }
+.hover\\:text-green-900:hover { color: #14532d; }
+
+/* Premium Button Styles */
+.premium-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.premium-btn-blue {
+  background-color: #2563eb;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+.premium-btn-blue:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.premium-btn-green {
+  background-color: #16a34a;
+  color: white;
+  padding: 1.25rem 2rem;
+  font-size: 1.25rem;
+}
+
+.premium-btn-green:hover {
+  background-color: #15803d;
+  transform: translateY(-1px);
+}
+
+.premium-btn-indigo {
+  background-color: #4f46e5;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+.premium-btn-indigo:hover {
+  background-color: #3730a3;
+  transform: translateY(-1px);
+}
+
+/* Premium Card Styles */
+.premium-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e5e7eb;
+}
+
+.premium-feature-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
+  border: 1px solid #f3f4f6;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
