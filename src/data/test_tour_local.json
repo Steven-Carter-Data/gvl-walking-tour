@@ -1,0 +1,87 @@
+{
+  "tour_id": "local-testing-neighborhood",
+  "currency": "USD",
+  "price": 0.01,
+  "stops": [
+    {
+      "id": "home-base-start",
+      "order": 1,
+      "title": "Test Stop 1: Home Base",
+      "coordinates": {
+        "lat": 34.889022,
+        "lng": -82.312002
+      },
+      "radius_m": 10,
+      "duration_sec_estimate": 60,
+      "description": "Starting point for local testing. Test GPS accuracy and audio playback here.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "north-test-stop",
+      "order": 2,
+      "title": "Test Stop 2: North Point",
+      "coordinates": {
+        "lat": 34.889122,
+        "lng": -82.312002
+      },
+      "radius_m": 10,
+      "duration_sec_estimate": 60,
+      "description": "Walk north about 30 feet from home base. Test geofencing trigger when entering this area.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "east-test-stop",
+      "order": 3,
+      "title": "Test Stop 3: East Point",
+      "coordinates": {
+        "lat": 34.889022,
+        "lng": -82.311902
+      },
+      "radius_m": 10,
+      "duration_sec_estimate": 60,
+      "description": "Walk east about 30 feet. Test GPS accuracy and tour progression logic.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "south-test-stop",
+      "order": 4,
+      "title": "Test Stop 4: South Point",
+      "coordinates": {
+        "lat": 34.888922,
+        "lng": -82.312002
+      },
+      "radius_m": 10,
+      "duration_sec_estimate": 60,
+      "description": "Walk south about 30 feet from home base. Test mobile audio autoplay behavior.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "west-test-stop",
+      "order": 5,
+      "title": "Test Stop 5: West Point (End)",
+      "coordinates": {
+        "lat": 34.889022,
+        "lng": -82.312102
+      },
+      "radius_m": 10,
+      "duration_sec_estimate": 60,
+      "description": "Final test stop to the west. Test tour completion and payment flow.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    }
+  ]
+}
