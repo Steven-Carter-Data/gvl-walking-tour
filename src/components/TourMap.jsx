@@ -12,17 +12,37 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom icons
-const userLocationIcon = new L.Icon({
-  iconUrl: 'data:image/svg+xml;base64,' + btoa(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#3B82F6" width="24" height="24">
-      <circle cx="12" cy="12" r="8"/>
-      <circle cx="12" cy="12" r="3" fill="white"/>
-    </svg>
-  `),
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
-});
+// Dynamic user location icon with direction arrow
+const createUserLocationIcon = (heading = null, accuracy = null) => {
+  const hasHeading = heading !== null && heading !== undefined && !isNaN(heading);
+  const color = accuracy && accuracy < 10 ? '#10B981' : accuracy && accuracy < 20 ? '#3B82F6' : '#F59E0B';
+  
+  return new L.Icon({
+    iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+        <!-- Accuracy circle -->
+        <circle cx="16" cy="16" r="14" fill="white" stroke="${color}" stroke-width="2" opacity="0.9"/>
+        <circle cx="16" cy="16" r="10" fill="${color}" opacity="0.8"/>
+        <circle cx="16" cy="16" r="4" fill="white"/>
+        
+        <!-- Direction arrow (only if heading available) -->
+        ${hasHeading ? `
+          <g transform="rotate(${heading} 16 16)">
+            <path d="M16 4 L20 12 L16 10 L12 12 Z" fill="white" stroke="${color}" stroke-width="1"/>
+          </g>
+        ` : ''}
+        
+        <!-- GPS accuracy indicator -->
+        <circle cx="26" cy="6" r="3" fill="${color}" opacity="0.8"/>
+        <text x="26" y="8" text-anchor="middle" fill="white" font-size="6" font-weight="bold">
+          ${accuracy ? Math.round(accuracy * 3.28084) : 'GPS'}
+        </text>
+      </svg>
+    `),
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  });
+};
 
 const tourStopIcon = new L.Icon({
   iconUrl: 'data:image/svg+xml;base64,' + btoa(`
@@ -62,6 +82,7 @@ const lockedStopIcon = new L.Icon({
 
 function LocationTracker({ userLocation, tourStops, tourPurchased, onStopTriggered }) {
   const map = useMap();
+  const [triggeredStops, setTriggeredStops] = useState(new Set());
   
   useEffect(() => {
     if (!userLocation || !tourPurchased) return;
@@ -75,13 +96,24 @@ function LocationTracker({ userLocation, tourStops, tourPurchased, onStopTrigger
         stop.coordinates.lng
       );
       
-      if (distance <= stop.radius_m) {
-        // User is within this stop's geofence
-        console.log(`User entered stop: ${stop.title}`);
+      console.log(`📍 Distance to ${stop.title}: ${Math.round(distance)}m (geofence: ${stop.radius_m}m)`);
+      
+      if (distance <= stop.radius_m && !triggeredStops.has(stop.id)) {
+        // User is within this stop's geofence and hasn't been triggered yet
+        console.log(`🎯 GEOFENCE TRIGGERED: ${stop.title}`);
+        setTriggeredStops(prev => new Set([...prev, stop.id]));
         onStopTriggered(stop);
+      } else if (distance > stop.radius_m + 10 && triggeredStops.has(stop.id)) {
+        // User is well outside the geofence, allow re-triggering
+        console.log(`🚶 Left geofence for: ${stop.title}`);
+        setTriggeredStops(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(stop.id);
+          return newSet;
+        });
       }
     });
-  }, [userLocation, tourStops, tourPurchased, onStopTriggered]);
+  }, [userLocation, tourStops, tourPurchased, onStopTriggered, triggeredStops]);
 
   // Removed automatic map centering on user location to keep focus on tour area
 
@@ -103,7 +135,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * c; // Distance in meters
 }
 
-function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBack }) {
+function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBack, isTestMode = false }) {
   const [selectedStop, setSelectedStop] = useState(null);
   const [walkingRoute, setWalkingRoute] = useState([]);
   const [routeLoading, setRouteLoading] = useState(false);
@@ -423,11 +455,21 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
           {userLocation && (
             <Marker 
               position={[userLocation.lat, userLocation.lng]}
-              icon={userLocationIcon}
+              icon={createUserLocationIcon(userLocation.heading, userLocation.accuracy)}
             >
               <Popup>
                 <div className="text-center">
                   <strong>Your Location</strong>
+                  {userLocation.accuracy && (
+                    <div style={{fontSize: '12px', color: '#666'}}>
+                      Accuracy: ±{Math.round(userLocation.accuracy * 3.28084)}ft
+                    </div>
+                  )}
+                  {userLocation.heading && (
+                    <div style={{fontSize: '12px', color: '#666'}}>
+                      Heading: {Math.round(userLocation.heading)}°
+                    </div>
+                  )}
                 </div>
               </Popup>
             </Marker>
@@ -488,10 +530,11 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
                   center={[stop.coordinates.lat, stop.coordinates.lng]}
                   radius={stop.radius_m}
                   pathOptions={{
-                    color: '#16A34A',
-                    fillColor: '#16A34A',
-                    fillOpacity: 0.1,
-                    weight: 1,
+                    color: isTestMode ? '#DC2626' : '#16A34A',
+                    fillColor: isTestMode ? '#DC2626' : '#16A34A',
+                    fillOpacity: isTestMode ? 0.3 : 0.1,
+                    weight: isTestMode ? 3 : 1,
+                    dashArray: isTestMode ? '5, 10' : null,
                   }}
                 />
               </div>

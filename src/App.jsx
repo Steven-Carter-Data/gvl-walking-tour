@@ -19,23 +19,60 @@ function App() {
   const activeTourData = isTestMode ? testTourData : tourData;
 
   useEffect(() => {
-    // Request location permissions on app load
+    let watchId;
+    
+    // Start continuous GPS tracking
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      console.log('🛰️ Starting continuous GPS tracking...');
+      
+      watchId = navigator.geolocation.watchPosition(
         (position) => {
-          setUserLocation({
+          const newLocation = {
             lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
+            lng: position.coords.longitude,
+            accuracy: position.coords.accuracy,
+            heading: position.coords.heading,
+            speed: position.coords.speed,
+            timestamp: position.timestamp
+          };
+          
+          console.log('📍 GPS Update:', newLocation);
+          setUserLocation(newLocation);
         },
         (error) => {
-          console.error('Location access denied:', error);
+          console.error('❌ GPS tracking error:', error);
+          
+          // Fallback to single position request
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              console.log('📍 Fallback GPS position obtained');
+              setUserLocation({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                accuracy: position.coords.accuracy
+              });
+            },
+            (fallbackError) => {
+              console.error('❌ Fallback GPS also failed:', fallbackError);
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+          );
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+        { 
+          enableHighAccuracy: true,    // Use GPS, not network location
+          timeout: 15000,              // 15 second timeout
+          maximumAge: 5000             // Accept positions up to 5 seconds old
+        }
       );
     }
 
-    // Tour is free for MVP - no purchase check needed
+    // Cleanup: stop watching location when component unmounts
+    return () => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+        console.log('🛑 GPS tracking stopped');
+      }
+    };
   }, []);
 
   const handleScreenChange = (screen) => {
@@ -76,6 +113,7 @@ function App() {
           tourPurchased={tourPurchased}
           onStopTriggered={handleStopTriggered}
           onBack={() => handleScreenChange('welcome')}
+          isTestMode={isTestMode}
         />
       )}
       

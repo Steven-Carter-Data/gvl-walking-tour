@@ -17,6 +17,11 @@ function AudioPlayer({ stop, isPlaying, onClose }) {
     const handleEnded = () => {
       setPlaying(false);
       setCurrentTime(0);
+      // Auto-close audio player when audio finishes
+      console.log('🎵 Audio finished, closing player');
+      setTimeout(() => {
+        onClose();
+      }, 1000); // Brief delay to show completion
     };
 
     audio.addEventListener('timeupdate', updateTime);
@@ -30,13 +35,20 @@ function AudioPlayer({ stop, isPlaying, onClose }) {
     };
   }, []);
 
-  // Removed automatic audio playback - user must click play manually
-  // useEffect(() => {
-  //   if (isPlaying && audioRef.current) {
-  //     audioRef.current.play();
-  //     setPlaying(true);
-  //   }
-  // }, [isPlaying]);
+  // Auto-start audio when geofence is triggered
+  useEffect(() => {
+    if (isPlaying && audioRef.current) {
+      console.log('🎵 Auto-playing audio for:', stop.title);
+      audioRef.current.play()
+        .then(() => {
+          setPlaying(true);
+        })
+        .catch((error) => {
+          console.error('❌ Audio autoplay failed:', error);
+          // Audio autoplay blocked by browser - user will need to tap play
+        });
+    }
+  }, [isPlaying, stop.title]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -199,16 +211,21 @@ function AudioPlayer({ stop, isPlaying, onClose }) {
       bottom: 0,
       zIndex: 50
     }}>
-      {/* Backdrop */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(67, 56, 202, 0.4))',
-        backdropFilter: 'blur(12px)'
-      }}></div>
+      {/* Backdrop - click to close */}
+      <div 
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(67, 56, 202, 0.4))',
+          backdropFilter: 'blur(12px)',
+          cursor: 'pointer'
+        }}
+        onClick={onClose}
+        title="Tap to close audio player"
+      ></div>
       
       {/* Main container */}
       <div style={{
@@ -218,13 +235,16 @@ function AudioPlayer({ stop, isPlaying, onClose }) {
         display: 'flex',
         alignItems: 'flex-end'
       }}>
-        <div style={{
-          width: '100%',
-          backgroundColor: 'white',
-          borderRadius: '48px 48px 0 0',
-          maxHeight: '90vh',
-          overflowY: 'auto'
-        }}>
+        <div 
+          style={{
+            width: '100%',
+            backgroundColor: 'white',
+            borderRadius: '48px 48px 0 0',
+            maxHeight: '90vh',
+            overflowY: 'auto'
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
           {/* Header */}
           <div style={{
             position: 'sticky',
@@ -256,8 +276,25 @@ function AudioPlayer({ stop, isPlaying, onClose }) {
                     cursor: 'pointer',
                     fontSize: '18px'
                   }}
+                  title="Minimize player"
                 >
                   ⬇️
+                </button>
+                <button
+                  onClick={onClose}
+                  style={{
+                    padding: '12px',
+                    background: '#fecaca',
+                    color: '#dc2626',
+                    borderRadius: '16px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '18px',
+                    fontWeight: 'bold'
+                  }}
+                  title="Close audio player"
+                >
+                  ✕
                 </button>
                 
                 <div style={{
