@@ -14,7 +14,7 @@
       "radius_m": 25,
       "duration_sec_estimate": 10,
       "description": "Starting point for local testing. Test GPS accuracy and audio playback here.",
-      "audio_url": "https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=Test stop one activated. GPS geofencing is working correctly.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -30,7 +30,7 @@
       "radius_m": 25,
       "duration_sec_estimate": 10,
       "description": "Second test stop to the north. Test geofencing trigger when entering this area.",
-      "audio_url": "https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=You have reached test stop number two. Audio system functioning properly.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -46,7 +46,7 @@
       "radius_m": 25,
       "duration_sec_estimate": 10,
       "description": "Third test stop to the northeast. Test GPS accuracy and tour progression logic.",
-      "audio_url": "https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=Test stop three reached successfully. Mobile audio playback is working.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -62,7 +62,7 @@
       "radius_m": 25,
       "duration_sec_estimate": 10,
       "description": "Final test stop to the southeast. Test mobile audio autoplay and tour completion.",
-      "audio_url": "https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=Final test stop completed. All geofencing and audio systems are operational.",
+      "audio_url": "/audio/Liberty_bridge_sample.m4a",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"

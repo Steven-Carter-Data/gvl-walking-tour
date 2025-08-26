@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 
-function AudioPlayer({ stop, isPlaying, onClose }) {
+function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [showPlayPrompt, setShowPlayPrompt] = useState(false);
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -13,7 +14,10 @@ function AudioPlayer({ stop, isPlaying, onClose }) {
     if (!audio) return;
 
     const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
+    const updateDuration = () => {
+      console.log('📊 Audio metadata loaded. Duration:', audio.duration);
+      setDuration(audio.duration);
+    };
     const handleEnded = () => {
       setPlaying(false);
       setCurrentTime(0);
@@ -23,41 +27,92 @@ function AudioPlayer({ stop, isPlaying, onClose }) {
         onClose();
       }, 1000); // Brief delay to show completion
     };
+    const handleError = (e) => {
+      console.error('❌ Audio loading error:', e);
+      console.error('Audio error details:', {
+        error: audio.error,
+        code: audio.error?.code,
+        message: audio.error?.message,
+        src: audio.src
+      });
+    };
+    const handleLoadStart = () => {
+      console.log('📡 Audio loading started from:', audio.src);
+    };
+    const handleCanPlay = () => {
+      console.log('✅ Audio can play (enough data loaded)');
+    };
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateDuration);
     audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('loadstart', handleLoadStart);
+    audio.addEventListener('canplay', handleCanPlay);
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('loadstart', handleLoadStart);
+      audio.removeEventListener('canplay', handleCanPlay);
     };
   }, []);
 
-  // Auto-start audio when geofence is triggered
-  useEffect(() => {
-    if (isPlaying && audioRef.current) {
-      console.log('🎵 Auto-playing audio for:', stop.title);
-      audioRef.current.play()
-        .then(() => {
-          setPlaying(true);
-        })
-        .catch((error) => {
-          console.error('❌ Audio autoplay failed:', error);
-          // Audio autoplay blocked by browser - user will need to tap play
-        });
-    }
-  }, [isPlaying, stop.title]);
+  // Disabled autoplay - focus on manual play button functionality
+  // useEffect(() => {
+  //   if (isPlaying && audioRef.current && audioUnlocked) {
+  //     console.log('🎵 Auto-playing audio for:', stop.title, '(Audio unlocked:', audioUnlocked, ')');
+  //     audioRef.current.play()
+  //       .then(() => {
+  //         setPlaying(true);
+  //         console.log('✅ Audio autoplay successful');
+  //       })
+  //       .catch((error) => {
+  //         console.error('❌ Audio autoplay failed despite unlock:', error);
+  //         setShowPlayPrompt(true);
+  //       });
+  //   } else if (isPlaying && !audioUnlocked) {
+  //     console.log('⚠️ Geofence triggered but audio not unlocked - user must tap play');
+  //     setShowPlayPrompt(true);
+  //   }
+  // }, [isPlaying, stop.title, audioUnlocked]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
+    if (!audio) {
+      console.error('❌ Audio element not found');
+      return;
+    }
+    
+    console.log('🎵 Toggle play button pressed. Current state:', {
+      playing,
+      audioSrc: audio.src,
+      readyState: audio.readyState,
+      networkState: audio.networkState
+    });
+    
     if (playing) {
+      console.log('⏸️ Pausing audio');
       audio.pause();
       setPlaying(false);
     } else {
-      audio.play();
-      setPlaying(true);
+      console.log('▶️ Attempting to play audio from:', audio.src);
+      audio.play()
+        .then(() => {
+          console.log('✅ Audio play successful');
+          setPlaying(true);
+        })
+        .catch((error) => {
+          console.error('❌ Audio play failed:', error);
+          console.error('Audio element state:', {
+            src: audio.src,
+            readyState: audio.readyState,
+            networkState: audio.networkState,
+            error: audio.error
+          });
+        });
     }
   };
 

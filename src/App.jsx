@@ -14,6 +14,7 @@ function App() {
   const [currentStop, setCurrentStop] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTestMode, setIsTestMode] = useState(false); // Toggle for local testing
+  const [audioUnlocked, setAudioUnlocked] = useState(false); // Track if user has enabled audio
   
   // Choose tour data based on test mode
   const activeTourData = isTestMode ? testTourData : tourData;
@@ -77,6 +78,24 @@ function App() {
 
   const handleScreenChange = (screen) => {
     setCurrentScreen(screen);
+    // Unlock audio on first user interaction
+    if (!audioUnlocked) {
+      unlockAudio();
+    }
+  };
+  
+  const unlockAudio = () => {
+    console.log('🔓 Attempting to unlock audio for autoplay...');
+    // Create a silent audio context to unlock audio
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const buffer = audioContext.createBuffer(1, 1, 22050);
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioContext.destination);
+    source.start(0);
+    
+    setAudioUnlocked(true);
+    console.log('✅ Audio unlocked for autoplay');
   };
 
   const handlePurchaseComplete = () => {
@@ -121,6 +140,7 @@ function App() {
         <AudioPlayer
           stop={currentStop}
           isPlaying={isPlaying}
+          audioUnlocked={audioUnlocked}
           onClose={() => {
             setIsPlaying(false);
             setCurrentStop(null);
