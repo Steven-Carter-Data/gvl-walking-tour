@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Test - Falls Park Tour</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .test-button {
+            background: #4f46e5;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 8px;
+            font-size: 16px;
+        }
+        .test-button:hover {
+            background: #3730a3;
+        }
+        .log {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-weight: bold;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee2e2; color: #991b1b; }
+        .warning { background: #fef3c7; color: #92400e; }
+    </style>
+</head>
+<body>
+    <h1>🎵 Audio Test Page</h1>
+    <p>This page tests audio playback to debug the Falls Park Tour app issues.</p>
+    
+    <h2>Test Audio Files</h2>
+    <button class="test-button" onclick="testAudio('/audio/Liberty_bridge_sample.m4a')">Test Liberty Bridge (M4A)</button>
+    <button class="test-button" onclick="testAudio('/audio/test.mp3')">Test Simple MP3</button>
+    <button class="test-button" onclick="createSilentTest()">Test Generated Audio</button>
+    
+    <h2>Audio Info</h2>
+    <div id="audio-info"></div>
+    
+    <h2>Test Results</h2>
+    <div id="status"></div>
+    
+    <h2>Debug Log</h2>
+    <div id="log" class="log"></div>
+    
+    <audio id="test-audio" controls style="width: 100%; margin: 16px 0;"></audio>
+
+    <script>
+        const logElement = document.getElementById('log');
+        const statusElement = document.getElementById('status');
+        const audioElement = document.getElementById('test-audio');
+        const audioInfoElement = document.getElementById('audio-info');
+        
+        function log(message) {
+            console.log(message);
+            logElement.innerHTML += new Date().toISOString() + ': ' + message + '\n';
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function setStatus(message, type = 'info') {
+            statusElement.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        function updateAudioInfo(audio) {
+            audioInfoElement.innerHTML = `
+                <strong>Audio Element State:</strong><br>
+                Source: ${audio.src}<br>
+                Ready State: ${audio.readyState} (${getReadyStateText(audio.readyState)})<br>
+                Network State: ${audio.networkState} (${getNetworkStateText(audio.networkState)})<br>
+                Duration: ${audio.duration || 'Unknown'}<br>
+                Current Time: ${audio.currentTime}<br>
+                Paused: ${audio.paused}<br>
+                Ended: ${audio.ended}<br>
+                Volume: ${audio.volume}<br>
+                Muted: ${audio.muted}<br>
+                Error: ${audio.error ? audio.error.message : 'None'}
+            `;
+        }
+        
+        function getReadyStateText(state) {
+            const states = ['HAVE_NOTHING', 'HAVE_METADATA', 'HAVE_CURRENT_DATA', 'HAVE_FUTURE_DATA', 'HAVE_ENOUGH_DATA'];
+            return states[state] || 'Unknown';
+        }
+        
+        function getNetworkStateText(state) {
+            const states = ['NETWORK_EMPTY', 'NETWORK_IDLE', 'NETWORK_LOADING', 'NETWORK_NO_SOURCE'];
+            return states[state] || 'Unknown';
+        }
+        
+        async function testAudio(url) {
+            log(`🎵 Testing audio: ${url}`);
+            setStatus('Testing audio...', 'warning');
+            
+            audioElement.src = url;
+            
+            // Set up event listeners
+            audioElement.onloadstart = () => log('📡 Load start');
+            audioElement.onloadedmetadata = () => {
+                log('📊 Metadata loaded');
+                updateAudioInfo(audioElement);
+            };
+            audioElement.oncanplay = () => log('✅ Can play');
+            audioElement.oncanplaythrough = () => log('🎯 Can play through');
+            audioElement.onerror = (e) => {
+                log(`❌ Audio error: ${e.message || 'Unknown error'}`);
+                setStatus('Audio failed to load', 'error');
+                updateAudioInfo(audioElement);
+            };
+            audioElement.onplay = () => log('▶️ Playing');
+            audioElement.onpause = () => log('⏸️ Paused');
+            audioElement.onended = () => log('🏁 Ended');
+            
+            try {
+                log('🔄 Loading audio...');
+                audioElement.load();
+                
+                // Wait for audio to be ready
+                await new Promise((resolve, reject) => {
+                    const timeout = setTimeout(() => reject(new Error('Timeout waiting for audio to load')), 10000);
+                    
+                    if (audioElement.readyState >= 2) {
+                        clearTimeout(timeout);
+                        resolve();
+                        return;
+                    }
+                    
+                    audioElement.addEventListener('canplay', () => {
+                        clearTimeout(timeout);
+                        resolve();
+                    }, { once: true });
+                    
+                    audioElement.addEventListener('error', () => {
+                        clearTimeout(timeout);
+                        reject(new Error('Audio failed to load'));
+                    }, { once: true });
+                });
+                
+                log('✅ Audio loaded successfully');
+                updateAudioInfo(audioElement);
+                
+                // Try to play
+                log('▶️ Attempting to play...');
+                await audioElement.play();
+                log('🎉 Audio playing successfully!');
+                setStatus('Audio test successful!', 'success');
+                
+            } catch (error) {
+                log(`❌ Test failed: ${error.message}`);
+                setStatus(`Test failed: ${error.message}`, 'error');
+                updateAudioInfo(audioElement);
+            }
+        }
+        
+        function createSilentTest() {
+            log('🔧 Creating silent test audio...');
+            
+            // Create a simple beep sound using Web Audio API
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 440; // A note
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 1);
+            
+            log('🎵 Generated 1-second beep sound');
+            setStatus('Generated audio test completed', 'success');
+        }
+        
+        // Initial setup
+        log('🚀 Audio test page loaded');
+        log(`User Agent: ${navigator.userAgent}`);
+        log(`Audio Context Support: ${window.AudioContext || window.webkitAudioContext ? 'Yes' : 'No'}`);
+        
+        updateAudioInfo(audioElement);
+    </script>
+</body>
+</html>

@@ -14,105 +14,134 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
     if (!audio) return;
 
     const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => {
-      console.log('📊 Audio metadata loaded. Duration:', audio.duration);
-      setDuration(audio.duration);
-    };
+    const updateDuration = () => setDuration(audio.duration);
     const handleEnded = () => {
       setPlaying(false);
       setCurrentTime(0);
       // Auto-close audio player when audio finishes
-      console.log('🎵 Audio finished, closing player');
       setTimeout(() => {
         onClose();
       }, 1000); // Brief delay to show completion
     };
     const handleError = (e) => {
-      console.error('❌ Audio loading error:', e);
-      console.error('Audio error details:', {
-        error: audio.error,
-        code: audio.error?.code,
-        message: audio.error?.message,
-        src: audio.src
-      });
-    };
-    const handleLoadStart = () => {
-      console.log('📡 Audio loading started from:', audio.src);
-    };
-    const handleCanPlay = () => {
-      console.log('✅ Audio can play (enough data loaded)');
+      console.error('Audio loading error:', audio.error?.message || 'Unknown error');
     };
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateDuration);
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('error', handleError);
-    audio.addEventListener('loadstart', handleLoadStart);
-    audio.addEventListener('canplay', handleCanPlay);
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
-      audio.removeEventListener('loadstart', handleLoadStart);
-      audio.removeEventListener('canplay', handleCanPlay);
     };
   }, []);
 
-  // Disabled autoplay - focus on manual play button functionality
-  // useEffect(() => {
-  //   if (isPlaying && audioRef.current && audioUnlocked) {
-  //     console.log('🎵 Auto-playing audio for:', stop.title, '(Audio unlocked:', audioUnlocked, ')');
-  //     audioRef.current.play()
-  //       .then(() => {
-  //         setPlaying(true);
-  //         console.log('✅ Audio autoplay successful');
-  //       })
-  //       .catch((error) => {
-  //         console.error('❌ Audio autoplay failed despite unlock:', error);
-  //         setShowPlayPrompt(true);
-  //       });
-  //   } else if (isPlaying && !audioUnlocked) {
-  //     console.log('⚠️ Geofence triggered but audio not unlocked - user must tap play');
-  //     setShowPlayPrompt(true);
-  //   }
-  // }, [isPlaying, stop.title, audioUnlocked]);
-
-  const togglePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) {
-      console.error('❌ Audio element not found');
-      return;
+  // Autoplay when geofence triggered and audio is unlocked
+  useEffect(() => {
+    if (isPlaying && audioRef.current && audioUnlocked) {
+      const audio = audioRef.current;
+      
+      const attemptAutoplay = async () => {
+        try {
+          // Force load if not ready
+          if (audio.readyState < 2) {
+            audio.load();
+            await new Promise((resolve, reject) => {
+              const timeout = setTimeout(() => reject(new Error('Autoplay timeout')), 5000);
+              const handleReady = () => {
+                clearTimeout(timeout);
+                audio.removeEventListener('canplay', handleReady);
+                audio.removeEventListener('error', handleError);
+                resolve();
+              };
+              const handleError = (e) => {
+                clearTimeout(timeout);
+                audio.removeEventListener('canplay', handleReady);
+                audio.removeEventListener('error', handleError);
+                reject(e);
+              };
+              
+              if (audio.readyState >= 2) {
+                clearTimeout(timeout);
+                resolve();
+                return;
+              }
+              
+              audio.addEventListener('canplay', handleReady);
+              audio.addEventListener('error', handleError);
+            });
+          }
+          
+          await audio.play();
+          setPlaying(true);
+        } catch (error) {
+          console.error('Autoplay failed:', error.message);
+          setShowPlayPrompt(true);
+        }
+      };
+      
+      attemptAutoplay();
+    } else if (isPlaying && !audioUnlocked) {
+      setShowPlayPrompt(true);
     }
-    
-    console.log('🎵 Toggle play button pressed. Current state:', {
-      playing,
-      audioSrc: audio.src,
-      readyState: audio.readyState,
-      networkState: audio.networkState
-    });
+  }, [isPlaying, stop.title, audioUnlocked]);
+
+  const togglePlay = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
     
     if (playing) {
-      console.log('⏸️ Pausing audio');
       audio.pause();
       setPlaying(false);
     } else {
-      console.log('▶️ Attempting to play audio from:', audio.src);
-      audio.play()
-        .then(() => {
-          console.log('✅ Audio play successful');
-          setPlaying(true);
-        })
-        .catch((error) => {
-          console.error('❌ Audio play failed:', error);
-          console.error('Audio element state:', {
-            src: audio.src,
-            readyState: audio.readyState,
-            networkState: audio.networkState,
-            error: audio.error
+      try {
+        // Force load if not ready
+        if (audio.readyState < 2) {
+          await new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => reject(new Error('Load timeout')), 5000);
+            const handleLoad = () => {
+              clearTimeout(timeout);
+              audio.removeEventListener('canplay', handleLoad);
+              audio.removeEventListener('error', handleError);
+              resolve();
+            };
+            const handleError = (e) => {
+              clearTimeout(timeout);
+              audio.removeEventListener('canplay', handleLoad);
+              audio.removeEventListener('error', handleError);
+              reject(e);
+            };
+            
+            if (audio.readyState >= 2) {
+              clearTimeout(timeout);
+              resolve();
+              return;
+            }
+            
+            audio.addEventListener('canplay', handleLoad);
+            audio.addEventListener('error', handleError);
+            audio.load();
           });
-        });
+        }
+        
+        await audio.play();
+        setPlaying(true);
+      } catch (error) {
+        console.error('Audio playback failed:', error.message);
+        
+        // Try alternative approach
+        try {
+          audio.currentTime = 0;
+          await audio.play();
+          setPlaying(true);
+        } catch (altError) {
+          console.error('Alternative playback failed:', altError.message);
+        }
+      }
     }
   };
 
@@ -434,62 +463,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
           <div style={{
             padding: '32px'
           }}>
-            {/* Images Section */}
-            {stop.image_urls && stop.image_urls.length > 0 && (
-              <div style={{
-                marginBottom: '32px'
-              }}>
-                <h4 style={{
-                  fontSize: '20px',
-                  fontWeight: 'bold',
-                  color: '#111827',
-                  marginBottom: '24px',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}>
-                  <span style={{marginRight: '12px'}}>📸</span>
-                  Historical Gallery
-                </h4>
-                
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '16px'
-                }}>
-                  {stop.image_urls.map((url, index) => (
-                    <div key={index} style={{
-                      backgroundColor: '#f9fafb',
-                      borderRadius: '24px',
-                      overflow: 'hidden',
-                      border: '1px solid #e5e7eb',
-                      aspectRatio: '16/9'
-                    }}>
-                      <img 
-                        src={url}
-                        alt={`${stop.title} - Historical Image ${index + 1}`}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover'
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = `
-                            <div style="display: flex; align-items: center; justify-content: center; height: 100%; text-align: center; color: #6b7280;">
-                              <div>
-                                <div style="font-size: 32px; margin-bottom: 8px;">📷</div>
-                                <div style="font-size: 18px; font-weight: 600;">Historical Image ${index + 1}</div>
-                                <div style="font-size: 14px; color: #9ca3af;">Loading: ${url.split('/').pop()}</div>
-                              </div>
-                            </div>
-                          `;
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Images Section Removed - Audio-First Launch */}
 
             {/* Stop Info */}
             <div style={{

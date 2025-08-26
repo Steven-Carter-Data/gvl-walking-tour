@@ -151,23 +151,25 @@ function App() {
       {/* Admin panel - only shows with ?admin=true */}
       <AdminPanel />
       
-      {/* Test Mode Toggle - for development */}
-      <div style={{
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        zIndex: 1000,
-        backgroundColor: isTestMode ? '#dc2626' : '#16a34a',
-        color: 'white',
-        padding: '12px 16px',
-        borderRadius: '12px',
-        cursor: 'pointer',
-        fontSize: '12px',
-        fontWeight: 'bold',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
-      }} onClick={() => setIsTestMode(!isTestMode)}>
-        {isTestMode ? '🏠 LOCAL TEST' : '🌍 GREENVILLE'}
-      </div>
+      {/* Test Mode Toggle - Hidden in production */}
+      {process.env.NODE_ENV === 'development' && (
+        <div style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          zIndex: 1000,
+          backgroundColor: isTestMode ? '#dc2626' : '#16a34a',
+          color: 'white',
+          padding: '12px 16px',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+        }} onClick={() => setIsTestMode(!isTestMode)}>
+          {isTestMode ? '🏠 LOCAL TEST' : '🌍 GREENVILLE'}
+        </div>
+      )}
     </div>
   );
 }
