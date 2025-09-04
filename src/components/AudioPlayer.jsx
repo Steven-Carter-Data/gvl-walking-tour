@@ -509,7 +509,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                     display: 'inline-block',
                     marginBottom: '16px'
                   }}>
-                    📍 Historical Stop {stop.order} of 10
+                    📍 Historical Stop {stop.order} of 8
                   </span>
                   
                   <p style={{

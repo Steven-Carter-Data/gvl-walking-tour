@@ -1,8 +1,8 @@
-# 🚀 Falls Park Tour - Production Deployment Guide
+# 🚀 Downtown Greenville Self-Guided Walking Tour - Production Deployment Guide
 
 ## Phase 1: Audio-First Launch (Free Tier)
 
-This guide walks you through launching the Falls Park Historical Tour starting with Vercel's free tier, focusing on audio quality and core tour experience first.
+This guide walks you through launching the Downtown Greenville Self-Guided Walking Tour starting with Vercel's free tier, focusing on audio quality and core tour experience first.
 
 ---
 

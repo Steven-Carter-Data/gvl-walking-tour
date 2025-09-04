@@ -51,8 +51,8 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
             Basecamp Presents:
           </p>
           <h1 className="bc-title bc-h1 mb-4" style={{color: '#e5e3dc', fontWeight: '400'}}>
-            <span className="bc-underline">Greenville Self-Guided</span><br />
-            <span>Walking Tour</span>
+            <span className="bc-underline">Downtown Greenville</span><br />
+            <span>Self-Guided Walking Tour</span>
           </h1>
           
           <p className="text-xl text-white mb-6 max-w-lg mx-auto leading-relaxed font-light">
@@ -75,7 +75,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
       <div className="px-6 py-8 bc-card-bg shadow-lg">
         <div className="grid grid-cols-3 gap-6 max-w-md mx-auto">
           <div className="text-center">
-            <div className="text-3xl font-black mb-2" style={{color: '#d4967d'}}>9</div>
+            <div className="text-3xl font-black mb-2" style={{color: '#d4967d'}}>8</div>
             <div className="text-xs font-semibold uppercase tracking-wide" style={{color: '#495a58'}}>
               Historic Stops
             </div>

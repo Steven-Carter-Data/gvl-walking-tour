@@ -1,5 +1,5 @@
 {
-  "tour_id": "falls-park-greenville-mvp",
+  "tour_id": "downtown-greenville-self-guided-walking-tour",
   "currency": "USD",
   "price": 9.99,
   "stops": [
@@ -79,54 +79,39 @@
       "geofence_type": "circle"
     },
     {
-      "id": "wyche-pavilion",
-      "order": 6,
-      "title": "Wyche Pavilion",
-      "coordinates": {
-        "lat": 34.8474,
-        "lng": -82.4012
-      },
-      "radius_m": 20,
-      "duration_sec_estimate": 180,
-      "description": "Open-air brick pavilion on the river. Placeholder: Carriage factory history and community events today.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
-      "autoplay_on_enter": true,
-      "geofence_type": "circle"
-    },
-    {
-      "id": "historic-main-street-one-city-plaza",
+      "id": "one-city-plaza",
       "order": 7,
-      "title": "Historic Main Street — One City Plaza",
+      "title": "One City Plaza",
       "coordinates": {
-        "lat": 34.8510,
-        "lng": -82.3996
+        "lat": 34.8519898525014,
+        "lng": -82.39883141692084
       },
       "radius_m": 20,
       "duration_sec_estimate": 180,
-      "description": "Pedestrian-friendly Main Street. Placeholder: Urban design decisions, shade trees, local businesses, and plazas.",
+      "description": "Modern civic plaza and downtown gathering space. Placeholder: Urban planning, community events, and civic engagement.",
       "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
     {
-      "id": "old-county-courthouse-poinsett-view",
-      "order": 8,
-      "title": "Old County Courthouse / Poinsett Hotel View",
+      "id": "old-greenville-county-courthouse",
+      "order": 6,
+      "title": "Old Greenville County Courthouse",
       "coordinates": {
-        "lat": 34.8516,
-        "lng": -82.3987
+        "lat": 34.84896382985925,
+        "lng": -82.40031432979997
       },
       "radius_m": 20,
       "duration_sec_estimate": 180,
-      "description": "Corner of Main & Court Streets. Placeholder: Poinsett Hotel's legacy and civic architecture around Court Street.",
+      "description": "Historic courthouse building. Placeholder: Civic architecture, government history, and courthouse square importance.",
       "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
     {
       "id": "falls-park-gardens-closing",
-      "order": 9,
-      "title": "Falls Park Gardens (Closing Stop)",
+      "order": 8,
+      "title": "Falls Park Gardens (Finish)",
       "coordinates": {
         "lat": 34.8443,
         "lng": -82.4015

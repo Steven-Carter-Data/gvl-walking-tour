@@ -322,7 +322,7 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
                 </div>
                 <div>
                   <h1 className="text-lg text-bc-on-dark" style={{fontFamily: 'Anton, sans-serif', fontWeight: '400', lineHeight: '1.1', letterSpacing: '-0.01em', textTransform: 'uppercase'}}>
-                    Greenville Walking Tour
+                    Downtown Greenville Self-Guided Walking Tour
                   </h1>
                 </div>
               </div>
