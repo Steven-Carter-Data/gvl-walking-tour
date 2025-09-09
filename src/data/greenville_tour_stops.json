@@ -4,6 +4,22 @@
   "price": 9.99,
   "stops": [
     {
+      "id": "start",
+      "order": 0,
+      "title": "Start",
+      "coordinates": {
+        "lat": 34.852380,
+        "lng": -82.394200
+      },
+      "radius_m": 50,
+      "duration_sec_estimate": 120,
+      "description": "Welcome to the Falls Park Historical Tour! Start here to begin your journey.",
+      "audio_url": "/audio/0_WELCOME.wav",
+      "image_urls": [],
+      "autoplay_on_enter": false,
+      "geofence_type": "circle"
+    },
+    {
       "id": "liberty-bridge-falls-park-entrance",
       "order": 1,
       "title": "Liberty Bridge — Falls Park Entrance",
@@ -64,7 +80,7 @@
     },
     {
       "id": "peace-center-plaza",
-      "order": 5,
+      "order": 4,
       "title": "Peace Center Plaza",
       "coordinates": {
         "lat": 34.850922,
@@ -82,46 +98,8 @@
       "geofence_type": "circle"
     },
     {
-      "id": "shoeless-joe-jackson-statue",
-      "order": 4,
-      "title": "Shoeless Joe Jackson Statue",
-      "coordinates": {
-        "lat": 34.846969,
-        "lng": -82.40187
-      },
-      "radius_m": 25,
-      "duration_sec_estimate": 210,
-      "description": "At S Main & Augusta. Placeholder: Joe Jackson's early life, baseball stardom, and local legacy.",
-      "audio_url": "https://example.com/audio/shoeless-joe.mp3",
-      "image_urls": [
-        "https://example.com/images/shoeless-joe-1.jpg",
-        "https://example.com/images/shoeless-joe-2.jpg"
-      ],
-      "autoplay_on_enter": true,
-      "geofence_type": "circle"
-    },
-    {
-      "id": "wyche-pavilion",
-      "order": 6,
-      "title": "Wyche Pavilion",
-      "coordinates": {
-        "lat": 34.85105,
-        "lng": -82.400212
-      },
-      "radius_m": 20,
-      "duration_sec_estimate": 180,
-      "description": "Open-air brick pavilion on the river. Placeholder: Carriage factory history and community events today.",
-      "audio_url": "https://example.com/audio/wyche-pavilion.mp3",
-      "image_urls": [
-        "https://example.com/images/wyche-pavilion-1.jpg",
-        "https://example.com/images/wyche-pavilion-2.jpg"
-      ],
-      "autoplay_on_enter": true,
-      "geofence_type": "circle"
-    },
-    {
       "id": "historic-main-street-one-city-plaza",
-      "order": 7,
+      "order": 5,
       "title": "Historic Main Street — One City Plaza",
       "coordinates": {
         "lat": 34.851934,
@@ -140,7 +118,7 @@
     },
     {
       "id": "old-county-courthouse-poinsett-view",
-      "order": 8,
+      "order": 6,
       "title": "Old County Courthouse / Poinsett Hotel View",
       "coordinates": {
         "lat": 34.852836,
@@ -153,6 +131,44 @@
       "image_urls": [
         "https://example.com/images/poinsett-1.jpg",
         "https://example.com/images/courthouse-1.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "shoeless-joe-jackson-statue",
+      "order": 7,
+      "title": "Shoeless Joe Jackson Statue",
+      "coordinates": {
+        "lat": 34.846969,
+        "lng": -82.40187
+      },
+      "radius_m": 25,
+      "duration_sec_estimate": 210,
+      "description": "At S Main & Augusta. Placeholder: Joe Jackson's early life, baseball stardom, and local legacy.",
+      "audio_url": "https://example.com/audio/shoeless-joe.mp3",
+      "image_urls": [
+        "https://example.com/images/shoeless-joe-1.jpg",
+        "https://example.com/images/shoeless-joe-2.jpg"
+      ],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "wyche-pavilion",
+      "order": 8,
+      "title": "Wyche Pavilion",
+      "coordinates": {
+        "lat": 34.85105,
+        "lng": -82.400212
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Open-air brick pavilion on the river. Placeholder: Carriage factory history and community events today.",
+      "audio_url": "https://example.com/audio/wyche-pavilion.mp3",
+      "image_urls": [
+        "https://example.com/images/wyche-pavilion-1.jpg",
+        "https://example.com/images/wyche-pavilion-2.jpg"
       ],
       "autoplay_on_enter": true,
       "geofence_type": "circle"

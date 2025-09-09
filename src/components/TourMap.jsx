@@ -136,11 +136,31 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBack, isTestMode = false }) {
+  const [showWelcomeAudio, setShowWelcomeAudio] = useState(true);
+  const [welcomeAudioPlaying, setWelcomeAudioPlaying] = useState(false);
+  const welcomeAudioRef = useRef(null);
+  
   const [selectedStop, setSelectedStop] = useState(null);
   const [walkingRoute, setWalkingRoute] = useState([]);
   const [routeLoading, setRouteLoading] = useState(false);
   const [routeType, setRouteType] = useState('loading'); // 'real', 'mock', 'fallback', 'loading'
   const mapRef = useRef();
+
+  const handleWelcomeAudioToggle = async () => {
+    if (welcomeAudioRef.current) {
+      try {
+        if (welcomeAudioPlaying) {
+          welcomeAudioRef.current.pause();
+          setWelcomeAudioPlaying(false);
+        } else {
+          await welcomeAudioRef.current.play();
+          setWelcomeAudioPlaying(true);
+        }
+      } catch (error) {
+        console.log('Audio play prevented - user interaction required');
+      }
+    }
+  };
 
   const defaultCenter = [34.844685, -82.400653]; // Liberty Bridge coordinates (updated to start position)
   
@@ -338,6 +358,52 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
           </div>
         </div>
       </div>
+
+      {/* Welcome Audio Section */}
+      {showWelcomeAudio && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center mr-4" style={{backgroundColor: '#d4967d'}}>
+                  <span className="text-2xl text-white">🎧</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">Welcome to Your Tour!</h3>
+                  <p className="text-sm text-gray-600">Start here to learn about your experience</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowWelcomeAudio(false)}
+                className="p-1 text-gray-400 hover:text-gray-600 rounded"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <button
+              onClick={handleWelcomeAudioToggle}
+              className="w-full text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center transition-colors"
+              style={{backgroundColor: '#d4967d'}}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#c8855b'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#d4967d'}
+            >
+              <span className="mr-2 text-lg">
+                {welcomeAudioPlaying ? '⏸️' : '▶️'}
+              </span>
+              {welcomeAudioPlaying ? 'Pause Welcome Audio' : 'Play Welcome Audio'}
+            </button>
+            
+            <audio
+              ref={welcomeAudioRef}
+              src="/audio/0_WELCOME.wav"
+              onEnded={() => setWelcomeAudioPlaying(false)}
+              onPause={() => setWelcomeAudioPlaying(false)}
+              preload="metadata"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Map */}
       <div className="flex-1 relative">
