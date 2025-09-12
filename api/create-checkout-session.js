@@ -44,6 +44,10 @@ export default async function handler(req, res) {
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: 'never'
+      },
       line_items: [
         {
           price_data: {
