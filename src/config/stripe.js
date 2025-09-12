@@ -1,5 +1,8 @@
 import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+// Handle missing Stripe key gracefully in production
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+
+const stripePromise = stripeKey ? loadStripe(stripeKey) : Promise.resolve(null);
 
 export default stripePromise;
