@@ -1,22 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test Deployment</title>
-    <style>
-        body { 
-            font-family: Arial; 
-            background: #e5e3dc; 
-            padding: 20px;
-        }
-    </style>
+    <title>DEPLOYMENT TEST</title>
 </head>
-<body>
-    <h1>🎧 Falls Park Tour - Deployment Test</h1>
-    <p>If you can see this, the deployment is working!</p>
-    <p>The tan background is from our CSS: #e5e3dc</p>
+<body style="background: red; color: white; font-size: 24px; padding: 20px;">
+    <h1>🚨 VERCEL DEPLOYMENT TEST</h1>
+    <p>If you see this RED page, files are being served!</p>
+    <p>Current time: <span id="time"></span></p>
     <script>
-        console.log('Test page loaded successfully');
-        document.body.innerHTML += '<p>✅ JavaScript is working!</p>';
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        console.log('TEST: JavaScript working at', new Date());
     </script>
 </body>
 </html>
