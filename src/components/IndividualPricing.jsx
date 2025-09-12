@@ -6,6 +6,8 @@ function IndividualPricing({ onPaymentSelect, onBack }) {
   const [customAmount, setCustomAmount] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [showPromoInput, setShowPromoInput] = useState(false);
   
   const presetAmounts = [3, 4, 5, 6, 8, 10, 15];
   
@@ -28,7 +30,33 @@ function IndividualPricing({ onPaymentSelect, onBack }) {
     }
   };
   
+  const handlePromoCodeSubmit = () => {
+    const validPromoCodes = ['ADMIN2024', 'REVIEW', 'TOUR_DEV'];
+    
+    if (validPromoCodes.includes(promoCode.toUpperCase())) {
+      // Grant tour access without payment
+      localStorage.setItem('tour_access', 'granted');
+      localStorage.setItem('promo_used', promoCode.toUpperCase());
+      localStorage.setItem('payment_session', JSON.stringify({
+        amount_total: 0,
+        payment_status: 'promo_code',
+        metadata: { promo_code: promoCode.toUpperCase() }
+      }));
+      
+      // Redirect directly to tour
+      window.location.href = '/?tour=true';
+    } else {
+      alert('Invalid promo code. Please try again.');
+    }
+  };
+
   const handleContinue = async () => {
+    // Check if promo code is being used
+    if (promoCode.trim()) {
+      handlePromoCodeSubmit();
+      return;
+    }
+
     const finalAmount = showCustomInput ? parseFloat(customAmount) : selectedAmount;
     if (finalAmount > 0) {
       setIsProcessing(true);
@@ -234,6 +262,62 @@ function IndividualPricing({ onPaymentSelect, onBack }) {
                 `Continue with ${showCustomInput ? `$${customAmount}` : `$${selectedAmount}`}`
               )}
             </button>
+          </div>
+        </div>
+
+        {/* Promo Code Section */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-8">
+          <div className="text-center">
+            <h3 className="text-lg font-bold mb-2" style={{color: '#303636'}}>
+              🎫 Have a promo code?
+            </h3>
+            <p className="text-sm mb-4" style={{color: '#495a58'}}>
+              Enter your code to access the tour
+            </p>
+            
+            {!showPromoInput ? (
+              <button
+                onClick={() => setShowPromoInput(true)}
+                className="px-6 py-2 rounded-xl border-2 font-semibold hover:transform hover:scale-105 transition-all duration-200"
+                style={{borderColor: '#d4967d', color: '#d4967d'}}
+              >
+                Enter Promo Code
+              </button>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-center gap-4">
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                    className="px-4 py-3 text-center text-lg font-bold rounded-xl border-2 uppercase"
+                    style={{borderColor: '#d4967d'}}
+                    placeholder="ENTER CODE"
+                    autoFocus
+                  />
+                  <button
+                    onClick={handlePromoCodeSubmit}
+                    disabled={!promoCode.trim()}
+                    className={`px-6 py-3 rounded-xl text-white font-semibold transition-all duration-200 ${
+                      promoCode.trim() ? 'hover:transform hover:scale-105' : 'opacity-50 cursor-not-allowed'
+                    }`}
+                    style={{backgroundColor: '#d4967d'}}
+                  >
+                    Apply
+                  </button>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowPromoInput(false);
+                    setPromoCode('');
+                  }}
+                  className="text-sm opacity-60 hover:opacity-100"
+                  style={{color: '#495a58'}}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
