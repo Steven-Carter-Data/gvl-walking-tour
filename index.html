@@ -8,8 +8,22 @@
     <meta name="description" content="Experience Greenville's history with GPS-guided audio narration. 8 historic stops, $9.99, walk at your own pace." />
     <meta name="keywords" content="Greenville SC, walking tour, self-guided, GPS audio, downtown Greenville, history tour" />
   </head>
-  <body>
+  <body style="background-color: #e5e3dc;">
     <div id="root"></div>
+    <div id="loading-fallback" style="display: none; padding: 20px; text-align: center;">
+      <h1 style="color: #d4967d;">🎧 Falls Park Tour</h1>
+      <p style="color: #303636;">Loading application...</p>
+      <p style="color: #495a58; font-size: 14px;">If this message persists, please check your browser console for errors.</p>
+    </div>
+    <script>
+      // Show fallback after 3 seconds if React doesn't load
+      setTimeout(function() {
+        if (document.getElementById('root').innerHTML === '') {
+          document.getElementById('loading-fallback').style.display = 'block';
+          console.error('React app failed to load within 3 seconds');
+        }
+      }, 3000);
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
