@@ -152,8 +152,7 @@ function IndividualPricing({ onPaymentSelect, onBack }) {
           </div>
           
           <div className="text-center p-4 rounded-xl" style={{backgroundColor: '#d4967d', color: 'white'}}>
-            <div className="font-semibold mb-2">🎯 100% satisfaction guaranteed</div>
-            <div className="text-sm opacity-90">Full refund if not delighted</div>
+            <div className="font-semibold">🎯 100% satisfaction guaranteed</div>
           </div>
         </div>
 
