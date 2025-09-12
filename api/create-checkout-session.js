@@ -75,6 +75,28 @@ export default async function handler(req, res) {
     res.status(200).json({ id: session.id });
   } catch (error) {
     console.error('Stripe session creation error:', error);
-    res.status(500).json({ error: error.message });
+    
+    // More detailed error logging
+    if (error.type === 'StripeInvalidRequestError') {
+      console.error('Stripe Invalid Request:', error.message);
+      return res.status(400).json({ 
+        error: 'Invalid payment request', 
+        details: error.message 
+      });
+    }
+    
+    if (error.type === 'StripeAuthenticationError') {
+      console.error('Stripe Authentication Error - Invalid API key');
+      return res.status(500).json({ 
+        error: 'Payment service configuration error',
+        details: 'Invalid API key'
+      });
+    }
+    
+    return res.status(500).json({ 
+      error: 'Payment processing failed', 
+      details: error.message,
+      type: error.type || 'unknown'
+    });
   }
 }

@@ -1,10 +1,16 @@
 // Vercel serverless function for payment verification
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Check if Stripe secret key is configured
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.error('STRIPE_SECRET_KEY environment variable is not set');
+    return res.status(500).json({ error: 'Payment verification not configured' });
+  }
+
+  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
   try {
     const { session_id } = req.query;
@@ -33,6 +39,19 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Payment verification error:', error);
-    res.status(500).json({ error: error.message });
+    
+    if (error.type === 'StripeAuthenticationError') {
+      console.error('Stripe Authentication Error - Invalid API key');
+      return res.status(500).json({ 
+        error: 'Payment verification service error',
+        details: 'Invalid API key'
+      });
+    }
+    
+    return res.status(500).json({ 
+      error: 'Payment verification failed', 
+      details: error.message,
+      type: error.type || 'unknown'
+    });
   }
 }
