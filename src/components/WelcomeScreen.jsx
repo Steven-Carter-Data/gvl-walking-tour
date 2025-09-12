@@ -247,6 +247,36 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
         </div>
       </div>
 
+      {/* Contact Section */}
+      <div className="px-6 py-8 bg-white border-t-2" style={{borderColor: '#d4967d'}}>
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full" style={{backgroundColor: '#d4967d'}}>
+            <div className="text-2xl text-white">📧</div>
+          </div>
+          <h3 className="text-2xl font-bold mb-4" style={{color: '#303636'}}>
+            Questions, Comments, or Suggestions?
+          </h3>
+          <p className="text-lg mb-6" style={{color: '#495a58'}}>
+            We'd love to hear from you! Send us your feedback, reviews, or any questions about the tour experience.
+          </p>
+          <div className="bg-white p-6 rounded-2xl border-2 shadow-lg" style={{borderColor: '#d4967d'}}>
+            <p className="text-sm font-medium mb-2" style={{color: '#495a58'}}>
+              Contact us at:
+            </p>
+            <a 
+              href="mailto:services@basecampdataanalytics.com"
+              className="text-2xl font-bold hover:underline transition-all duration-200"
+              style={{color: '#d4967d'}}
+            >
+              services@basecampdataanalytics.com
+            </a>
+            <p className="text-sm mt-3" style={{color: '#495a58'}}>
+              We typically respond within 24 hours
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Footer with Basecamp colors */}
       <div className="bc-muted-bg text-white py-8 px-6">
         <div className="text-center">
