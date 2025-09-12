@@ -11,15 +11,27 @@ import tourData from './data/greenville_tour_stops_with_test_scripts.json';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState(() => {
-    // Check if we're on the success page
+    // Check URL parameters
     const urlParams = new URLSearchParams(window.location.search);
+    
+    // Check if we're on the success page
     if (urlParams.get('session_id')) {
       return 'success';
     }
+    
+    // Check if user wants to go directly to tour
+    if (urlParams.get('tour') === 'true') {
+      return 'map';
+    }
+    
     return 'welcome';
   });
   const [userLocation, setUserLocation] = useState(null);
-  const [tourPurchased, setTourPurchased] = useState(false); // Now requires payment
+  const [tourPurchased, setTourPurchased] = useState(() => {
+    // Check if tour access has been granted via payment
+    return localStorage.getItem('tour_access') === 'granted' || 
+           localStorage.getItem('tourPurchased') === 'true';
+  });
   const [currentStop, setCurrentStop] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUnlocked, setAudioUnlocked] = useState(false);

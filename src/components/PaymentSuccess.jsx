@@ -30,8 +30,8 @@ function PaymentSuccess() {
   }, []);
 
   const handleStartTour = () => {
-    // Navigate to the tour interface
-    window.location.href = '/tour';
+    // Navigate to the tour interface - update URL to trigger tour mode
+    window.location.href = '/?tour=true';
   };
 
   const handleDownloadOffline = () => {
