@@ -13,8 +13,8 @@
       },
       "radius_m": 20,
       "duration_sec_estimate": 180,
-      "description": "Welcome to the Liberty Bridge overlooking Falls Park. Placeholder: Introduce Greenville's renaissance, the bridge's design, and how this tour works.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+      "description": "Welcome to the Liberty Bridge overlooking Falls Park.",
+      "audio_url": "/audio/STOP1_LIBERTY_BRIDGE.wav",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
@@ -29,7 +29,7 @@
       "radius_m": 30,
       "duration_sec_estimate": 300,
       "description": "Face the waterfall from the lower path and explore the nearby brick and stone remnants. Placeholder: Textile era to park restoration; environmental cleanup, cotton mills, industry, and the Reedy's working past.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+      "audio_url": "/audio/STOP2_REEDY_RIVER&OLD_MILL_RUINS.wav",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
@@ -44,7 +44,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Transition from river park to Main Street. Placeholder: Revitalization of the West End and adaptive reuse.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+      "audio_url": "/audio/STOP3_WEST_END_HISTORIC_DISTRICT_GATEWAY.wav",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
@@ -59,7 +59,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 210,
       "description": "Stand near the plaza fountains. Placeholder: From warehouse district to performing arts hub; cultural heartbeat of Greenville.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+      "audio_url": "/audio/STOP5_PEACE_CENTER_PLAZA.wav",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
@@ -74,7 +74,7 @@
       "radius_m": 25,
       "duration_sec_estimate": 210,
       "description": "At S Main & Augusta. Placeholder: Joe Jackson's early life, baseball stardom, and local legacy.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+      "audio_url": "/audio/STOP4_SHOELESS_JOE_JACKSON.wav",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
@@ -89,7 +89,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Modern civic plaza and downtown gathering space. Placeholder: Urban planning, community events, and civic engagement.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+      "audio_url": "/audio/STOP7_ONE_CITY_PLAZA.wav",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
@@ -104,7 +104,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Historic courthouse building. Placeholder: Civic architecture, government history, and courthouse square importance.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+      "audio_url": "/audio/STOP6_OLD_GVL_COUNTY_COURTHOUSE.wav",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     },
@@ -119,7 +119,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Near the bridge entrance in the gardens. Placeholder: Recap Greenville's transformation and invite further exploration.",
-      "audio_url": "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3",
+      "audio_url": "/audio/STOP8_FALLS_PARK_GARDEN.wav",
       "autoplay_on_enter": true,
       "geofence_type": "circle"
     }

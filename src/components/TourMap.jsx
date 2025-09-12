@@ -135,7 +135,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * c; // Distance in meters
 }
 
-function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBack, isTestMode = false }) {
+function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBack }) {
   const [showWelcomeAudio, setShowWelcomeAudio] = useState(true);
   const [welcomeAudioPlaying, setWelcomeAudioPlaying] = useState(false);
   const welcomeAudioRef = useRef(null);
@@ -596,11 +596,10 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
                   center={[stop.coordinates.lat, stop.coordinates.lng]}
                   radius={stop.radius_m}
                   pathOptions={{
-                    color: isTestMode ? '#DC2626' : '#16A34A',
-                    fillColor: isTestMode ? '#DC2626' : '#16A34A',
-                    fillOpacity: isTestMode ? 0.3 : 0.1,
-                    weight: isTestMode ? 3 : 1,
-                    dashArray: isTestMode ? '5, 10' : null,
+                    color: '#16A34A',
+                    fillColor: '#16A34A', 
+                    fillOpacity: 0.1,
+                    weight: 1,
                   }}
                 />
               </div>

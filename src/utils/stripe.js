@@ -1,17 +1,20 @@
 import stripePromise from '../config/stripe.js';
 
-export const createPaymentSession = async (tourData) => {
+export const createPaymentSession = async (paymentData) => {
   try {
-    // In production, this would call your backend API to create a Stripe checkout session
+    // Call backend API to create a Stripe checkout session
     const response = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        tourId: tourData.tour_id,
-        price: tourData.price,
-        currency: tourData.currency,
+        tourId: paymentData.tourId || 'falls-park-historical-tour',
+        price: paymentData.amount,
+        currency: paymentData.currency || 'usd',
+        groupType: paymentData.type,
+        groupSize: paymentData.groupSize,
+        isCustomAmount: paymentData.isCustom || false,
       }),
     });
 

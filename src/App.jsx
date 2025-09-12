@@ -1,23 +1,30 @@
 import { useState, useEffect } from 'react';
 import WelcomeScreen from './components/WelcomeScreen';
+import GroupSizeSelector from './components/GroupSizeSelector';
+import IndividualPricing from './components/IndividualPricing';
 import TourMap from './components/TourMap';
 import AudioPlayer from './components/AudioPlayer';
 import PaymentFlow from './components/PaymentFlow';
+import PaymentSuccess from './components/PaymentSuccess';
 import AdminPanel from './components/AdminPanel';
 import tourData from './data/greenville_tour_stops_with_test_scripts.json';
-import testTourData from './data/test_tour_local.json';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState('welcome');
+  const [currentScreen, setCurrentScreen] = useState(() => {
+    // Check if we're on the success page
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('session_id')) {
+      return 'success';
+    }
+    return 'welcome';
+  });
   const [userLocation, setUserLocation] = useState(null);
-  const [tourPurchased, setTourPurchased] = useState(true); // Free for MVP
+  const [tourPurchased, setTourPurchased] = useState(false); // Now requires payment
   const [currentStop, setCurrentStop] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isTestMode, setIsTestMode] = useState(false); // Toggle for local testing
-  const [audioUnlocked, setAudioUnlocked] = useState(false); // Track if user has enabled audio
-  
-  // Choose tour data based on test mode
-  const activeTourData = isTestMode ? testTourData : tourData;
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [paymentInfo, setPaymentInfo] = useState(null);
 
   useEffect(() => {
     let watchId;
@@ -84,6 +91,26 @@ function App() {
     }
   };
   
+  const handleGroupSelect = (groupOption) => {
+    setSelectedGroup(groupOption);
+    if (groupOption.id === 'individual') {
+      setCurrentScreen('individual-pricing');
+    } else {
+      // For now, skip to payment - we'll add group pricing pages later
+      setPaymentInfo({
+        type: 'group',
+        groupSize: groupOption.id,
+        amount: groupOption.pricing
+      });
+      setCurrentScreen('payment');
+    }
+  };
+  
+  const handlePaymentSelect = (paymentData) => {
+    setPaymentInfo(paymentData);
+    setCurrentScreen('payment');
+  };
+  
   const unlockAudio = () => {
     console.log('🔓 Attempting to unlock audio for autoplay...');
     // Create a silent audio context to unlock audio
@@ -101,6 +128,7 @@ function App() {
   const handlePurchaseComplete = () => {
     setTourPurchased(true);
     localStorage.setItem('tourPurchased', 'true');
+    localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo));
     setCurrentScreen('map');
   };
 
@@ -113,26 +141,50 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       {currentScreen === 'welcome' && (
         <WelcomeScreen
-          onScreenChange={handleScreenChange}
+          onScreenChange={() => setCurrentScreen('group-size')}
           tourPurchased={tourPurchased}
+        />
+      )}
+      
+      {currentScreen === 'group-size' && (
+        <GroupSizeSelector
+          onGroupSelect={handleGroupSelect}
+          onBack={() => setCurrentScreen('welcome')}
+        />
+      )}
+      
+      {currentScreen === 'individual-pricing' && (
+        <IndividualPricing
+          onPaymentSelect={handlePaymentSelect}
+          onBack={() => setCurrentScreen('group-size')}
         />
       )}
       
       {currentScreen === 'payment' && (
         <PaymentFlow
+          paymentInfo={paymentInfo}
           onPaymentComplete={handlePurchaseComplete}
-          onBack={() => handleScreenChange('welcome')}
+          onBack={() => {
+            if (paymentInfo?.type === 'individual') {
+              setCurrentScreen('individual-pricing');
+            } else {
+              setCurrentScreen('group-size');
+            }
+          }}
         />
+      )}
+      
+      {currentScreen === 'success' && (
+        <PaymentSuccess />
       )}
       
       {currentScreen === 'map' && (
         <TourMap
           userLocation={userLocation}
-          tourStops={activeTourData.stops}
+          tourStops={tourData.stops}
           tourPurchased={tourPurchased}
           onStopTriggered={handleStopTriggered}
           onBack={() => handleScreenChange('welcome')}
-          isTestMode={isTestMode}
         />
       )}
       
@@ -150,26 +202,6 @@ function App() {
       
       {/* Admin panel - only shows with ?admin=true */}
       <AdminPanel />
-      
-      {/* Test Mode Toggle - Hidden in production */}
-      {process.env.NODE_ENV === 'development' && (
-        <div style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 1000,
-          backgroundColor: isTestMode ? '#dc2626' : '#16a34a',
-          color: 'white',
-          padding: '12px 16px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
-        }} onClick={() => setIsTestMode(!isTestMode)}>
-          {isTestMode ? '🏠 LOCAL TEST' : '🌍 GREENVILLE'}
-        </div>
-      )}
     </div>
   );
 }

@@ -5,6 +5,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
   const [showPreview, setShowPreview] = useState(false);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
   const audioRef = useRef(null);
+  const previewTimeoutRef = useRef(null);
   
   const previewStop = tourData.stops[0]; // Liberty Bridge - the first stop
 
@@ -16,9 +17,21 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
         if (isPreviewPlaying) {
           audioRef.current.pause();
           setIsPreviewPlaying(false);
+          if (previewTimeoutRef.current) {
+            clearTimeout(previewTimeoutRef.current);
+          }
         } else {
+          audioRef.current.currentTime = 0; // Start from beginning
           await audioRef.current.play();
           setIsPreviewPlaying(true);
+          
+          // Stop audio after 15 seconds
+          previewTimeoutRef.current = setTimeout(() => {
+            if (audioRef.current) {
+              audioRef.current.pause();
+              setIsPreviewPlaying(false);
+            }
+          }, 15000);
         }
       } catch (error) {
         console.log('Audio autoplay prevented - user interaction required');
@@ -28,8 +41,8 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
   };
 
   const handleStartTour = () => {
-    // For MVP - go directly to tour map (no payment required)
-    onScreenChange('map');
+    // Go to group size selector first
+    onScreenChange();
   };
 
   return (
@@ -115,22 +128,22 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
               { 
                 icon: "🎭", 
                 title: "Professional Storytelling", 
-                description: "Theatrical-quality narration that transforms historical facts into engaging stories you'll remember" 
+                description: "Quality narration that transforms historical facts into engaging stories you'll remember" 
               },
               { 
                 icon: "🎯", 
                 title: "Precision GPS Technology", 
-                description: "Audio automatically triggers as you approach each location - no button pressing or guesswork" 
+                description: "Audio automatically triggers as you approach each location. No guesswork at all!" 
               },
               { 
                 icon: "🏛️", 
                 title: "Exclusive Historical Access", 
-                description: "Rare archival photos and untold stories from Greenville's mill town era to modern renaissance" 
+                description: "Hear untold stories from Greenville's mill town era to modern renaissance" 
               },
               { 
                 icon: "⚡", 
                 title: "Smart & Self-Paced", 
-                description: "Complete the tour in 45 minutes or take your time - the experience adapts to your schedule" 
+                description: "Take the full 45-minute experience or customize your journey. Pause anytime, revisit stops, and explore at your own pace!" 
               }
             ].map((feature, index) => (
               <div key={index} className="flex items-start p-4 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
@@ -210,7 +223,6 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
             {[
               { icon: "📍", title: "9 GPS-Triggered Stops", subtitle: "Automatic audio activation" },
               { icon: "🎙️", title: "Professional Narration", subtitle: "3-5 minutes per location" },
-              { icon: "📸", title: "Historic Visual Content", subtitle: "Photos and visual stories" },
               { icon: "⏱️", title: "Self-Paced Experience", subtitle: "~45 minutes total journey" }
             ].map((feature, index) => (
               <div key={index} className="flex items-center p-4 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
@@ -251,8 +263,18 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
       <audio
         ref={audioRef}
         src={previewStop.audio_url}
-        onEnded={() => setIsPreviewPlaying(false)}
-        onPause={() => setIsPreviewPlaying(false)}
+        onEnded={() => {
+          setIsPreviewPlaying(false);
+          if (previewTimeoutRef.current) {
+            clearTimeout(previewTimeoutRef.current);
+          }
+        }}
+        onPause={() => {
+          setIsPreviewPlaying(false);
+          if (previewTimeoutRef.current) {
+            clearTimeout(previewTimeoutRef.current);
+          }
+        }}
         preload="metadata"
       />
     </div>

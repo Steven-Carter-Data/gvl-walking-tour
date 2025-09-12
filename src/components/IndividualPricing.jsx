@@ -1,0 +1,245 @@
+import { useState } from 'react';
+import { createPaymentSession } from '../utils/stripe.js';
+
+function IndividualPricing({ onPaymentSelect, onBack }) {
+  const [selectedAmount, setSelectedAmount] = useState(8); // Default to $8
+  const [customAmount, setCustomAmount] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  const presetAmounts = [3, 4, 5, 6, 8, 10, 15];
+  
+  const handleAmountSelect = (amount) => {
+    setSelectedAmount(amount);
+    setShowCustomInput(false);
+    setCustomAmount('');
+  };
+  
+  const handleCustomAmount = () => {
+    setShowCustomInput(true);
+    setSelectedAmount(null);
+  };
+  
+  const handleCustomSubmit = () => {
+    const amount = parseFloat(customAmount);
+    if (amount > 0) {
+      setSelectedAmount(amount);
+      setShowCustomInput(false);
+    }
+  };
+  
+  const handleContinue = async () => {
+    const finalAmount = showCustomInput ? parseFloat(customAmount) : selectedAmount;
+    if (finalAmount > 0) {
+      setIsProcessing(true);
+      try {
+        const paymentData = {
+          type: 'individual',
+          amount: finalAmount,
+          isCustom: showCustomInput,
+          groupSize: 1,
+          currency: 'usd'
+        };
+
+        // Create Stripe checkout session and redirect
+        const result = await createPaymentSession(paymentData);
+        
+        if (!result.success) {
+          throw new Error(result.error || 'Payment session failed');
+        }
+
+        // If we get here, Stripe will handle the redirect
+        // The user will be redirected to Stripe checkout
+      } catch (error) {
+        console.error('Payment error:', error);
+        alert('Payment processing failed. Please try again.');
+        setIsProcessing(false);
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen" style={{backgroundColor: '#e5e3dc'}}>
+      {/* Header */}
+      <div className="bc-primary-bg text-white">
+        <div className="px-6 py-8">
+          <button 
+            onClick={onBack}
+            className="flex items-center mb-4 text-white opacity-80 hover:opacity-100"
+          >
+            <span className="text-xl mr-2">←</span>
+            Back
+          </button>
+          
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 mb-6 bg-white bg-opacity-10 rounded-full">
+              <div className="text-3xl">💝</div>
+            </div>
+            <h1 className="text-3xl font-bold mb-4" style={{color: 'white'}}>
+              What's this experience worth to you?
+            </h1>
+            <p className="text-xl opacity-90" style={{color: 'white'}}>
+              Pay what feels fair - you decide
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-6 py-8 max-w-4xl mx-auto">
+        {/* Value Anchoring */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-8">
+          <h3 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
+            For comparison in downtown Greenville:
+          </h3>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="flex justify-between">
+              <span>🌟 Professional guided tour:</span>
+              <span className="font-semibold">$25-35</span>
+            </div>
+            <div className="flex justify-between">
+              <span>☕ Coffee at local café:</span>
+              <span className="font-semibold">$5-6</span>
+            </div>
+            <div className="flex justify-between">
+              <span>🚗 2-hour downtown parking:</span>
+              <span className="font-semibold">$4-8</span>
+            </div>
+            <div className="flex justify-between">
+              <span>📱 Our historical tour:</span>
+              <span className="font-semibold" style={{color: '#d4967d'}}>You decide!</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Value Reinforcement */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-8">
+          <h3 className="text-lg font-bold mb-4" style={{color: '#303636'}}>
+            ✅ Your contribution supports:
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4 text-sm mb-6">
+            <div>• Local storytelling and historical research</div>
+            <div>• App improvements and new tour development</div>
+            <div>• Keeping this accessible to everyone</div>
+            <div>• Supporting visitors who can't afford the full experience</div>
+          </div>
+          
+          <div className="text-center p-4 rounded-xl" style={{backgroundColor: '#d4967d', color: 'white'}}>
+            <div className="font-semibold mb-2">🎯 100% satisfaction guaranteed</div>
+            <div className="text-sm opacity-90">Full refund if not delighted</div>
+          </div>
+        </div>
+
+        {/* Payment Selection */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-8">
+          <div className="text-center mb-6">
+            <h3 className="text-2xl font-bold mb-2" style={{color: '#303636'}}>
+              🏆 Most people choose $8 🏆
+            </h3>
+            <p className="text-sm" style={{color: '#495a58'}}>
+              Select an amount or enter your own
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-4 gap-3 mb-6">
+            {presetAmounts.map((amount) => (
+              <button
+                key={amount}
+                onClick={() => handleAmountSelect(amount)}
+                className={`
+                  p-4 rounded-xl text-center transition-all duration-200 border-2
+                  ${selectedAmount === amount && !showCustomInput
+                    ? 'transform scale-105 shadow-lg text-white' 
+                    : 'hover:transform hover:scale-105'
+                  }
+                `}
+                style={{
+                  backgroundColor: selectedAmount === amount && !showCustomInput ? '#d4967d' : '#e5e3dc',
+                  borderColor: amount === 8 ? '#d4967d' : '#495a58',
+                  color: selectedAmount === amount && !showCustomInput ? 'white' : '#303636',
+                  borderWidth: amount === 8 ? '3px' : '2px'
+                }}
+              >
+                <div className="text-2xl font-bold">${amount}</div>
+                {amount === 8 && (
+                  <div className="text-xs mt-1 opacity-75">Popular</div>
+                )}
+              </button>
+            ))}
+            
+            <button
+              onClick={handleCustomAmount}
+              className={`
+                p-4 rounded-xl text-center transition-all duration-200 border-2
+                ${showCustomInput 
+                  ? 'transform scale-105 shadow-lg text-white' 
+                  : 'hover:transform hover:scale-105'
+                }
+              `}
+              style={{
+                backgroundColor: showCustomInput ? '#d4967d' : '#e5e3dc',
+                borderColor: '#495a58',
+                color: showCustomInput ? 'white' : '#303636'
+              }}
+            >
+              <div className="text-lg font-bold">Custom</div>
+              <div className="text-xs mt-1">Amount</div>
+            </button>
+          </div>
+          
+          {showCustomInput && (
+            <div className="mb-6">
+              <div className="flex items-center justify-center gap-4">
+                <span className="text-2xl font-bold">$</span>
+                <input
+                  type="number"
+                  min="1"
+                  step="0.50"
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  className="w-24 p-3 text-center text-xl font-bold rounded-xl border-2"
+                  style={{borderColor: '#d4967d'}}
+                  placeholder="0.00"
+                  autoFocus
+                />
+                <button
+                  onClick={handleCustomSubmit}
+                  className="px-4 py-2 rounded-xl text-white font-semibold"
+                  style={{backgroundColor: '#d4967d'}}
+                >
+                  Set
+                </button>
+              </div>
+            </div>
+          )}
+          
+          <div className="text-center">
+            <button
+              onClick={handleContinue}
+              disabled={(!selectedAmount && !customAmount) || isProcessing}
+              className={`
+                px-8 py-4 rounded-xl text-xl font-bold text-white transition-all duration-200
+                ${(selectedAmount || customAmount) && !isProcessing
+                  ? 'hover:transform hover:scale-105 shadow-lg' 
+                  : 'opacity-50 cursor-not-allowed'
+                }
+              `}
+              style={{backgroundColor: '#d4967d'}}
+            >
+              {isProcessing ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-2"></div>
+                  Processing...
+                </div>
+              ) : (
+                `Continue with ${showCustomInput ? `$${customAmount}` : `$${selectedAmount}`}`
+              )}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+export default IndividualPricing;

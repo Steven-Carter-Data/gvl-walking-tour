@@ -7,12 +7,31 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { tourId, price, currency } = req.body;
+    const { tourId, price, currency, groupType, groupSize } = req.body;
 
     // Validate input
     if (!tourId || !price || !currency) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
+
+    // Validate minimum price
+    if (price < 1) {
+      return res.status(400).json({ error: 'Minimum price is $1' });
+    }
+
+    // Get product name based on group type
+    const getProductName = (groupType) => {
+      switch(groupType) {
+        case 'individual':
+          return 'Falls Park Historical Tour - Individual';
+        case 'small-group':
+          return 'Falls Park Historical Tour - Small Group (2-4 people)';
+        case 'large-group':
+          return 'Falls Park Historical Tour - Large Group (5+ people)';
+        default:
+          return 'Falls Park Historical Tour';
+      }
+    };
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
@@ -22,8 +41,8 @@ export default async function handler(req, res) {
           price_data: {
             currency: currency.toLowerCase(),
             product_data: {
-              name: 'Falls Park Historical Tour',
-              description: 'Self-guided audio tour with GPS triggers',
+              name: getProductName(groupType),
+              description: 'Self-guided audio tour with GPS triggers around Falls Park & downtown Greenville',
               images: [
                 'https://example.com/tour-image.jpg' // Replace with actual image
               ],
@@ -38,6 +57,10 @@ export default async function handler(req, res) {
       cancel_url: `${req.headers.origin}/payment?cancelled=true`,
       metadata: {
         tourId,
+        groupType: groupType || 'individual',
+        groupSize: groupSize || '1',
+        paymentAmount: price.toString(),
+        isCustomAmount: req.body.isCustomAmount ? 'true' : 'false',
       },
       customer_creation: 'if_required',
       billing_address_collection: 'auto',

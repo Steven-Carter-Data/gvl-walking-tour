@@ -1,0 +1,227 @@
+# Greenville Tour App - Pricing UI Flow
+
+## Landing Page
+
+2 ways to get to the payment screen:
+  1. Selecting "START YOUR WALKING TOUR" button
+  2. Selecting "START PREMIUM EXPERIENCE" button
+
+
+### Group Size Selector
+```
+How many people are exploring with you today?
+
+ - Just me -- Pay what you want :)
+ 
+ - 2 - 4 People -- Recommend $15
+ 
+ - 5+ People -- Recommend $25
+```
+
+---
+
+## Individual User Pricing Page (Pay-What-You-Want)
+
+### Value Anchoring Header
+```
+🌟 Professional guided tours in Greenville: $25-35
+☕ Coffee at a downtown café: $5-6
+🚗 2-hour downtown parking: $4-8
+📱 Our comprehensive historical tour: You decide what's fair
+```
+
+### Social Proof Section
+```
+💬 What others are saying:
+"Worth every penny at $8!" - Sarah M.
+"Paid $10 and would do it again!" - Mike R.
+
+📊 Community Stats:
+• Average contribution: $6.50
+• 62% of users pay $6 or more
+• Most popular choice: $6
+```
+
+### Payment Selection
+```
+What's this experience worth to you?
+
+         🏆 Most people choose $8 🏆
+
+┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────────────┐
+│ $3  │  │ $4  │  │ $5  │  │ $6  │  │ $8* │  │ $10 │  │ $15 │  │ Custom      │
+│     │  │     │  │     │  │     │  │     │  │     │  │     │  │ Amount      │
+└─────┘  └─────┘  └─────┘  └─────┘  └─────┘  └─────┘  └─────┘  └─────────────┘
+```
+*$8 button highlighted/pre-selected
+
+### Value Reinforcement Footer
+```
+✅ Your contribution supports:
+   • Local storytelling and historical research
+   • App improvements and new tour development
+   • Keeping this accessible to everyone
+
+🎯 100% satisfaction guaranteed - full refund if not delighted
+💝 Pay more to support other visitors who can't afford the full experience
+```
+
+---
+
+### Group Benefits Section
+```
+🎊 Group Tour Benefits:
+
+✓ Share access with everyone in your group
+✓ Use the tour as many times as you want
+✓ No hidden per-person fees
+✓ Perfect for families, couples, or friends
+✓ Start together or split up. It is all your choice
+```
+
+### Pricing Display
+```
+👥 2-4 People Group Tour
+
+Regular price if bought individually: $12-24
+Your group price: $15
+Savings: Up to $9
+
+[Purchase Group Access - $15]
+```
+
+---
+
+## Group Pricing Page (5-8 People)
+
+### Enhanced Savings Calculator
+```
+💰 Big Group, Bigger Savings!
+
+If everyone paid individually at $6 each:
+8 people × $6 = $48 total
+
+Your group price: $25
+You save: $23! 🚀
+```
+
+### Group Benefits Section
+```
+🎊 Large Group Tour Benefits:
+
+✓ Perfect for extended families, friend groups, or team outings
+✓ Everyone gets full access to all 8 stops
+✓ Use multiple times during your visit
+✓ Split the cost however works best for your group
+✓ Great for bachelor/bachelorette parties, reunions, etc.
+```
+
+### Pricing Display
+```
+👥 5-8 People Group Tour
+
+Regular price if bought individually: $30-48
+Your group price: $25
+Savings: Up to $23
+
+[Purchase Group Access - $25]
+```
+
+---
+
+## Group Pricing Page (9+ People)
+
+### Maximum Savings Calculator
+```
+💰 Maximum Group Savings!
+
+If everyone paid individually at $6 each:
+15 people × $6 = $90 total
+
+Your group price: $35
+You save: $55! 🎯
+```
+
+### Corporate/Event Benefits
+```
+🎊 Large Group Tour Benefits:
+
+✓ Perfect for corporate outings, conferences, or large events
+✓ Wedding parties and family reunions love this option
+✓ Everyone in your group gets lifetime access
+✓ No limits on group size beyond 9 people
+✓ Bulk pricing for schools and organizations available
+```
+
+### Pricing Display
+```
+👥 9+ People Group Tour
+
+Regular price if bought individually: $54+
+Your group price: $35
+Maximum savings: $55+
+
+[Purchase Group Access - $35]
+
+📞 Need a custom quote for 25+ people? Contact us for special rates.
+```
+
+---
+
+## Payment Confirmation Screen
+
+### Individual Confirmation
+```
+🎉 Thank you for supporting local history!
+
+You chose: $[amount]
+"Most visitors like you find great value in this tour."
+
+📱 Download starting now...
+📧 Receipt sent to your email
+🔄 Access this tour anytime - it's yours forever
+```
+
+### Group Confirmation  
+```
+🎉 Thank you for exploring Greenville together!
+
+📱 Share this access code with your group: [CODE]
+📧 Instructions sent to your email
+🔄 Everyone can use this as many times as they want
+```
+
+---
+
+## Error/Edge Cases
+
+### Low Payment Warning (if under $3)
+```
+💝 Thanks for your contribution!
+
+Just so you know - this tour took months to research and costs money to maintain. 
+The average visitor contributes $8 to keep this available for everyone.
+
+Consider what you'd spend on:
+• Coffee downtown: $5
+• Parking for 2 hours: $6
+• Museum admission: $12
+
+Would you like to adjust your contribution?
+
+[Keep $X] [Change to $8] [Change to $10]
+```
+
+### High Payment Thank You (if over $10)
+```
+🏆 Wow! Thank you for being a community champion!
+
+Your generous $[amount] contribution helps us:
+✅ Keep the tour accessible to everyone
+✅ Research new historical tours
+✅ Support local historians and storytellers
+
+You're making Greenville's history available to visitors who might not otherwise afford it.
+
+🎁 As thanks, we'll send you exclusive behind-the-scenes content about how we created this tour.
+```
