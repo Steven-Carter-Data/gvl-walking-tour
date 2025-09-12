@@ -9,7 +9,7 @@ function IndividualPricing({ onPaymentSelect, onBack }) {
   const [promoCode, setPromoCode] = useState('');
   const [showPromoInput, setShowPromoInput] = useState(false);
   
-  const presetAmounts = [3, 4, 5, 6, 8, 10, 15];
+  const presetAmounts = [3, 5, 8, 10, 15];
   
   const handleAmountSelect = (amount) => {
     setSelectedAmount(amount);
