@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import WelcomeScreen from './components/WelcomeScreen';
 import GroupSizeSelector from './components/GroupSizeSelector';
 import IndividualPricing from './components/IndividualPricing';
+import GroupPricing from './components/GroupPricing';
 import TourMap from './components/TourMap';
 import AudioPlayer from './components/AudioPlayer';
 import PaymentFlow from './components/PaymentFlow';
@@ -108,13 +109,7 @@ function App() {
     if (groupOption.id === 'individual') {
       setCurrentScreen('individual-pricing');
     } else {
-      // For now, skip to payment - we'll add group pricing pages later
-      setPaymentInfo({
-        type: 'group',
-        groupSize: groupOption.id,
-        amount: groupOption.pricing
-      });
-      setCurrentScreen('payment');
+      setCurrentScreen('group-pricing');
     }
   };
   
@@ -172,6 +167,14 @@ function App() {
         />
       )}
       
+      {currentScreen === 'group-pricing' && (
+        <GroupPricing
+          groupData={selectedGroup}
+          onPaymentSelect={handlePaymentSelect}
+          onBack={() => setCurrentScreen('group-size')}
+        />
+      )}
+      
       {currentScreen === 'payment' && (
         <PaymentFlow
           paymentInfo={paymentInfo}
@@ -180,7 +183,7 @@ function App() {
             if (paymentInfo?.type === 'individual') {
               setCurrentScreen('individual-pricing');
             } else {
-              setCurrentScreen('group-size');
+              setCurrentScreen('group-pricing');
             }
           }}
         />
