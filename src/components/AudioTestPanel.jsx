@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import tourData from '../data/greenville_tour_stops_with_test_scripts.json';
+import tourData from '../data/falls_park_tour_stops.json';
 
 function AudioTestPanel() {
   const [isPlaying, setIsPlaying] = useState(false);

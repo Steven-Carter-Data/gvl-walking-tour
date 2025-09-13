@@ -8,7 +8,7 @@ import AudioPlayer from './components/AudioPlayer';
 import PaymentFlow from './components/PaymentFlow';
 import PaymentSuccess from './components/PaymentSuccess';
 import AdminPanel from './components/AdminPanel';
-import tourData from './data/greenville_tour_stops_with_test_scripts.json';
+import tourData from './data/falls_park_tour_stops.json';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState(() => {

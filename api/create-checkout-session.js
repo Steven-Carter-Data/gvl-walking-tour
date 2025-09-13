@@ -50,7 +50,7 @@ export default async function handler(req, res) {
             currency: currency.toLowerCase(),
             product_data: {
               name: getProductName(groupType),
-              description: 'Self-guided audio tour with GPS triggers around Falls Park & downtown Greenville',
+              description: 'Self-guided audio tour with GPS triggers around Falls Park in Greenville, SC',
               images: [
                 'https://example.com/tour-image.jpg' // Replace with actual image
               ],

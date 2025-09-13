@@ -1,0 +1,119 @@
+{
+  "tour_id": "falls-park-greenville-v2",
+  "currency": "USD",
+  "price": 9.99,
+  "stops": [
+    {
+      "id": "cradle-of-greenville",
+      "order": 1,
+      "title": "Cradle of Greenville",
+      "coordinates": {
+        "lat": 34.84505875191681,
+        "lng": -82.40057229995729
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Placeholder: Intro to Greenville's founding.",
+      "audio_url": "https://example.com/audio/cradle-of-greenville.mp3",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "liberty-bridge-falls-park-entrance",
+      "order": 2,
+      "title": "Liberty Bridge \u2014 Falls Park Entrance",
+      "coordinates": {
+        "lat": 34.84466251889,
+        "lng": -82.40063667297365
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Placeholder: Liberty Bridge story.",
+      "audio_url": "https://example.com/audio/liberty-bridge.mp3",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "reedy-river-falls-and-old-mill-ruins",
+      "order": 3,
+      "title": "Reedy River Falls and Old Mill Ruins",
+      "coordinates": {
+        "lat": 34.84532290620822,
+        "lng": -82.40121603012086
+      },
+      "radius_m": 30,
+      "duration_sec_estimate": 300,
+      "description": "Placeholder: Falls and ruins history.",
+      "audio_url": "https://example.com/audio/reedy-river-falls.mp3",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "wyche-pavilion",
+      "order": 4,
+      "title": "Wyche Pavilion",
+      "coordinates": {
+        "lat": 34.846344294824206,
+        "lng": -82.40203142166139
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Placeholder: Pavilion story.",
+      "audio_url": "https://example.com/audio/wyche-pavilion.mp3",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "charles-h-townes",
+      "order": 5,
+      "title": "Charles H. Townes",
+      "coordinates": {
+        "lat": 34.845432970246044,
+        "lng": -82.40212798118593
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Placeholder: Charles Townes legacy.",
+      "audio_url": "https://example.com/audio/charles-townes.mp3",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "the-medusa-tree-and-furman",
+      "order": 6,
+      "title": "The Medusa Tree & Furman University",
+      "coordinates": {
+        "lat": 34.843896462962284,
+        "lng": -82.4017095565796
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Placeholder: Medusa Tree story and Furman University story.",
+      "audio_url": "https://example.com/audio/medusa-tree-and-furman.mp3",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    },
+    {
+      "id": "falls-park-gardens-closing",
+      "order": 7,
+      "title": "Falls Park Gardens (Closing Stop)",
+      "coordinates": {
+        "lat": 34.84417382886301,
+        "lng": -82.4022138118744
+      },
+      "radius_m": 20,
+      "duration_sec_estimate": 180,
+      "description": "Placeholder: Closing remarks and invitation to explore more.",
+      "audio_url": "https://example.com/audio/falls-park-gardens.mp3",
+      "image_urls": [],
+      "autoplay_on_enter": true,
+      "geofence_type": "circle"
+    }
+  ]
+}

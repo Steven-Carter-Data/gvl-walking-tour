@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import tourData from '../data/greenville_tour_stops_with_test_scripts.json';
+import tourData from '../data/falls_park_tour_stops.json';
 
 function WelcomeScreen({ onScreenChange, tourPurchased }) {
   const [showPreview, setShowPreview] = useState(false);
@@ -64,12 +64,12 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
             Basecamp Presents:
           </p>
           <h1 className="bc-title bc-h1 mb-4" style={{color: '#e5e3dc', fontWeight: '400'}}>
-            <span className="bc-underline">Downtown Greenville</span><br />
+            <span className="bc-underline">Falls Park</span><br />
             <span>Self-Guided Walking Tour</span>
           </h1>
           
           <p className="text-xl text-white mb-6 max-w-lg mx-auto leading-relaxed font-light">
-            An immersive journey through Greenville's remarkable transformation from mill town to modern marvel.
+            An immersive journey through Falls Park's natural beauty and rich history.
           </p>
           
           {/* CTA Button */}
@@ -118,7 +118,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
               WHY CHOOSE OUR TOUR?
             </h2>
             <p className="text-lg leading-relaxed" style={{color: '#495a58'}}>
-              Unlike other walking tours, we deliver a <strong>premium storytelling experience</strong> that brings Greenville's transformation to life through professional narration, real-time GPS guidance, and exclusive historical insights.
+              Unlike other walking tours, we deliver a <strong>premium storytelling experience</strong> that brings Falls Park's rich history to life through professional narration, real-time GPS guidance, and exclusive historical insights.
             </p>
           </div>
           
