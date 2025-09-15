@@ -707,6 +707,101 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                 </button>
               </div>
             </div>
+
+            {/* Stop Images */}
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '24px',
+              padding: '32px',
+              marginTop: '32px',
+              border: '1px solid #f3f4f6',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            }}>
+              <div style={{
+                textAlign: 'center',
+                marginBottom: '24px'
+              }}>
+                <h4 style={{
+                  fontSize: '24px',
+                  fontWeight: '900',
+                  color: '#111827',
+                  marginBottom: '8px',
+                  margin: '0 0 8px 0'
+                }}>
+                  Historical Images
+                </h4>
+                <p style={{
+                  color: '#6b7280',
+                  margin: 0
+                }}>Visual references for this stop</p>
+              </div>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: '16px'
+              }}>
+                {/* Image 1 */}
+                <div style={{
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  border: '1px solid #e5e7eb'
+                }}>
+                  <img
+                    src={`/images/stops/${stop.id}_1.jpg`}
+                    alt={`${stop.title} - Historical Image 1`}
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      objectFit: 'cover'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </div>
+
+                {/* Image 2 */}
+                <div style={{
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  border: '1px solid #e5e7eb'
+                }}>
+                  <img
+                    src={`/images/stops/${stop.id}_2.jpg`}
+                    alt={`${stop.title} - Historical Image 2`}
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      objectFit: 'cover'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </div>
+
+                {/* Image 3 */}
+                <div style={{
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  border: '1px solid #e5e7eb'
+                }}>
+                  <img
+                    src={`/images/stops/${stop.id}_3.jpg`}
+                    alt={`${stop.title} - Historical Image 3`}
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      objectFit: 'cover'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Hidden Audio Element */}

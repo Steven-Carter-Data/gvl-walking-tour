@@ -222,6 +222,7 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
   const [showWelcomeAudio, setShowWelcomeAudio] = useState(true);
   const [welcomeAudioPlaying, setWelcomeAudioPlaying] = useState(false);
   const welcomeAudioRef = useRef(null);
+  const [showRouteReference, setShowRouteReference] = useState(false);
   
   const [selectedStop, setSelectedStop] = useState(null);
   const [walkingRoute, setWalkingRoute] = useState([]);
@@ -757,6 +758,37 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
         </MapContainer>
 
 
+        {/* Route Reference Button */}
+        <div style={{
+          position: 'absolute',
+          top: '24px',
+          left: '24px',
+          zIndex: 30
+        }}>
+          <button
+            onClick={() => setShowRouteReference(true)}
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(12px)',
+              borderRadius: '12px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+              border: '1px solid rgba(0, 0, 0, 0.1)',
+              padding: '12px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#495a58'
+            }}
+            title="View walking route reference"
+          >
+            <span style={{fontSize: '16px'}}>🗺️</span>
+            Route Map
+          </button>
+        </div>
+
         {/* GPS Status - Fixed Readability */}
         {userLocation && (
           <div style={{
@@ -800,6 +832,86 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
                     fontWeight: '500'
                   }}>High Accuracy</div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Route Reference Modal */}
+        {showRouteReference && (
+          <div style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            zIndex: 50,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
+          }}>
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '16px',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+              maxWidth: '90vw',
+              maxHeight: '90vh',
+              overflow: 'hidden',
+              position: 'relative'
+            }}>
+              {/* Header */}
+              <div style={{
+                padding: '20px',
+                borderBottom: '1px solid #e5e7eb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <div>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: '18px',
+                    fontWeight: '700',
+                    color: '#495a58'
+                  }}>Optimized Walking Route</h3>
+                  <p style={{
+                    margin: '4px 0 0 0',
+                    fontSize: '14px',
+                    color: '#6b7280'
+                  }}>Reference map for the complete tour path</p>
+                </div>
+                <button
+                  onClick={() => setShowRouteReference(false)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                    color: '#6b7280',
+                    padding: '4px',
+                    borderRadius: '8px'
+                  }}
+                  title="Close"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Route Image */}
+              <div style={{
+                padding: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+              }}>
+                <img
+                  src="/complete_route.png"
+                  alt="Complete walking route map"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '70vh',
+                    objectFit: 'contain',
+                    borderRadius: '8px'
+                  }}
+                />
               </div>
             </div>
           </div>
