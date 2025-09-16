@@ -737,26 +737,29 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
               </div>
 
               <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                gap: '16px'
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px'
               }}>
                 {/* Image 1 */}
                 <div style={{
                   borderRadius: '16px',
                   overflow: 'hidden',
-                  border: '1px solid #e5e7eb'
+                  border: '1px solid #e5e7eb',
+                  backgroundColor: '#f9fafb'
                 }}>
                   <img
                     src={`/images/stops/${stop.id}_1.jpg`}
                     alt={`${stop.title} - Historical Image 1`}
                     style={{
                       width: '100%',
-                      height: '200px',
-                      objectFit: 'cover'
+                      height: 'auto',
+                      display: 'block',
+                      maxHeight: '400px',
+                      objectFit: 'contain'
                     }}
                     onError={(e) => {
-                      e.target.style.display = 'none';
+                      e.target.parentElement.style.display = 'none';
                     }}
                   />
                 </div>
@@ -765,38 +768,21 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                 <div style={{
                   borderRadius: '16px',
                   overflow: 'hidden',
-                  border: '1px solid #e5e7eb'
+                  border: '1px solid #e5e7eb',
+                  backgroundColor: '#f9fafb'
                 }}>
                   <img
                     src={`/images/stops/${stop.id}_2.jpg`}
                     alt={`${stop.title} - Historical Image 2`}
                     style={{
                       width: '100%',
-                      height: '200px',
-                      objectFit: 'cover'
+                      height: 'auto',
+                      display: 'block',
+                      maxHeight: '400px',
+                      objectFit: 'contain'
                     }}
                     onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                </div>
-
-                {/* Image 3 */}
-                <div style={{
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  border: '1px solid #e5e7eb'
-                }}>
-                  <img
-                    src={`/images/stops/${stop.id}_3.jpg`}
-                    alt={`${stop.title} - Historical Image 3`}
-                    style={{
-                      width: '100%',
-                      height: '200px',
-                      objectFit: 'cover'
-                    }}
-                    onError={(e) => {
-                      e.target.style.display = 'none';
+                      e.target.parentElement.style.display = 'none';
                     }}
                   />
                 </div>
