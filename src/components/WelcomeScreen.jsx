@@ -88,7 +88,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
       <div className="px-6 py-8 bc-card-bg shadow-lg">
         <div className="grid grid-cols-3 gap-6 max-w-md mx-auto">
           <div className="text-center">
-            <div className="text-3xl font-black mb-2" style={{color: '#d4967d'}}>8</div>
+            <div className="text-3xl font-black mb-2" style={{color: '#d4967d'}}>7</div>
             <div className="text-xs font-semibold uppercase tracking-wide" style={{color: '#495a58'}}>
               Historic Stops
             </div>
@@ -221,7 +221,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
           {/* Feature List */}
           <div className="grid grid-cols-1 gap-4 mb-8">
             {[
-              { icon: "📍", title: "9 GPS-Triggered Stops", subtitle: "Automatic audio activation" },
+              { icon: "📍", title: "7 GPS-Triggered Stops", subtitle: "Automatic audio activation" },
               { icon: "🎙️", title: "Professional Narration", subtitle: "3-5 minutes per location" },
               { icon: "⏱️", title: "Self-Paced Experience", subtitle: "~45 minutes total journey" }
             ].map((feature, index) => (
