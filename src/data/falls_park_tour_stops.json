@@ -14,7 +14,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Placeholder: Intro to Greenville's founding.",
-      "audio_url": "https://example.com/audio/cradle-of-greenville.mp3",
+      "audio_url": "/audio/cradle-of-greenville.wav",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -30,7 +30,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Placeholder: Liberty Bridge story.",
-      "audio_url": "https://example.com/audio/liberty-bridge.mp3",
+      "audio_url": "/audio/liberty-bridge-falls-park-entrance.wav",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -46,7 +46,7 @@
       "radius_m": 30,
       "duration_sec_estimate": 300,
       "description": "Placeholder: Falls and ruins history.",
-      "audio_url": "https://example.com/audio/reedy-river-falls.mp3",
+      "audio_url": "/audio/reedy-river-falls-and-old-mill-ruins.wav",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -62,7 +62,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Placeholder: Pavilion story.",
-      "audio_url": "https://example.com/audio/wyche-pavilion.mp3",
+      "audio_url": "/audio/wyche-pavilion.wav",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -78,7 +78,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Placeholder: Charles Townes legacy.",
-      "audio_url": "https://example.com/audio/charles-townes.mp3",
+      "audio_url": "/audio/charles-h-townes.wav",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -94,7 +94,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Placeholder: Medusa Tree story and Furman University story.",
-      "audio_url": "https://example.com/audio/medusa-tree-and-furman.mp3",
+      "audio_url": "/audio/the-medusa-tree-and-furman.wav",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"
@@ -110,7 +110,7 @@
       "radius_m": 20,
       "duration_sec_estimate": 180,
       "description": "Placeholder: Closing remarks and invitation to explore more.",
-      "audio_url": "https://example.com/audio/falls-park-gardens.mp3",
+      "audio_url": "/audio/falls-park-gardens-closing.wav",
       "image_urls": [],
       "autoplay_on_enter": true,
       "geofence_type": "circle"

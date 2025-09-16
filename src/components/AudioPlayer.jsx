@@ -7,6 +7,8 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showPlayPrompt, setShowPlayPrompt] = useState(false);
+  const [showSources, setShowSources] = useState(false);
+  const [sourcesText, setSourcesText] = useState('');
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -176,6 +178,24 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const loadSources = async () => {
+    try {
+      const response = await fetch('/references/tour_sources.txt');
+      if (response.ok) {
+        const text = await response.text();
+        setSourcesText(text);
+        setShowSources(true);
+      } else {
+        setSourcesText('Sources document not found.');
+        setShowSources(true);
+      }
+    } catch (error) {
+      console.error('Error loading sources:', error);
+      setSourcesText('Unable to load sources at this time.');
+      setShowSources(true);
+    }
   };
 
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -787,8 +807,118 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                   />
                 </div>
               </div>
+
+              {/* Sources Link */}
+              <div style={{
+                textAlign: 'center',
+                marginTop: '24px',
+                paddingTop: '20px',
+                borderTop: '1px solid #e5e7eb'
+              }}>
+                <button
+                  onClick={loadSources}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#6b7280',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    transition: 'color 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.target.style.color = '#374151'}
+                  onMouseLeave={(e) => e.target.style.color = '#6b7280'}
+                  title="View sources and references for this tour"
+                >
+                  📚 Sources & References
+                </button>
+              </div>
             </div>
           </div>
+
+          {/* Sources Modal */}
+          {showSources && (
+            <div style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              zIndex: 60,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px'
+            }}>
+              <div style={{
+                backgroundColor: 'white',
+                borderRadius: '16px',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                maxWidth: '600px',
+                maxHeight: '80vh',
+                overflow: 'hidden',
+                position: 'relative',
+                width: '90vw'
+              }}>
+                {/* Header */}
+                <div style={{
+                  padding: '24px',
+                  borderBottom: '1px solid #e5e7eb',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <div>
+                    <h3 style={{
+                      margin: 0,
+                      fontSize: '20px',
+                      fontWeight: '700',
+                      color: '#111827'
+                    }}>Sources & References</h3>
+                    <p style={{
+                      margin: '4px 0 0 0',
+                      fontSize: '14px',
+                      color: '#6b7280'
+                    }}>Historical sources used in this tour</p>
+                  </div>
+                  <button
+                    onClick={() => setShowSources(false)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      fontSize: '24px',
+                      cursor: 'pointer',
+                      color: '#6b7280',
+                      padding: '4px',
+                      borderRadius: '8px'
+                    }}
+                    title="Close"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Content */}
+                <div style={{
+                  padding: '24px',
+                  maxHeight: '60vh',
+                  overflowY: 'auto'
+                }}>
+                  <pre style={{
+                    whiteSpace: 'pre-wrap',
+                    wordWrap: 'break-word',
+                    fontFamily: 'system-ui, -apple-system, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    color: '#374151',
+                    margin: 0
+                  }}>
+                    {sourcesText}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Hidden Audio Element */}
           <audio
