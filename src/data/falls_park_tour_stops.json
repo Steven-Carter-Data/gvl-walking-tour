@@ -1,7 +1,7 @@
 {
   "tour_id": "falls-park-greenville-v2",
   "currency": "USD",
-  "price": 9.99,
+  "price": "Pay what you want",
   "stops": [
     {
       "id": "cradle-of-greenville",
