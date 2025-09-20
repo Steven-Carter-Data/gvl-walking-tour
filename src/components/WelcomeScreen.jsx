@@ -158,7 +158,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
           
           <div className="mt-6 p-4 rounded-xl text-center" style={{backgroundColor: '#d4967d', color: '#ffffff'}}>
             <p className="font-medium">
-              🚀 Experience Greenville's remarkable story.
+              🚀 Experience Falls Park's remarkable story.
             </p>
           </div>
         </div>
