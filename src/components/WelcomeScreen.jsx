@@ -1,13 +1,79 @@
 import { useState, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, Circle, Polyline } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import tourData from '../data/falls_park_tour_stops.json';
+
+// Fix for default markers in React Leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
+// Tour stop icon for preview
+const previewStopIcon = new L.Icon({
+  iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+      <circle cx="16" cy="16" r="14" fill="#ffffff" stroke="#d4967d" stroke-width="3"/>
+      <circle cx="16" cy="16" r="10" fill="#d4967d"/>
+      <circle cx="16" cy="16" r="4" fill="#ffffff"/>
+    </svg>
+  `),
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+});
+
+// Special starting point icon
+const previewStartIcon = new L.Icon({
+  iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+      <circle cx="20" cy="20" r="18" fill="#ffffff" stroke="#495a58" stroke-width="3"/>
+      <circle cx="20" cy="20" r="14" fill="#495a58"/>
+      <circle cx="20" cy="20" r="8" fill="#ffffff"/>
+      <text x="20" y="24" text-anchor="middle" fill="#495a58" font-size="6" font-weight="bold">START</text>
+    </svg>
+  `),
+  iconSize: [40, 40],
+  iconAnchor: [20, 20],
+});
 
 function WelcomeScreen({ onScreenChange, tourPurchased }) {
   const [showPreview, setShowPreview] = useState(false);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
+  const [showMapPreview, setShowMapPreview] = useState(false);
   const audioRef = useRef(null);
   const previewTimeoutRef = useRef(null);
-  
+
   const previewStop = tourData.stops[0]; // Liberty Bridge - the first stop
+
+  // Calculate map bounds that encompass all tour stops with tighter zoom
+  const calculateTourBounds = () => {
+    if (!tourData.stops || tourData.stops.length === 0) return null;
+
+    const lats = tourData.stops.map(stop => stop.coordinates.lat);
+    const lngs = tourData.stops.map(stop => stop.coordinates.lng);
+
+    const minLat = Math.min(...lats);
+    const maxLat = Math.max(...lats);
+    const minLng = Math.min(...lngs);
+    const maxLng = Math.max(...lngs);
+
+    // Reduced padding for tighter zoom
+    const padding = 0.0008;
+    return [
+      [minLat - padding, minLng - padding],
+      [maxLat + padding, maxLng + padding]
+    ];
+  };
+
+  const tourBounds = calculateTourBounds();
+
+  // Create tour route path
+  const tourRoute = tourData.stops
+    .sort((a, b) => a.order - b.order)
+    .map(stop => [stop.coordinates.lat, stop.coordinates.lng]);
 
   const handlePreviewPlay = async () => {
     setShowPreview(true);
@@ -162,7 +228,110 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
             </p>
           </div>
         </div>
-        
+
+        {/* Interactive Map Preview Card */}
+        <div className="bc-card-bg rounded-2xl p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
+          <div className="flex items-center mb-6">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#495a58'}}>
+              <div className="text-2xl text-white">🗺️</div>
+            </div>
+            <div className="ml-4">
+              <h3 className="text-2xl font-bold" style={{color: '#303636'}}>Interactive Route Preview</h3>
+              <p className="font-medium" style={{color: '#495a58'}}>See where your journey takes you</p>
+            </div>
+          </div>
+
+          <p className="text-lg leading-relaxed mb-6" style={{color: '#495a58'}}>
+            Explore the complete walking route and discover all 7 historical stops throughout Falls Park. Click below to reveal your adventure path!
+          </p>
+
+          <button
+            onClick={() => setShowMapPreview(!showMapPreview)}
+            className="bc-btn-primary w-full mb-6"
+          >
+            <div className="flex items-center justify-center">
+              <span className="mr-3 text-2xl">
+                {showMapPreview ? '🔽' : '🗺️'}
+              </span>
+              {showMapPreview ? 'Hide Tour Map' : 'Reveal Tour Map'}
+            </div>
+          </button>
+
+          {showMapPreview && (
+            <div className="space-y-4">
+              <div className="rounded-xl border overflow-hidden relative" style={{borderColor: '#d4967d', height: '400px'}}>
+                <MapContainer
+                  bounds={tourBounds}
+                  boundsOptions={{padding: [20, 20]}}
+                  style={{ height: '100%', width: '100%' }}
+                  zoomControl={false}
+                  attributionControl={false}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+
+                  {/* Tour stop markers */}
+                  {tourData.stops.map((stop) => (
+                    <div key={stop.id}>
+                      <Marker
+                        position={[stop.coordinates.lat, stop.coordinates.lng]}
+                        icon={stop.order === 1 ? previewStartIcon : previewStopIcon}
+                      />
+
+                      {/* Geofence circles (smaller for preview) */}
+                      <Circle
+                        center={[stop.coordinates.lat, stop.coordinates.lng]}
+                        radius={stop.radius_m}
+                        pathOptions={{
+                          color: '#d4967d',
+                          fillColor: '#d4967d',
+                          fillOpacity: 0.1,
+                          weight: 1,
+                        }}
+                      />
+                    </div>
+                  ))}
+                </MapContainer>
+
+                {/* Map overlay with tour info */}
+                <div className="absolute bottom-4 left-4 right-4 bg-white bg-opacity-95 rounded-lg p-4 backdrop-blur-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-sm" style={{color: '#303636'}}>
+                        Your 7-Stop Journey
+                      </h4>
+                      <p className="text-xs" style={{color: '#495a58'}}>
+                        ~45 minutes • 1.2 miles • Professional audio narration
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 rounded-full" style={{backgroundColor: '#d4967d'}}></div>
+                      <span className="text-xs font-medium" style={{color: '#495a58'}}>Tour Stops</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick tour info below map */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center p-3 rounded-lg border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
+                  <div className="text-lg font-bold" style={{color: '#495a58'}}>START</div>
+                  <div className="text-xs" style={{color: '#495a58'}}>Liberty Bridge</div>
+                </div>
+                <div className="text-center p-3 rounded-lg border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
+                  <div className="text-lg font-bold" style={{color: '#495a58'}}>7</div>
+                  <div className="text-xs" style={{color: '#495a58'}}>Historic Stops</div>
+                </div>
+                <div className="text-center p-3 rounded-lg border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
+                  <div className="text-lg font-bold" style={{color: '#495a58'}}>END</div>
+                  <div className="text-xs" style={{color: '#495a58'}}>Park Gardens</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Audio Preview Card */}
         <div className="bc-card-bg rounded-2xl p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
           <div className="flex items-center mb-6">
