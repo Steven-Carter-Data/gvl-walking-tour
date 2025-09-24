@@ -574,7 +574,7 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
             
             <audio
               ref={welcomeAudioRef}
-              src="/audio/0_WELCOME.wav"
+              src="/audio/0_welcome.wav"
               onEnded={() => setWelcomeAudioPlaying(false)}
               onPause={() => setWelcomeAudioPlaying(false)}
               preload="metadata"

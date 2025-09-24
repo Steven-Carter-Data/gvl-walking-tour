@@ -121,9 +121,10 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
             <span className="bc-underline">Falls Park</span><br />
             <span>Self-Guided Walking Tour</span>
           </h1>
-          
+
           <p className="text-xl text-white mb-6 max-w-lg mx-auto leading-relaxed font-light">
-            An immersive journey through Falls Park's natural beauty and rich history.
+            Skip the Boring History Lesson.<br />
+            Experience Falls Park Like a Local Storyteller.
           </p>
           
           {/* CTA Button */}
@@ -162,6 +163,26 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
         </div>
       </div>
 
+      {/* Urgency Section */}
+      <div className="px-6 py-8" style={{backgroundColor: '#495a58'}}>
+        <div className="max-w-md mx-auto text-center">
+          <div className="mb-4">
+            <h3 className="text-3xl font-black mb-3" style={{
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '0.1em',
+              color: '#e5e3dc',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+            }}>
+              PAY WHAT YOU WANT
+            </h3>
+            <div className="w-20 h-1 mx-auto rounded-full" style={{backgroundColor: '#d4967d'}}></div>
+          </div>
+          <p className="text-lg font-medium leading-relaxed" style={{color: '#e5e3dc'}}>
+            Choose your own price — pay what feels fair to you. No fixed cost, no pressure. Just great stories at whatever value you decide.
+          </p>
+        </div>
+      </div>
+
       {/* Content Section with proper Basecamp colors */}
       <div className="flex-1 px-6 py-8 space-y-6" style={{backgroundColor: '#e5e3dc'}}>
         
@@ -172,7 +193,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
               WHY CHOOSE OUR TOUR?
             </h2>
             <p className="text-lg leading-relaxed" style={{color: '#495a58'}}>
-              Unlike other walking tours, we deliver a <strong>premium storytelling experience</strong> that brings Falls Park's rich history to life through professional narration, real-time GPS guidance, and exclusive historical insights.
+              Unlike other walking tours, we deliver a <strong>seamless storytelling experience</strong> that automatically comes alive as you walk. No maps to fumble with, no wondering "am I in the right spot?" Compelling stories appear right when you reach each historic spot.
             </p>
           </div>
           
@@ -180,19 +201,19 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
           <div className="grid grid-cols-1 gap-4">
             {[
               {
-                icon: "🎭",
-                title: "Professional Storytelling",
-                description: "Quality narration that transforms historical facts into engaging stories you'll remember"
+                icon: "🎯",
+                title: "Stories That Find YOU",
+                description: "Walk naturally and let our GPS magic do the rest. Your phone knows when you've reached each historic spot and serves up the perfect story - no maps to check, no guessing where to go!"
               },
               {
-                icon: "🎯",
-                title: "Precision GPS Technology",
-                description: "Audio automatically triggers as you approach each location. No guesswork at all!"
+                icon: "🎭",
+                title: "Leave with Stories You'll Actually Remember",
+                description: "Professional narration that turns forgotten history into fascinating tales you'll share with friends and family"
               },
               {
                 icon: "⚡",
-                title: "Smart & Self-Paced",
-                description: "Take the full 45-minute experience or customize your journey. Pause anytime, revisit stops, and explore at your own pace!"
+                title: "Perfect for YOUR Schedule",
+                description: "Start anytime, pause for lunch, skip ahead, or take your time. This is your adventure on your timeline!"
               }
             ].map((feature, index) => (
               <div key={index} className="flex items-start p-4 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
