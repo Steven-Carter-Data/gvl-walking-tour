@@ -44,7 +44,6 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
   const [showMapPreview, setShowMapPreview] = useState(false);
   const audioRef = useRef(null);
-  const previewTimeoutRef = useRef(null);
 
   const previewStop = tourData.stops[0]; // Liberty Bridge - the first stop
 
@@ -77,27 +76,16 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
 
   const handlePreviewPlay = async () => {
     setShowPreview(true);
-    
+
     if (audioRef.current) {
       try {
         if (isPreviewPlaying) {
           audioRef.current.pause();
           setIsPreviewPlaying(false);
-          if (previewTimeoutRef.current) {
-            clearTimeout(previewTimeoutRef.current);
-          }
         } else {
           audioRef.current.currentTime = 0; // Start from beginning
           await audioRef.current.play();
           setIsPreviewPlaying(true);
-          
-          // Stop audio after 15 seconds
-          previewTimeoutRef.current = setTimeout(() => {
-            if (audioRef.current) {
-              audioRef.current.pause();
-              setIsPreviewPlaying(false);
-            }
-          }, 15000);
         }
       } catch (error) {
         console.log('Audio autoplay prevented - user interaction required');
@@ -191,25 +179,20 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
           {/* Key Differentiators */}
           <div className="grid grid-cols-1 gap-4">
             {[
-              { 
-                icon: "🎭", 
-                title: "Professional Storytelling", 
-                description: "Quality narration that transforms historical facts into engaging stories you'll remember" 
+              {
+                icon: "🎭",
+                title: "Professional Storytelling",
+                description: "Quality narration that transforms historical facts into engaging stories you'll remember"
               },
-              { 
-                icon: "🎯", 
-                title: "Precision GPS Technology", 
-                description: "Audio automatically triggers as you approach each location. No guesswork at all!" 
+              {
+                icon: "🎯",
+                title: "Precision GPS Technology",
+                description: "Audio automatically triggers as you approach each location. No guesswork at all!"
               },
-              { 
-                icon: "🏛️", 
-                title: "Exclusive Historical Access", 
-                description: "Hear untold stories from Greenville's mill town era to modern renaissance" 
-              },
-              { 
-                icon: "⚡", 
-                title: "Smart & Self-Paced", 
-                description: "Take the full 45-minute experience or customize your journey. Pause anytime, revisit stops, and explore at your own pace!" 
+              {
+                icon: "⚡",
+                title: "Smart & Self-Paced",
+                description: "Take the full 45-minute experience or customize your journey. Pause anytime, revisit stops, and explore at your own pace!"
               }
             ].map((feature, index) => (
               <div key={index} className="flex items-start p-4 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
@@ -345,7 +328,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
           </div>
           
           <p className="text-lg leading-relaxed mb-6" style={{color: '#495a58'}}>
-            Listen to our professionally narrated sample from Liberty Bridge and discover the exceptional quality of our immersive storytelling experience.
+            Listen to our professionally narrated sample and discover the exceptional quality of our immersive storytelling experience.
           </p>
           
           <button 
@@ -365,11 +348,11 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
               <div className="flex items-center mb-3">
                 <div className="w-3 h-3 rounded-full mr-3" style={{backgroundColor: '#d4967d'}}></div>
                 <h4 className="font-bold text-lg" style={{color: '#303636'}}>
-                  "{previewStop.title}"
+                  "Tour Preview Sample"
                 </h4>
               </div>
               <p className="leading-relaxed mb-4" style={{color: '#495a58'}}>
-                {previewStop.description}
+                Get a taste of our professional storytelling experience and discover what makes Falls Park's history come alive through engaging narration and fascinating historical insights.
               </p>
             </div>
           )}
@@ -461,18 +444,12 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
       {/* Hidden Audio Element for Preview */}
       <audio
         ref={audioRef}
-        src={previewStop.audio_url}
+        src="/audio/preview-sample.wav"
         onEnded={() => {
           setIsPreviewPlaying(false);
-          if (previewTimeoutRef.current) {
-            clearTimeout(previewTimeoutRef.current);
-          }
         }}
         onPause={() => {
           setIsPreviewPlaying(false);
-          if (previewTimeoutRef.current) {
-            clearTimeout(previewTimeoutRef.current);
-          }
         }}
         preload="metadata"
       />
