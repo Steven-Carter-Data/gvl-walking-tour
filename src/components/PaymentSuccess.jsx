@@ -149,6 +149,17 @@ function PaymentSuccess() {
           )}
         </div>
 
+        {/* Primary Action - Start Tour */}
+        <div className="grid gap-4 mb-8">
+          <button
+            onClick={handleStartTour}
+            className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white shadow-lg hover:transform hover:scale-105 transition-all duration-200"
+            style={{backgroundColor: '#d4967d'}}
+          >
+            🎧 Start Your Tour Now
+          </button>
+        </div>
+
         {/* Offline Download Recommendation */}
         <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-6">
           <div className="text-center mb-4">
@@ -217,17 +228,6 @@ function PaymentSuccess() {
               </div>
             )}
           </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="grid gap-4 mb-8">
-          <button
-            onClick={handleStartTour}
-            className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white shadow-lg hover:transform hover:scale-105 transition-all duration-200"
-            style={{backgroundColor: '#d4967d'}}
-          >
-            🎧 Start Your Tour Now
-          </button>
         </div>
 
         {/* Support Contact */}
