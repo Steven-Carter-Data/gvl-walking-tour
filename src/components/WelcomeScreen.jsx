@@ -124,7 +124,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
 
           <p className="text-xl text-white mb-6 max-w-lg mx-auto leading-relaxed font-light">
             Skip the Boring History Lesson.<br />
-            Experience Falls Park Like a Local Storyteller.
+            Let Falls Park Tell Its Story.
           </p>
           
           {/* CTA Button */}
@@ -164,20 +164,20 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
       </div>
 
       {/* Urgency Section */}
-      <div className="px-6 py-8" style={{backgroundColor: '#495a58'}}>
+      <div className="px-6 py-8" style={{backgroundColor: '#d4967d'}}>
         <div className="max-w-md mx-auto text-center">
           <div className="mb-4">
             <h3 className="text-3xl font-black mb-3" style={{
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '0.1em',
-              color: '#e5e3dc',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+              color: 'white',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
             }}>
               PAY WHAT YOU WANT
             </h3>
-            <div className="w-20 h-1 mx-auto rounded-full" style={{backgroundColor: '#d4967d'}}></div>
+            <div className="w-20 h-1 mx-auto rounded-full" style={{backgroundColor: '#495a58'}}></div>
           </div>
-          <p className="text-lg font-medium leading-relaxed" style={{color: '#e5e3dc'}}>
+          <p className="text-lg font-medium leading-relaxed" style={{color: 'white'}}>
             Choose your own price — pay what feels fair to you. No fixed cost, no pressure. Just great stories at whatever value you decide.
           </p>
         </div>
@@ -203,12 +203,12 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
               {
                 icon: "🎯",
                 title: "Stories That Find YOU",
-                description: "Walk naturally and let our GPS magic do the rest. Your phone knows when you've reached each historic spot and serves up the perfect story - no maps to check, no guessing where to go!"
+                description: "Walk naturally and let our GPS technology do the rest. Your phone knows when you've reached each historic spot and serves up the perfect story - no maps to check, no guessing where to go!"
               },
               {
                 icon: "🎭",
                 title: "Leave with Stories You'll Actually Remember",
-                description: "Professional narration that turns forgotten history into fascinating tales you'll share with friends and family"
+                description: "Professional narration that turns local history into fascinating tales you'll share with friends and family"
               },
               {
                 icon: "⚡",
@@ -436,9 +436,9 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
             <p className="text-sm font-medium mb-2" style={{color: '#495a58'}}>
               Contact us at:
             </p>
-            <a 
+            <a
               href="mailto:services@basecampdataanalytics.com"
-              className="text-2xl font-bold hover:underline transition-all duration-200"
+              className="text-lg md:text-xl font-bold hover:underline transition-all duration-200 break-all text-center block"
               style={{color: '#d4967d'}}
             >
               services@basecampdataanalytics.com

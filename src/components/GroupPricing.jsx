@@ -129,22 +129,22 @@ function GroupPricing({ groupData, onPaymentSelect, onBack }) {
           <h3 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
             For comparison in downtown Greenville:
           </h3>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div className="flex justify-between">
+          <div className="grid grid-cols-1 gap-3 text-sm">
+            <div className="flex justify-between items-center">
               <span>🌟 Professional guided tour:</span>
-              <span className="font-semibold">$25-35</span>
+              <span className="font-semibold ml-2">$25-35</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span>☕ Coffee at local café:</span>
-              <span className="font-semibold">$5-6</span>
+              <span className="font-semibold ml-2">$5-6</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span>🚗 2-hour downtown parking:</span>
-              <span className="font-semibold">$4-8</span>
+              <span className="font-semibold ml-2">$4-8</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span>📱 Our historical tour:</span>
-              <span className="font-semibold" style={{color: '#d4967d'}}>You decide!</span>
+              <span className="font-semibold ml-2" style={{color: '#d4967d'}}>You decide!</span>
             </div>
           </div>
         </div>
@@ -162,7 +162,7 @@ function GroupPricing({ groupData, onPaymentSelect, onBack }) {
           </div>
           
           <div className="text-center p-4 rounded-xl" style={{backgroundColor: '#d4967d', color: 'white'}}>
-            <div className="font-semibold">🎯 100% satisfaction guaranteed</div>
+            <div className="font-semibold">🎯 No pressure, just great stories</div>
           </div>
         </div>
 

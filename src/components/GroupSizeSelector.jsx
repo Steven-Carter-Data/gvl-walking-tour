@@ -54,10 +54,10 @@ function GroupSizeSelector({ onGroupSelect, onBack }) {
             <div className="inline-flex items-center justify-center w-16 h-16 mb-6 bg-white bg-opacity-10 rounded-full">
               <div className="text-3xl">🎧</div>
             </div>
-            <h1 className="text-3xl font-bold mb-4" style={{color: '#9ca3af'}}>
+            <h1 className="text-3xl font-bold mb-4" style={{color: 'white'}}>
               How many people are exploring with you today?
             </h1>
-            <p className="text-xl" style={{color: '#9ca3af', opacity: 0.8}}>
+            <p className="text-xl" style={{color: 'white', opacity: 0.9}}>
               Choose your group size to see pricing
             </p>
           </div>
@@ -128,8 +128,8 @@ function GroupSizeSelector({ onGroupSelect, onBack }) {
         <div className="mt-12 max-w-2xl mx-auto">
           <div className="bc-card-bg rounded-2xl p-8 shadow-lg">
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold mb-4" style={{color: '#303636'}}>
-                What You Get
+              <h3 className="text-3xl font-black mb-4" style={{color: '#303636', fontFamily: 'Anton, sans-serif', fontWeight: '700'}}>
+                WHAT YOU GET
               </h3>
             </div>
             
