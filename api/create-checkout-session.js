@@ -52,7 +52,7 @@ export default async function handler(req, res) {
               name: getProductName(groupType),
               description: 'Self-guided audio tour with GPS triggers around Falls Park in Greenville, SC',
               images: [
-                'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop&crop=center'
+                `${req.headers.origin}/images/stripe-checkout-image.jpg`
               ],
             },
             unit_amount: Math.round(price * 100), // Convert to cents
