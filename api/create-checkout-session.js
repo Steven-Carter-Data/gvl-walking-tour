@@ -22,9 +22,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Validate minimum price
-    if (price < 1) {
-      return res.status(400).json({ error: 'Minimum price is $1' });
+    // Validate minimum price (Stripe requires minimum $0.50 for USD)
+    if (price < 0.50) {
+      return res.status(400).json({ error: 'Minimum price is $0.50' });
     }
 
     // Get product name based on group type
@@ -52,7 +52,7 @@ export default async function handler(req, res) {
               name: getProductName(groupType),
               description: 'Self-guided audio tour with GPS triggers around Falls Park in Greenville, SC',
               images: [
-                'https://tours.basecampdataanalytics.com/images/stops/liberty-bridge-falls-park-entrance_1.jpg'
+                'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop&crop=center'
               ],
             },
             unit_amount: Math.round(price * 100), // Convert to cents
