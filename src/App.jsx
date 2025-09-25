@@ -177,6 +177,7 @@ function App() {
         <WelcomeScreen
           onScreenChange={() => setCurrentScreen('group-size')}
           tourPurchased={tourPurchased}
+          onStartTourMap={() => setCurrentScreen('map')}
         />
       )}
       

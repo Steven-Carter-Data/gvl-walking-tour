@@ -39,7 +39,7 @@ const previewStartIcon = new L.Icon({
   iconAnchor: [20, 20],
 });
 
-function WelcomeScreen({ onScreenChange, tourPurchased }) {
+function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
   const [showPreview, setShowPreview] = useState(false);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
   const [showMapPreview, setShowMapPreview] = useState(false);
@@ -95,8 +95,13 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
   };
 
   const handleStartTour = () => {
-    // Go to group size selector first
-    onScreenChange();
+    if (tourPurchased && onStartTourMap) {
+      // User has already paid, go directly to tour map
+      onStartTourMap();
+    } else {
+      // User hasn't paid yet, go to group size selector first
+      onScreenChange();
+    }
   };
 
   return (
@@ -133,7 +138,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
               onClick={handleStartTour}
               className="bc-btn-primary"
             >
-              Start Your Walking Tour
+              {tourPurchased ? 'Start Your Tour' : 'Start Your Walking Tour'}
             </button>
           </div>
         </div>
@@ -414,7 +419,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased }) {
           >
             <div className="flex items-center justify-center">
               <span className="mr-3 text-2xl">🎧</span>
-              Start Premium Experience
+              {tourPurchased ? 'Start Your Tour' : 'Start Premium Experience'}
             </div>
           </button>
         </div>
