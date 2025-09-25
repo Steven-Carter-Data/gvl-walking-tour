@@ -126,7 +126,7 @@ function PaymentSuccess() {
           <h1 className="text-3xl font-bold mb-4" style={{color: 'white'}}>
             Payment Successful!
           </h1>
-          <p className="text-xl opacity-90">
+          <p className="text-xl" style={{color: 'white'}}>
             Thank you for supporting local history
           </p>
         </div>
