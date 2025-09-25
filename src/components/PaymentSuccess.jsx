@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { verifyPayment } from '../utils/stripe.js';
+import { audioPreloader } from '../utils/audioPreloader.js';
+import tourData from '../data/falls_park_tour_stops.json';
 
 function PaymentSuccess() {
   const [paymentStatus, setPaymentStatus] = useState('verifying');
   const [sessionDetails, setSessionDetails] = useState(null);
+  const [downloadStatus, setDownloadStatus] = useState('idle'); // idle, downloading, completed, error
+  const [downloadProgress, setDownloadProgress] = useState(0);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -34,10 +38,35 @@ function PaymentSuccess() {
     window.location.href = '/?tour=true';
   };
 
-  const handleDownloadOffline = () => {
-    // Trigger offline content download
-    console.log('Starting offline download...');
-    // This would integrate with your offline download system
+  const handleDownloadOffline = async () => {
+    if (downloadStatus === 'downloading') return;
+
+    setDownloadStatus('downloading');
+    setDownloadProgress(0);
+
+    // Get all audio URLs from tour data
+    const audioUrls = tourData.stops.map(stop => stop.audio_url);
+
+    try {
+      const result = await audioPreloader.preloadAudioFiles(
+        audioUrls,
+        (progress, loaded, total) => {
+          setDownloadProgress(progress);
+        }
+      );
+
+      if (result.success) {
+        setDownloadStatus('completed');
+        // Store in localStorage that content is downloaded
+        localStorage.setItem('tour_content_downloaded', 'true');
+        localStorage.setItem('download_timestamp', Date.now().toString());
+      } else {
+        setDownloadStatus('error');
+      }
+    } catch (error) {
+      console.error('Download failed:', error);
+      setDownloadStatus('error');
+    }
   };
 
   if (paymentStatus === 'verifying') {
@@ -129,13 +158,64 @@ function PaymentSuccess() {
             <p className="text-sm mb-4" style={{color: '#495a58'}}>
               Download the audio content now to avoid any technical issues during your tour. This ensures a seamless experience even without cell service.
             </p>
-            <button
-              onClick={handleDownloadOffline}
-              className="w-full px-8 py-3 rounded-xl text-lg font-semibold mb-4 hover:transform hover:scale-105 transition-all duration-200"
-              style={{backgroundColor: '#d4967d', color: 'white'}}
-            >
-              📱 Download for Offline Use
-            </button>
+            {downloadStatus === 'idle' && (
+              <button
+                onClick={handleDownloadOffline}
+                className="w-full px-8 py-3 rounded-xl text-lg font-semibold mb-4 hover:transform hover:scale-105 transition-all duration-200"
+                style={{backgroundColor: '#d4967d', color: 'white'}}
+              >
+                📱 Download for Offline Use
+              </button>
+            )}
+
+            {downloadStatus === 'downloading' && (
+              <div className="text-center mb-4">
+                <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
+                  <div
+                    className="h-3 rounded-full transition-all duration-300"
+                    style={{
+                      width: `${downloadProgress}%`,
+                      backgroundColor: '#d4967d'
+                    }}
+                  ></div>
+                </div>
+                <p className="text-sm font-semibold" style={{color: '#303636'}}>
+                  Downloading audio files... {downloadProgress}%
+                </p>
+                <p className="text-xs" style={{color: '#495a58'}}>
+                  Please keep this page open
+                </p>
+              </div>
+            )}
+
+            {downloadStatus === 'completed' && (
+              <div className="text-center mb-4 p-4 rounded-xl" style={{backgroundColor: '#e8f5e8'}}>
+                <div className="text-2xl mb-2">✅</div>
+                <p className="font-semibold text-green-800 mb-1">Download Complete!</p>
+                <p className="text-sm text-green-700">
+                  All audio files are ready for offline use
+                </p>
+              </div>
+            )}
+
+            {downloadStatus === 'error' && (
+              <div className="text-center mb-4">
+                <div className="p-4 rounded-xl mb-3" style={{backgroundColor: '#fee'}}>
+                  <div className="text-2xl mb-2">⚠️</div>
+                  <p className="font-semibold text-red-800 mb-1">Download Issues</p>
+                  <p className="text-sm text-red-700">
+                    Some files couldn't download, but your tour will still work
+                  </p>
+                </div>
+                <button
+                  onClick={handleDownloadOffline}
+                  className="w-full px-6 py-2 rounded-xl text-sm font-semibold hover:transform hover:scale-105 transition-all duration-200"
+                  style={{backgroundColor: '#d4967d', color: 'white'}}
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
