@@ -106,9 +106,6 @@ function PaymentSuccess() {
       <div className="px-6 py-8 max-w-4xl mx-auto">
         {/* Payment Summary */}
         <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-8">
-          <h3 className="text-xl font-bold mb-4" style={{color: '#303636'}}>
-            Your Contribution: ${sessionDetails?.amount_total ? (sessionDetails.amount_total / 100).toFixed(2) : 'N/A'}
-          </h3>
           <div className="grid md:grid-cols-2 gap-4 text-sm mb-6">
             <div>✅ Full access to all 8 tour stops</div>
             <div>✅ GPS-triggered audio narration</div>
@@ -123,6 +120,25 @@ function PaymentSuccess() {
           )}
         </div>
 
+        {/* Offline Download Recommendation */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-6">
+          <div className="text-center mb-4">
+            <h3 className="text-lg font-bold mb-2" style={{color: '#303636'}}>
+              📱 Strongly Recommended: Download for Offline Use
+            </h3>
+            <p className="text-sm mb-4" style={{color: '#495a58'}}>
+              Download the audio content now to avoid any technical issues during your tour. This ensures a seamless experience even without cell service.
+            </p>
+            <button
+              onClick={handleDownloadOffline}
+              className="w-full px-8 py-3 rounded-xl text-lg font-semibold mb-4 hover:transform hover:scale-105 transition-all duration-200"
+              style={{backgroundColor: '#d4967d', color: 'white'}}
+            >
+              📱 Download for Offline Use
+            </button>
+          </div>
+        </div>
+
         {/* Action Buttons */}
         <div className="grid gap-4 mb-8">
           <button
@@ -132,14 +148,26 @@ function PaymentSuccess() {
           >
             🎧 Start Your Tour Now
           </button>
-          
-          <button
-            onClick={handleDownloadOffline}
-            className="w-full px-8 py-4 rounded-xl text-lg font-semibold border-2 hover:transform hover:scale-105 transition-all duration-200"
-            style={{borderColor: '#d4967d', color: '#d4967d', backgroundColor: 'transparent'}}
+        </div>
+
+        {/* Support Contact */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-6 text-center">
+          <h3 className="text-lg font-bold mb-4" style={{color: '#303636'}}>
+            Need Technical Support?
+          </h3>
+          <p className="text-sm mb-4" style={{color: '#495a58'}}>
+            If you experience any technical issues that cannot be resolved, please contact us:
+          </p>
+          <a
+            href="mailto:services@basecampdataanalytics.com"
+            className="text-lg font-semibold hover:underline transition-all duration-200 block"
+            style={{color: '#d4967d'}}
           >
-            📱 Download for Offline Use
-          </button>
+            services@basecampdataanalytics.com
+          </a>
+          <p className="text-xs mt-2" style={{color: '#495a58'}}>
+            We typically respond within 24 hours
+          </p>
         </div>
 
         {/* Thank You Message */}
