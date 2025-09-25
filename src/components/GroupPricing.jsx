@@ -229,8 +229,8 @@ function GroupPricing({ groupData, onPaymentSelect, onBack }) {
                 <span className="text-2xl font-bold">$</span>
                 <input
                   type="number"
-                  min="1"
-                  step="0.50"
+                  min="0.01"
+                  step="0.01"
                   value={customAmount}
                   onChange={(e) => setCustomAmount(e.target.value)}
                   className="w-24 p-3 text-center text-xl font-bold rounded-xl border-2"
