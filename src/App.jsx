@@ -39,6 +39,33 @@ function App() {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [paymentInfo, setPaymentInfo] = useState(null);
 
+  // Check for payment status changes (e.g., returning from Stripe checkout)
+  useEffect(() => {
+    const checkPaymentStatus = () => {
+      const hasAccess = localStorage.getItem('tour_access') === 'granted' ||
+                       localStorage.getItem('tourPurchased') === 'true';
+
+      if (hasAccess && !tourPurchased) {
+        console.log('✅ Payment found in localStorage, updating state');
+        setTourPurchased(true);
+
+        // Check URL parameters for tour mode
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('tour') === 'true') {
+          setCurrentScreen('map');
+        }
+      }
+    };
+
+    // Check on mount
+    checkPaymentStatus();
+
+    // Listen for storage events (in case user has multiple tabs open)
+    window.addEventListener('storage', checkPaymentStatus);
+
+    return () => window.removeEventListener('storage', checkPaymentStatus);
+  }, [tourPurchased]);
+
   useEffect(() => {
     let watchId;
     
