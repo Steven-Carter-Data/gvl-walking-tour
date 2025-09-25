@@ -52,7 +52,7 @@ export default async function handler(req, res) {
               name: getProductName(groupType),
               description: 'Self-guided audio tour with GPS triggers around Falls Park in Greenville, SC',
               images: [
-                'https://example.com/tour-image.jpg' // Replace with actual image
+                'https://tours.basecampdataanalytics.com/images/stops/liberty-bridge-falls-park-entrance_1.jpg'
               ],
             },
             unit_amount: Math.round(price * 100), // Convert to cents
