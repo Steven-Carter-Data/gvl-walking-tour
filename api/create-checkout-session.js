@@ -22,9 +22,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Validate minimum price (Allow true "pay what you want" pricing)
-    if (price < 0.01) {
-      return res.status(400).json({ error: 'Minimum price is $0.01' });
+    // Validate minimum price (Stripe enforces $0.50 minimum for USD)
+    if (price < 0.50) {
+      return res.status(400).json({ error: 'Minimum price is $0.50 (Stripe requirement)' });
     }
 
     // Get product name based on group type
