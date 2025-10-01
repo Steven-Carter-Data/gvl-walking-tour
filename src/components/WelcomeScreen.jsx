@@ -288,49 +288,115 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
       {/* Content Section with proper Basecamp colors */}
       <div className="flex-1 px-6 py-8 space-y-6" style={{backgroundColor: '#e5e3dc'}}>
         
-        {/* What Makes Us Different Section */}
+        {/* Comparison Section - Self-Guided vs Traditional Tours */}
         <div className="bc-card-bg rounded-2xl p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold mb-4" style={{color: '#303636', fontFamily: 'Anton, sans-serif', fontWeight: '700'}}>
-              WHY CHOOSE OUR TOUR?
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-3" style={{color: '#303636', fontFamily: 'Anton, sans-serif', fontWeight: '700'}}>
+              SELF-GUIDED vs TRADITIONAL TOUR
             </h2>
-            <p className="text-lg leading-relaxed" style={{color: '#495a58'}}>
-              Unlike other walking tours, we deliver a <strong>seamless storytelling experience</strong> that automatically comes alive as you walk. No maps to fumble with, no wondering "am I in the right spot?" Compelling stories appear right when you reach each historic spot.
+            <p className="text-lg font-medium" style={{color: '#495a58'}}>
+              Why pay more for less freedom?
             </p>
           </div>
-          
-          {/* Key Differentiators */}
-          <div className="grid grid-cols-1 gap-4">
-            {[
-              {
-                icon: "🎯",
-                title: "Stories That Find YOU",
-                description: "Walk naturally and let our GPS technology do the rest. Your phone knows when you've reached each historic spot and serves up the perfect story - no maps to check, no guessing where to go!"
-              },
-              {
-                icon: "🎭",
-                title: "Leave with Stories You'll Actually Remember",
-                description: "Professional narration that turns local history into fascinating tales you'll share with friends and family"
-              },
-              {
-                icon: "⚡",
-                title: "Perfect for YOUR Schedule",
-                description: "Start anytime, pause for lunch, skip ahead, or take your time. This is your adventure on your timeline!"
-              }
-            ].map((feature, index) => (
-              <div key={index} className="flex items-start p-4 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
-                <div className="text-3xl mr-4 flex-shrink-0">{feature.icon}</div>
-                <div>
-                  <h3 className="font-bold text-lg mb-1" style={{color: '#303636'}}>{feature.title}</h3>
-                  <p className="text-sm leading-relaxed" style={{color: '#495a58'}}>{feature.description}</p>
+
+          {/* Comparison Grid */}
+          <div className="overflow-x-auto">
+            <div className="min-w-full">
+              {/* Header Row */}
+              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px'}}>
+                <div className="p-4 rounded-xl text-center border-2" style={{backgroundColor: '#d4967d', borderColor: '#495a58'}}>
+                  <div className="text-2xl mb-2">🎧</div>
+                  <div className="font-bold text-lg text-white">Our Self-Guided Tour</div>
+                  <div className="text-sm text-white font-semibold mt-1">Pay What You Want</div>
+                </div>
+                <div className="p-4 rounded-xl text-center border-2" style={{backgroundColor: '#e5e3dc', borderColor: '#495a58'}}>
+                  <div className="text-2xl mb-2">👥</div>
+                  <div className="font-bold text-lg" style={{color: '#303636'}}>Traditional Guided Tour</div>
+                  <div className="text-sm font-semibold mt-1" style={{color: '#495a58'}}>$25-40 per person</div>
                 </div>
               </div>
-            ))}
+
+              {/* Comparison Items */}
+              <div className="space-y-3">
+                {[
+                  {
+                    category: "Price",
+                    ours: "Pay what feels fair to you",
+                    theirs: "$25-40 fixed price",
+                    ourIcon: "✅",
+                    theirIcon: "💰"
+                  },
+                  {
+                    category: "Schedule",
+                    ours: "Start anytime - perfect timing",
+                    theirs: "Fixed times only (10am, 2pm)",
+                    ourIcon: "✅",
+                    theirIcon: "❌"
+                  },
+                  {
+                    category: "Pace",
+                    ours: "Walk at your speed, pause for photos",
+                    theirs: "Rushed through each stop",
+                    ourIcon: "✅",
+                    theirIcon: "❌"
+                  },
+                  {
+                    category: "Flexibility",
+                    ours: "Stop for lunch, skip ahead, repeat stops",
+                    theirs: "Stuck with the group schedule",
+                    ourIcon: "✅",
+                    theirIcon: "❌"
+                  },
+                  {
+                    category: "Content",
+                    ours: "45 min professional narration",
+                    theirs: "Similar content, less freedom",
+                    ourIcon: "✅",
+                    theirIcon: "⏱️"
+                  },
+                  {
+                    category: "Access",
+                    ours: "Keep forever, tour anytime",
+                    theirs: "One-time experience only",
+                    ourIcon: "✅",
+                    theirIcon: "❌"
+                  }
+                ].map((item, index) => (
+                  <div key={index} style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
+                    {/* Our Tour */}
+                    <div className="p-4 rounded-xl border-2" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
+                      <div style={{display: 'flex', alignItems: 'flex-start'}}>
+                        <span style={{fontSize: '20px', marginRight: '8px', flexShrink: 0}}>{item.ourIcon}</span>
+                        <div>
+                          <div className="font-semibold text-sm mb-1" style={{color: '#495a58'}}>{item.category}</div>
+                          <div className="text-sm leading-relaxed font-medium" style={{color: '#303636'}}>{item.ours}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Their Tour */}
+                    <div className="p-4 rounded-xl border" style={{backgroundColor: '#f9f9f9', borderColor: '#d1d1d1', borderWidth: '1px'}}>
+                      <div style={{display: 'flex', alignItems: 'flex-start'}}>
+                        <span style={{fontSize: '20px', marginRight: '8px', flexShrink: 0}}>{item.theirIcon}</span>
+                        <div>
+                          <div className="font-semibold text-sm mb-1" style={{color: '#9ca3af'}}>{item.category}</div>
+                          <div className="text-sm leading-relaxed" style={{color: '#6b7280'}}>{item.theirs}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          
-          <div className="mt-6 p-4 rounded-xl text-center" style={{backgroundColor: '#d4967d', color: '#ffffff'}}>
-            <p className="font-medium">
-              🚀 Experience Falls Park's remarkable story.
+
+          {/* Bottom CTA */}
+          <div className="mt-8 p-6 rounded-xl text-center" style={{backgroundColor: '#d4967d', color: '#ffffff'}}>
+            <p className="text-xl font-bold mb-2">
+              🎯 More Freedom. Better Value. Your Price.
+            </p>
+            <p className="text-sm font-medium opacity-90">
+              Experience Falls Park on your terms
             </p>
           </div>
         </div>
