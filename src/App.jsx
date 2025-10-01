@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import WelcomeScreen from './components/WelcomeScreen';
-import GroupSizeSelector from './components/GroupSizeSelector';
-import IndividualPricing from './components/IndividualPricing';
-import GroupPricing from './components/GroupPricing';
+import PricingSelection from './components/PricingSelection';
 import TourMap from './components/TourMap';
 import AudioPlayer from './components/AudioPlayer';
-import PaymentFlow from './components/PaymentFlow';
 import PaymentSuccess from './components/PaymentSuccess';
 import AdminPanel from './components/AdminPanel';
 import tourData from './data/falls_park_tour_stops.json';
@@ -36,8 +33,6 @@ function App() {
   const [currentStop, setCurrentStop] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUnlocked, setAudioUnlocked] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState(null);
-  const [paymentInfo, setPaymentInfo] = useState(null);
 
   // Check for payment status changes (e.g., returning from Stripe checkout)
   useEffect(() => {
@@ -130,21 +125,7 @@ function App() {
       unlockAudio();
     }
   };
-  
-  const handleGroupSelect = (groupOption) => {
-    setSelectedGroup(groupOption);
-    if (groupOption.id === 'individual') {
-      setCurrentScreen('individual-pricing');
-    } else {
-      setCurrentScreen('group-pricing');
-    }
-  };
-  
-  const handlePaymentSelect = (paymentData) => {
-    setPaymentInfo(paymentData);
-    setCurrentScreen('payment');
-  };
-  
+
   const unlockAudio = () => {
     console.log('🔓 Attempting to unlock audio for autoplay...');
     // Create a silent audio context to unlock audio
@@ -162,7 +143,6 @@ function App() {
   const handlePurchaseComplete = () => {
     setTourPurchased(true);
     localStorage.setItem('tourPurchased', 'true');
-    localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo));
     setCurrentScreen('map');
   };
 
@@ -175,52 +155,22 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       {currentScreen === 'welcome' && (
         <WelcomeScreen
-          onScreenChange={() => setCurrentScreen('group-size')}
+          onScreenChange={() => setCurrentScreen('pricing')}
           tourPurchased={tourPurchased}
           onStartTourMap={() => setCurrentScreen('map')}
         />
       )}
-      
-      {currentScreen === 'group-size' && (
-        <GroupSizeSelector
-          onGroupSelect={handleGroupSelect}
+
+      {currentScreen === 'pricing' && (
+        <PricingSelection
           onBack={() => setCurrentScreen('welcome')}
         />
       )}
-      
-      {currentScreen === 'individual-pricing' && (
-        <IndividualPricing
-          onPaymentSelect={handlePaymentSelect}
-          onBack={() => setCurrentScreen('group-size')}
-        />
-      )}
-      
-      {currentScreen === 'group-pricing' && (
-        <GroupPricing
-          groupData={selectedGroup}
-          onPaymentSelect={handlePaymentSelect}
-          onBack={() => setCurrentScreen('group-size')}
-        />
-      )}
-      
-      {currentScreen === 'payment' && (
-        <PaymentFlow
-          paymentInfo={paymentInfo}
-          onPaymentComplete={handlePurchaseComplete}
-          onBack={() => {
-            if (paymentInfo?.type === 'individual') {
-              setCurrentScreen('individual-pricing');
-            } else {
-              setCurrentScreen('group-pricing');
-            }
-          }}
-        />
-      )}
-      
+
       {currentScreen === 'success' && (
         <PaymentSuccess />
       )}
-      
+
       {currentScreen === 'map' && (
         <TourMap
           userLocation={userLocation}
@@ -230,7 +180,7 @@ function App() {
           onBack={() => handleScreenChange('welcome')}
         />
       )}
-      
+
       {isPlaying && currentStop && (
         <AudioPlayer
           stop={currentStop}
@@ -242,7 +192,7 @@ function App() {
           }}
         />
       )}
-      
+
       {/* Admin panel - only shows with ?admin=true */}
       <AdminPanel />
     </div>
