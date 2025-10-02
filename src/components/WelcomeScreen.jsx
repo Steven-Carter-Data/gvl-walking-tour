@@ -307,7 +307,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
           </div>
 
           {/* Clean Comparison List - Stacked on Mobile */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             {[
               {
                 benefit: "Pay What You Want",
@@ -336,29 +336,30 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
             ].map((item, index) => (
               <div
                 key={index}
-                className="p-4 md:p-5 rounded-xl border-2"
+                className="p-5 md:p-6 rounded-2xl shadow-md border"
                 style={{
                   backgroundColor: '#e5e3dc',
-                  borderColor: '#d4967d'
+                  borderColor: '#d4967d',
+                  borderWidth: '2px'
                 }}
               >
-                <div className="flex items-start">
+                <div className="flex items-start gap-4">
                   <div
-                    className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-3 md:mr-4"
+                    className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-sm"
                     style={{
                       backgroundColor: '#d4967d',
-                      marginTop: '2px'
+                      border: '3px solid #e5e3dc'
                     }}
                   >
-                    <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M1 5.5L5 9.5L13 1.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <svg width="16" height="13" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 5.5L5 9.5L13 1.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-base md:text-lg mb-1" style={{color: '#303636'}}>
+                    <h3 className="font-bold text-base md:text-lg mb-2" style={{color: '#303636'}}>
                       {item.benefit}
                     </h3>
-                    <p className="text-sm md:text-base" style={{color: '#495a58'}}>
+                    <p className="text-sm md:text-base leading-relaxed" style={{color: '#495a58'}}>
                       {item.detail}
                     </p>
                   </div>
