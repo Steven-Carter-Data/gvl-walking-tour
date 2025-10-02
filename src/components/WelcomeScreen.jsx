@@ -107,17 +107,24 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
   return (
     <div className="min-h-screen" style={{backgroundColor: '#e5e3dc'}}>
       {/* Hero Section with Video Background */}
-      <div className="relative overflow-hidden" style={{minHeight: '600px'}}>
+      <div className="relative overflow-hidden" style={{minHeight: '100vh', height: '100vh'}}>
         {/* Video Background */}
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
           style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            minWidth: '100%',
+            minHeight: '100%',
+            width: 'auto',
+            height: 'auto',
+            transform: 'translate(-50%, -50%)',
             filter: 'brightness(0.7)',
-            objectPosition: 'center'
+            objectFit: 'cover'
           }}
         >
           <source src="/video/falls-park-flyover.mp4" type="video/mp4" />
@@ -128,7 +135,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
         <div className="absolute inset-0" style={{backgroundColor: 'rgba(73, 90, 88, 0.3)'}}></div>
 
         {/* Content Overlay */}
-        <div className="relative px-6 py-20 text-center" style={{minHeight: '600px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+        <div className="relative px-6 py-20 text-center" style={{minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
           <p className="text-lg font-semibold mb-6" style={{
             color: '#ffffff',
             textShadow: '2px 2px 12px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8)',
