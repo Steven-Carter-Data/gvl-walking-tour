@@ -171,7 +171,7 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
                 backdropFilter: 'blur(10px)'
               }}
             >
-              {tourPurchased ? 'Start Your Tour' : 'Start Your Walking Tour'}
+              {tourPurchased ? 'Start Your Tour' : 'Start Tour - Pay What You Want'}
             </button>
           </div>
         </div>
@@ -288,112 +288,82 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
       {/* Content Section with proper Basecamp colors */}
       <div className="flex-1 px-6 py-8 space-y-6" style={{backgroundColor: '#e5e3dc'}}>
         
-        {/* Comparison Section - Self-Guided vs Traditional Tours */}
-        <div className="bc-card-bg rounded-2xl p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-3" style={{color: '#303636', fontFamily: 'Anton, sans-serif', fontWeight: '700'}}>
-              SELF-GUIDED vs TRADITIONAL TOUR
+        {/* Comparison Section - Mobile-First Clean Design */}
+        <div className="bc-card-bg rounded-2xl p-6 md:p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{color: '#303636', fontFamily: 'Anton, sans-serif', fontWeight: '700'}}>
+              WHY SELF-GUIDED?
             </h2>
-            <p className="text-lg font-medium" style={{color: '#495a58'}}>
-              Why pay more for less freedom?
+            <p className="text-base md:text-lg font-medium" style={{color: '#495a58'}}>
+              More freedom for less money
             </p>
           </div>
 
-          {/* Comparison Grid */}
-          <div className="overflow-x-auto">
-            <div className="min-w-full">
-              {/* Header Row */}
-              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px'}}>
-                <div className="p-4 rounded-xl text-center border-2" style={{backgroundColor: '#d4967d', borderColor: '#495a58'}}>
-                  <div className="text-2xl mb-2">🎧</div>
-                  <div className="font-bold text-lg text-white">Our Self-Guided Tour</div>
-                  <div className="text-sm text-white font-semibold mt-1">Pay What You Want</div>
-                </div>
-                <div className="p-4 rounded-xl text-center border-2" style={{backgroundColor: '#e5e3dc', borderColor: '#495a58'}}>
-                  <div className="text-2xl mb-2">👥</div>
-                  <div className="font-bold text-lg" style={{color: '#303636'}}>Traditional Guided Tour</div>
-                  <div className="text-sm font-semibold mt-1" style={{color: '#495a58'}}>$25-40 per person</div>
-                </div>
-              </div>
-
-              {/* Comparison Items */}
-              <div className="space-y-3">
-                {[
-                  {
-                    category: "Price",
-                    ours: "Pay what feels fair to you",
-                    theirs: "$25-40 fixed price",
-                    ourIcon: "✅",
-                    theirIcon: "💰"
-                  },
-                  {
-                    category: "Schedule",
-                    ours: "Start anytime - perfect timing",
-                    theirs: "Fixed times only (10am, 2pm)",
-                    ourIcon: "✅",
-                    theirIcon: "❌"
-                  },
-                  {
-                    category: "Pace",
-                    ours: "Walk at your speed, pause for photos",
-                    theirs: "Rushed through each stop",
-                    ourIcon: "✅",
-                    theirIcon: "❌"
-                  },
-                  {
-                    category: "Flexibility",
-                    ours: "Stop for lunch, skip ahead, repeat stops",
-                    theirs: "Stuck with the group schedule",
-                    ourIcon: "✅",
-                    theirIcon: "❌"
-                  },
-                  {
-                    category: "Content",
-                    ours: "45 min professional narration",
-                    theirs: "Similar content, less freedom",
-                    ourIcon: "✅",
-                    theirIcon: "⏱️"
-                  },
-                  {
-                    category: "Access",
-                    ours: "Keep forever, tour anytime",
-                    theirs: "One-time experience only",
-                    ourIcon: "✅",
-                    theirIcon: "❌"
-                  }
-                ].map((item, index) => (
-                  <div key={index} style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
-                    {/* Our Tour */}
-                    <div className="p-4 rounded-xl border-2" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
-                      <div style={{display: 'flex', alignItems: 'flex-start'}}>
-                        <span style={{fontSize: '20px', marginRight: '8px', flexShrink: 0}}>{item.ourIcon}</span>
-                        <div>
-                          <div className="font-semibold text-sm mb-1" style={{color: '#495a58'}}>{item.category}</div>
-                          <div className="text-sm leading-relaxed font-medium" style={{color: '#303636'}}>{item.ours}</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Their Tour */}
-                    <div className="p-4 rounded-xl border" style={{backgroundColor: '#f9f9f9', borderColor: '#d1d1d1', borderWidth: '1px'}}>
-                      <div style={{display: 'flex', alignItems: 'flex-start'}}>
-                        <span style={{fontSize: '20px', marginRight: '8px', flexShrink: 0}}>{item.theirIcon}</span>
-                        <div>
-                          <div className="font-semibold text-sm mb-1" style={{color: '#9ca3af'}}>{item.category}</div>
-                          <div className="text-sm leading-relaxed" style={{color: '#6b7280'}}>{item.theirs}</div>
-                        </div>
-                      </div>
-                    </div>
+          {/* Clean Comparison List - Stacked on Mobile */}
+          <div className="space-y-4">
+            {[
+              {
+                benefit: "Pay What You Want",
+                detail: "vs $25-40 fixed guided tour price"
+              },
+              {
+                benefit: "Start Anytime You Want",
+                detail: "vs fixed 10am or 2pm tour times"
+              },
+              {
+                benefit: "Walk at Your Own Pace",
+                detail: "vs being rushed through with a group"
+              },
+              {
+                benefit: "Pause for Lunch or Photos",
+                detail: "vs stuck on rigid group schedule"
+              },
+              {
+                benefit: "Tour Again Whenever",
+                detail: "vs one-time guided experience"
+              },
+              {
+                benefit: "45 Minutes of Expert Narration",
+                detail: "professional storytelling included"
+              }
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="p-4 md:p-5 rounded-xl border-2"
+                style={{
+                  backgroundColor: '#e5e3dc',
+                  borderColor: '#d4967d'
+                }}
+              >
+                <div className="flex items-start">
+                  <div
+                    className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-3 md:mr-4"
+                    style={{
+                      backgroundColor: '#d4967d',
+                      marginTop: '2px'
+                    }}
+                  >
+                    <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 5.5L5 9.5L13 1.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </div>
-                ))}
+                  <div className="flex-1">
+                    <h3 className="font-bold text-base md:text-lg mb-1" style={{color: '#303636'}}>
+                      {item.benefit}
+                    </h3>
+                    <p className="text-sm md:text-base" style={{color: '#495a58'}}>
+                      {item.detail}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
 
           {/* Bottom CTA */}
-          <div className="mt-8 p-6 rounded-xl text-center" style={{backgroundColor: '#d4967d', color: '#ffffff'}}>
-            <p className="text-xl font-bold mb-2">
-              🎯 More Freedom. Better Value. Your Price.
+          <div className="mt-6 p-5 rounded-xl text-center" style={{backgroundColor: '#d4967d', color: '#ffffff'}}>
+            <p className="text-lg md:text-xl font-bold mb-1">
+              More Freedom. Better Value. Your Price.
             </p>
             <p className="text-sm font-medium opacity-90">
               Experience Falls Park on your terms
@@ -402,15 +372,14 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
         </div>
 
         {/* Interactive Map Preview Card - Always Visible */}
-        <div className="bc-card-bg rounded-2xl p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <div className="flex items-center mb-6">
-            <div className="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#495a58'}}>
-              <div className="text-2xl text-white">🗺️</div>
+        <div className="bc-card-bg rounded-2xl p-6 md:p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
+          {/* Centered header with icon above text - All Devices */}
+          <div className="text-center mb-6">
+            <div className="inline-flex w-12 h-12 md:w-14 md:h-14 rounded-xl items-center justify-center shadow-lg mb-3" style={{backgroundColor: '#495a58'}}>
+              <div className="text-xl md:text-2xl text-white">🗺️</div>
             </div>
-            <div className="ml-4">
-              <h3 className="text-2xl font-bold" style={{color: '#303636'}}>Your Complete Walking Route</h3>
-              <p className="font-medium" style={{color: '#495a58'}}>7 historic stops throughout Falls Park</p>
-            </div>
+            <h3 className="text-xl md:text-2xl font-bold mb-1" style={{color: '#303636'}}>Your Complete Walking Route</h3>
+            <p className="text-sm md:text-base font-medium" style={{color: '#495a58'}}>7 historic stops throughout Falls Park</p>
           </div>
 
           <div className="space-y-4">

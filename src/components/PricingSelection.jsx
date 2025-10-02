@@ -8,6 +8,8 @@ function PricingSelection({ onBack }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [showPromoInput, setShowPromoInput] = useState(false);
+  const [showWhatYouGet, setShowWhatYouGet] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
 
   const presetAmounts = [3, 5, 8, 10, 15];
 
@@ -114,70 +116,134 @@ function PricingSelection({ onBack }) {
       </div>
 
       <div className="px-6 py-8 max-w-4xl mx-auto">
-        {/* What You Get Section */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-8">
-          <h3 className="text-2xl font-bold mb-4 text-center" style={{color: '#303636'}}>
-            🎯 What You Get
-          </h3>
-          <div className="grid grid-cols-1 gap-3">
+        {/* Collapsible What You Get Section */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-6">
+          <button
+            onClick={() => setShowWhatYouGet(!showWhatYouGet)}
+            className="w-full flex items-center justify-between"
+            style={{cursor: 'pointer'}}
+          >
+            <h3 className="text-lg font-bold" style={{color: '#303636'}}>
+              What's Included in Your Tour
+            </h3>
+            <span className="text-2xl" style={{color: '#d4967d'}}>
+              {showWhatYouGet ? '−' : '+'}
+            </span>
+          </button>
+
+          {showWhatYouGet && (
+            <div className="mt-4 grid grid-cols-1 gap-3 pt-4 border-t" style={{borderColor: '#e5e3dc'}}>
+              {[
+                { icon: "📍", title: "7 GPS-Triggered Stops", subtitle: "Automatic audio activation as you walk" },
+                { icon: "🎙️", title: "Professional Narration", subtitle: "3-5 minutes of storytelling per location" },
+                { icon: "🖼️", title: "Historical Photos", subtitle: "Visual content and archival images" },
+                { icon: "🗺️", title: "Interactive Map", subtitle: "Real-time location tracking" },
+                { icon: "⏱️", title: "Self-Paced Experience", subtitle: "Start anytime, pause, skip ahead" },
+                { icon: "♾️", title: "Lifetime Access", subtitle: "Tour as many times as you want" }
+              ].map((feature, index) => (
+                <div key={index} className="flex items-center p-3 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
+                  <div className="text-xl mr-3">{feature.icon}</div>
+                  <div>
+                    <div className="font-semibold text-sm" style={{color: '#303636'}}>{feature.title}</div>
+                    <div className="text-xs" style={{color: '#495a58'}}>{feature.subtitle}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Collapsible Value Comparison */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-6">
+          <button
+            onClick={() => setShowComparison(!showComparison)}
+            className="w-full flex items-center justify-between"
+            style={{cursor: 'pointer'}}
+          >
+            <h3 className="text-lg font-bold" style={{color: '#303636'}}>
+              How This Compares to Other Options
+            </h3>
+            <span className="text-2xl" style={{color: '#d4967d'}}>
+              {showComparison ? '−' : '+'}
+            </span>
+          </button>
+
+          {showComparison && (
+            <div className="mt-4 grid grid-cols-1 gap-3 pt-4 border-t" style={{borderColor: '#e5e3dc'}}>
+              <div className="flex justify-between items-center p-3 rounded-xl" style={{backgroundColor: '#e5e3dc'}}>
+                <span className="text-sm">Professional guided tour:</span>
+                <span className="font-bold">$25-35</span>
+              </div>
+              <div className="flex justify-between items-center p-3 rounded-xl" style={{backgroundColor: '#e5e3dc'}}>
+                <span className="text-sm">Coffee at local café:</span>
+                <span className="font-bold">$5-6</span>
+              </div>
+              <div className="flex justify-between items-center p-3 rounded-xl" style={{backgroundColor: '#e5e3dc'}}>
+                <span className="text-sm">2-hour downtown parking:</span>
+                <span className="font-bold">$4-8</span>
+              </div>
+              <div className="flex justify-between items-center p-3 rounded-xl border-2" style={{backgroundColor: '#d4967d', borderColor: '#495a58'}}>
+                <span className="text-sm font-bold text-white">Our historical tour:</span>
+                <span className="font-bold text-white">You decide!</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* PROMINENT: Your Contribution Supports - Hero Section */}
+        <div className="bc-card-bg rounded-2xl p-8 shadow-2xl mb-8 border-2" style={{borderColor: '#d4967d'}}>
+          <div className="text-center mb-6">
+            <div className="inline-flex w-16 h-16 rounded-full items-center justify-center mb-4" style={{backgroundColor: '#d4967d'}}>
+              <span className="text-3xl">💝</span>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold mb-3" style={{color: '#303636', fontFamily: 'Anton, sans-serif'}}>
+              YOUR CONTRIBUTION MATTERS
+            </h3>
+            <p className="text-lg mb-6" style={{color: '#495a58', lineHeight: '1.6'}}>
+              Every dollar you contribute helps us continue sharing Greenville's history with visitors like you
+            </p>
+          </div>
+
+          <div className="space-y-4 mb-6">
             {[
-              { icon: "📍", title: "7 GPS-Triggered Stops", subtitle: "Automatic audio activation as you walk" },
-              { icon: "🎙️", title: "Professional Narration", subtitle: "3-5 minutes of storytelling per location" },
-              { icon: "🖼️", title: "Historical Photos", subtitle: "Visual content and archival images" },
-              { icon: "🗺️", title: "Interactive Map", subtitle: "Real-time location tracking" },
-              { icon: "⏱️", title: "Self-Paced Experience", subtitle: "Start anytime, pause, skip ahead" },
-              { icon: "♾️", title: "Lifetime Access", subtitle: "Tour as many times as you want" }
-            ].map((feature, index) => (
-              <div key={index} className="flex items-center p-4 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
-                <div className="text-2xl mr-4">{feature.icon}</div>
+              {
+                icon: "📚",
+                title: "Local Storytelling",
+                description: "Fund research and preservation of Greenville's rich history"
+              },
+              {
+                icon: "🌱",
+                title: "New Tour Development",
+                description: "Help us create more experiences across Greenville"
+              },
+              {
+                icon: "❤️",
+                title: "Accessibility for All",
+                description: "Keep tours available to visitors who can't afford traditional guided tours"
+              },
+              {
+                icon: "✨",
+                title: "App Improvements",
+                description: "Better features, more content, enhanced experience"
+              }
+            ].map((item, index) => (
+              <div key={index} className="flex items-start p-4 rounded-xl border-2" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
+                <div className="text-2xl mr-4 flex-shrink-0">{item.icon}</div>
                 <div>
-                  <div className="font-semibold" style={{color: '#303636'}}>{feature.title}</div>
-                  <div className="text-sm" style={{color: '#495a58'}}>{feature.subtitle}</div>
+                  <div className="font-bold text-base mb-1" style={{color: '#303636'}}>{item.title}</div>
+                  <div className="text-sm leading-relaxed" style={{color: '#495a58'}}>{item.description}</div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Value Anchoring */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-8">
-          <h3 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
-            For comparison in downtown Greenville:
-          </h3>
-          <div className="grid grid-cols-1 gap-3 text-sm">
-            <div className="flex justify-between items-center">
-              <span>🌟 Professional guided tour:</span>
-              <span className="font-semibold ml-2">$25-35</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>☕ Coffee at local café:</span>
-              <span className="font-semibold ml-2">$5-6</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>🚗 2-hour downtown parking:</span>
-              <span className="font-semibold ml-2">$4-8</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>📱 Our historical tour:</span>
-              <span className="font-semibold ml-2" style={{color: '#d4967d'}}>You decide!</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Value Reinforcement */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-8">
-          <h3 className="text-lg font-bold mb-4" style={{color: '#303636'}}>
-            ✅ Your contribution supports:
-          </h3>
-          <div className="grid md:grid-cols-2 gap-4 text-sm mb-6">
-            <div>• Local storytelling and historical research</div>
-            <div>• App improvements and new tour development</div>
-            <div>• Keeping this accessible to everyone</div>
-            <div>• Supporting visitors who can't afford the full experience</div>
-          </div>
-
-          <div className="text-center p-4 rounded-xl" style={{backgroundColor: '#d4967d', color: 'white'}}>
-            <div className="font-semibold">🎯 No pressure, just great stories</div>
+          <div className="text-center p-6 rounded-xl" style={{backgroundColor: '#d4967d', color: 'white'}}>
+            <p className="text-xl font-bold mb-2">
+              Thank you for supporting local history! 🙏
+            </p>
+            <p className="text-sm opacity-90">
+              Your generosity makes these tours possible for everyone
+            </p>
           </div>
         </div>
 
