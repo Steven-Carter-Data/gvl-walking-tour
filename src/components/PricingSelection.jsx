@@ -93,14 +93,6 @@ function PricingSelection({ onBack }) {
       {/* Header */}
       <div className="bc-primary-bg text-white">
         <div className="px-6 py-8">
-          <button
-            onClick={onBack}
-            className="flex items-center mb-4 text-white opacity-80 hover:opacity-100"
-          >
-            <span className="text-xl mr-2">←</span>
-            Back
-          </button>
-
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 mb-6 bg-white bg-opacity-10 rounded-full">
               <div className="text-3xl">💝</div>

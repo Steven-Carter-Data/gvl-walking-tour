@@ -505,15 +505,6 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
         <div className="relative px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <button 
-                onClick={onBack}
-                className="mr-3 p-2 bg-white/10 hover:bg-white/20 rounded-xl backdrop-blur-sm border border-white/20 transition-all duration-300 shadow-lg"
-                title="Return to welcome"
-              >
-                <div className="flex items-center">
-                  <span className="text-lg">←</span>
-                </div>
-              </button>
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20">
                   <div className="text-lg">🗺️</div>
