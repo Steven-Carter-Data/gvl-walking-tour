@@ -15,6 +15,38 @@
 
 ---
 
+## ✅ DONE - Technical SEO & Analytics (Nov 2025)
+
+### Google Analytics 4 Integration
+- ✅ react-ga4 package installed
+- ✅ GA4 tracking service created (`src/services/analytics.js`)
+- ✅ Page view tracking
+- ✅ E-commerce tracking (begin_checkout, purchase events)
+- ✅ Tour engagement events (geofence_triggered, audio_played, tour_completed)
+- ✅ Share and review click tracking
+
+**Action Required:** Add your GA4 Measurement ID to `.env`:
+```
+VITE_GA4_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+Get this from: https://analytics.google.com → Admin → Data Streams → Web stream details
+
+### Technical SEO Files
+- ✅ `/public/sitemap.xml` created
+- ✅ `/public/robots.txt` created
+
+**Action Required:** Submit sitemap to Google Search Console after deployment
+
+### UX Improvements for Retention/Referral
+- ✅ Tour progress indicator with visual progress bar
+- ✅ GPS loading states and error recovery UI
+- ✅ Post-tour review prompt (triggers after 5+ stops)
+- ✅ Social share buttons on PaymentSuccess page
+- ✅ In-tour share modal with current progress
+- ✅ Group share link feature for group purchases
+
+---
+
 ## 🚨 CRITICAL - Must Do Immediately (Week 1)
 
 ### 1. Google Business Profile (FREE - Most Important!)
