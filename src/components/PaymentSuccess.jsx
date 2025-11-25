@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { verifyPayment } from '../utils/stripe.js';
 import { audioPreloader } from '../utils/audioPreloader.js';
+import { ga4 } from '../services/analytics.js';
+import ShareButtons from './ShareButtons.jsx';
 import tourData from '../data/falls_park_tour_stops.json';
 
 function PaymentSuccess() {
@@ -21,6 +23,8 @@ function PaymentSuccess() {
           // Store successful payment in localStorage
           localStorage.setItem('tour_access', 'granted');
           localStorage.setItem('payment_session', JSON.stringify(result.session));
+          // Track purchase in GA4
+          ga4.purchase(sessionId, result.session?.amount_total / 100 || 8);
         } else {
           setPaymentStatus('failed');
         }
@@ -248,6 +252,15 @@ function PaymentSuccess() {
           <p className="text-xs mt-2" style={{color: '#495a58'}}>
             We typically respond within 24 hours
           </p>
+        </div>
+
+        {/* Share with Friends */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-6">
+          <ShareButtons
+            title="Falls Park Self-Guided Walking Tour"
+            text="I just got access to an amazing self-guided tour of Falls Park in Greenville, SC! GPS-triggered audio at historic stops. Check it out:"
+            url="https://tours.basecampdataanalytics.com"
+          />
         </div>
 
         {/* Thank You Message */}

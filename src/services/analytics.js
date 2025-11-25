@@ -1,4 +1,74 @@
+import ReactGA from 'react-ga4';
 import { logAnalyticsEvent } from './firestore.js';
+
+// Initialize GA4 - Replace with your actual Measurement ID from Google Analytics
+const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID;
+
+let ga4Initialized = false;
+
+export const initGA4 = () => {
+  if (GA4_MEASUREMENT_ID && GA4_MEASUREMENT_ID !== 'G-XXXXXXXXXX' && !ga4Initialized) {
+    ReactGA.initialize(GA4_MEASUREMENT_ID);
+    ga4Initialized = true;
+    console.log('📊 Google Analytics 4 initialized');
+  } else if (!GA4_MEASUREMENT_ID) {
+    console.log('📊 GA4 not configured - add VITE_GA4_MEASUREMENT_ID to .env');
+  }
+};
+
+// GA4 specific tracking functions
+export const ga4 = {
+  pageView: (page, title) => {
+    if (!ga4Initialized) return;
+    ReactGA.send({ hitType: 'pageview', page, title });
+  },
+
+  event: (action, params = {}) => {
+    if (!ga4Initialized) return;
+    ReactGA.event(action, params);
+  },
+
+  beginCheckout: (amount) => {
+    if (!ga4Initialized) return;
+    ReactGA.event('begin_checkout', {
+      currency: 'USD',
+      value: amount,
+      items: [{
+        item_id: 'falls-park-tour',
+        item_name: 'Falls Park Self-Guided Tour',
+        price: amount,
+        quantity: 1
+      }]
+    });
+  },
+
+  purchase: (transactionId, amount) => {
+    if (!ga4Initialized) return;
+    ReactGA.event('purchase', {
+      transaction_id: transactionId,
+      currency: 'USD',
+      value: amount,
+      items: [{
+        item_id: 'falls-park-tour',
+        item_name: 'Falls Park Self-Guided Tour',
+        price: amount,
+        quantity: 1
+      }]
+    });
+  },
+
+  // Tour-specific events
+  tourStarted: () => ga4.event('tour_started', { tour_name: 'Falls Park Tour' }),
+  geofenceTriggered: (stopName, stopOrder) => ga4.event('geofence_triggered', { stop_name: stopName, stop_order: stopOrder }),
+  audioPlayed: (stopName, stopOrder) => ga4.event('audio_played', { stop_name: stopName, stop_order: stopOrder }),
+  audioCompleted: (stopName, stopOrder) => ga4.event('audio_completed', { stop_name: stopName, stop_order: stopOrder }),
+  tourCompleted: (stopsVisited) => ga4.event('tour_completed', { stops_visited: stopsVisited }),
+  previewPlayed: () => ga4.event('preview_played'),
+  offlineDownload: (status) => ga4.event('offline_download', { status }),
+  shareClicked: (platform) => ga4.event('share', { method: platform }),
+  reviewPromptShown: () => ga4.event('review_prompt_shown'),
+  reviewClicked: () => ga4.event('review_clicked')
+};
 
 // Analytics event types
 export const EVENTS = {

@@ -1,0 +1,14 @@
+# Robots.txt for Falls Park Self-Guided Tour
+# https://tours.basecampdataanalytics.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://tours.basecampdataanalytics.com/sitemap.xml
+
+# Block API endpoints from indexing
+Disallow: /api/
+
+# Block audio files from indexing (save bandwidth)
+Disallow: /audio/

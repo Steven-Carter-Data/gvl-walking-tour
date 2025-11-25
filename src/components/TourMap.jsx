@@ -3,6 +3,10 @@ import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline, useMap } from
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { getCompleteTourRoute } from '../services/routingService';
+import { ga4 } from '../services/analytics.js';
+import ReviewPrompt from './ReviewPrompt.jsx';
+import ShareButtons from './ShareButtons.jsx';
+import GroupShareLink from './GroupShareLink.jsx';
 
 // Fix for default markers in React Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -80,7 +84,7 @@ const lockedStopIcon = new L.Icon({
   iconAnchor: [16, 32],
 });
 
-function LocationTracker({ userLocation, tourStops, tourPurchased, onStopTriggered }) {
+function LocationTracker({ userLocation, tourStops, tourPurchased, onStopTriggered, onStopCompleted }) {
   const map = useMap();
   const [triggeredStops, setTriggeredStops] = useState(new Set());
 
@@ -103,6 +107,12 @@ function LocationTracker({ userLocation, tourStops, tourPurchased, onStopTrigger
         console.log(`🎯 GEOFENCE TRIGGERED: ${stop.title}`);
         setTriggeredStops(prev => new Set([...prev, stop.id]));
         onStopTriggered(stop);
+        // Mark stop as completed when triggered
+        if (onStopCompleted) {
+          onStopCompleted(stop.id);
+        }
+        // Track in GA4
+        ga4.geofenceTriggered(stop.title, stop.order);
       } else if (distance > stop.radius_m + 10 && triggeredStops.has(stop.id)) {
         // User is well outside the geofence, allow re-triggering
         console.log(`🚶 Left geofence for: ${stop.title}`);
@@ -113,7 +123,7 @@ function LocationTracker({ userLocation, tourStops, tourPurchased, onStopTrigger
         });
       }
     });
-  }, [userLocation, tourStops, tourPurchased, onStopTriggered, triggeredStops]);
+  }, [userLocation, tourStops, tourPurchased, onStopTriggered, onStopCompleted, triggeredStops]);
 
   return null;
 }
@@ -223,12 +233,60 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
   const [welcomeAudioPlaying, setWelcomeAudioPlaying] = useState(false);
   const welcomeAudioRef = useRef(null);
   const [showRouteReference, setShowRouteReference] = useState(false);
-  
+
   const [selectedStop, setSelectedStop] = useState(null);
   const [walkingRoute, setWalkingRoute] = useState([]);
   const [routeLoading, setRouteLoading] = useState(false);
   const [routeType, setRouteType] = useState('loading'); // 'real', 'mock', 'fallback', 'loading'
   const mapRef = useRef();
+
+  // Tour progress tracking
+  const [completedStops, setCompletedStops] = useState(() => {
+    const saved = localStorage.getItem('completed_stops');
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
+  const [showReviewPrompt, setShowReviewPrompt] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+
+  // GPS status tracking
+  const [gpsStatus, setGpsStatus] = useState('loading'); // 'loading', 'active', 'error', 'denied'
+  const [gpsError, setGpsError] = useState(null);
+
+  // Track completed stops and trigger review prompt
+  useEffect(() => {
+    if (completedStops.size > 0) {
+      localStorage.setItem('completed_stops', JSON.stringify([...completedStops]));
+    }
+  }, [completedStops]);
+
+  // Update GPS status based on userLocation
+  useEffect(() => {
+    if (userLocation) {
+      setGpsStatus('active');
+      setGpsError(null);
+    }
+  }, [userLocation]);
+
+  // Mark a stop as completed
+  const markStopCompleted = (stopId) => {
+    setCompletedStops(prev => {
+      const newSet = new Set(prev);
+      newSet.add(stopId);
+
+      // Track in GA4
+      const stop = tourStops.find(s => s.id === stopId);
+      if (stop) {
+        ga4.audioCompleted(stop.title, stop.order);
+      }
+
+      // Check if tour is complete
+      if (newSet.size === tourStops.length) {
+        ga4.tourCompleted(newSet.size);
+      }
+
+      return newSet;
+    });
+  };
 
   const handleWelcomeAudioToggle = async () => {
     if (welcomeAudioRef.current) {
@@ -594,6 +652,7 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
             tourStops={tourStops}
             tourPurchased={tourPurchased}
             onStopTriggered={onStopTriggered}
+            onStopCompleted={markStopCompleted}
           />
 
 
@@ -908,7 +967,7 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
           </div>
         )}
 
-        {/* Compact Tour Progress Panel */}
+        {/* Enhanced Tour Progress Panel */}
         {tourPurchased && (
           <div style={{
             position: 'absolute',
@@ -920,57 +979,275 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
             <div style={{
               backgroundColor: 'rgba(255, 255, 255, 0.95)',
               borderRadius: '16px',
-              padding: '12px 16px',
+              padding: '16px',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
               border: '1px solid rgba(0, 0, 0, 0.1)',
               backdropFilter: 'blur(8px)'
             }}>
-              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                <div style={{display: 'flex', alignItems: 'center'}}>
+              {/* Progress Bar */}
+              <div style={{ marginBottom: '12px' }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '8px'
+                }}>
+                  <span style={{ fontWeight: '600', color: '#303636', fontSize: '14px' }}>
+                    Tour Progress
+                  </span>
+                  <span style={{ fontWeight: 'bold', color: '#d4967d', fontSize: '14px' }}>
+                    {completedStops.size}/{tourStops.length} stops
+                  </span>
+                </div>
+                <div style={{
+                  width: '100%',
+                  height: '8px',
+                  backgroundColor: '#e5e3dc',
+                  borderRadius: '4px',
+                  overflow: 'hidden'
+                }}>
                   <div style={{
-                    width: '32px',
-                    height: '32px',
+                    width: `${(completedStops.size / tourStops.length) * 100}%`,
+                    height: '100%',
                     backgroundColor: '#d4967d',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginRight: '12px'
-                  }}>
-                    <span style={{color: 'white', fontSize: '14px'}}>🎯</span>
+                    borderRadius: '4px',
+                    transition: 'width 0.5s ease'
+                  }} />
+                </div>
+              </div>
+
+              {/* Stop Indicators */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '4px',
+                marginBottom: '12px'
+              }}>
+                {tourStops.map((stop) => (
+                  <div
+                    key={stop.id}
+                    title={`${stop.order}. ${stop.title}`}
+                    style={{
+                      flex: 1,
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '4px',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      backgroundColor: completedStops.has(stop.id) ? '#10B981' : '#e5e3dc',
+                      color: completedStops.has(stop.id) ? 'white' : '#495a58',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    {completedStops.has(stop.id) ? '✓' : stop.order}
                   </div>
-                  <div>
-                    <div style={{
+                ))}
+              </div>
+
+              {/* Status Message */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}>
+                <p style={{
+                  color: '#495a58',
+                  fontSize: '12px',
+                  fontWeight: '500',
+                  margin: 0
+                }}>
+                  {completedStops.size === 0 && '🚶‍♂️ Walk to the START marker to begin'}
+                  {completedStops.size > 0 && completedStops.size < tourStops.length && `🎧 ${tourStops.length - completedStops.size} stops remaining`}
+                  {completedStops.size === tourStops.length && '🎉 Tour complete! Great job!'}
+                </p>
+
+                {/* Share button when tour is complete or near complete */}
+                {completedStops.size >= Math.min(5, tourStops.length) && (
+                  <button
+                    onClick={() => setShowShareModal(true)}
+                    style={{
+                      backgroundColor: '#d4967d',
+                      color: 'white',
+                      border: 'none',
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      fontSize: '12px',
                       fontWeight: '600',
-                      color: '#303636',
-                      fontSize: '14px'
-                    }}>Tour Progress</div>
-                  </div>
-                </div>
-                <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
-                  <div style={{
-                    backgroundColor: '#e5e3dc',
-                    padding: '4px 12px',
-                    borderRadius: '12px',
-                    border: '1px solid #d4967d'
-                  }}>
-                    <span style={{fontWeight: 'bold', color: '#303636', fontSize: '14px'}}>0</span>
-                    <span style={{color: '#495a58', fontSize: '12px'}}>/{tourStops.length}</span>
-                  </div>
-                  <p style={{
-                    color: '#495a58',
-                    fontSize: '12px',
-                    fontWeight: '500',
-                    margin: 0
-                  }}>
-                    🚶‍♂️ Walk to START marker
-                  </p>
-                </div>
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    📤 Share
+                  </button>
+                )}
               </div>
             </div>
           </div>
         )}
+
+        {/* GPS Loading/Error States */}
+        {!userLocation && gpsStatus === 'loading' && (
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 40,
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '16px',
+            padding: '24px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+            textAlign: 'center',
+            maxWidth: '300px'
+          }}>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              margin: '0 auto 16px',
+              border: '4px solid #e5e3dc',
+              borderTop: '4px solid #d4967d',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }} />
+            <h3 style={{ color: '#303636', margin: '0 0 8px 0', fontSize: '18px' }}>
+              Finding Your Location
+            </h3>
+            <p style={{ color: '#495a58', margin: 0, fontSize: '14px' }}>
+              Please allow location access when prompted
+            </p>
+          </div>
+        )}
+
+        {gpsStatus === 'error' && (
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 40,
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '16px',
+            padding: '24px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+            textAlign: 'center',
+            maxWidth: '320px'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>📍</div>
+            <h3 style={{ color: '#303636', margin: '0 0 8px 0', fontSize: '18px' }}>
+              GPS Not Available
+            </h3>
+            <p style={{ color: '#495a58', margin: '0 0 16px 0', fontSize: '14px' }}>
+              {gpsError || 'Unable to get your location. You can still explore the tour manually.'}
+            </p>
+            <button
+              onClick={() => {
+                setGpsStatus('loading');
+                navigator.geolocation.getCurrentPosition(
+                  () => setGpsStatus('active'),
+                  (err) => {
+                    setGpsStatus('error');
+                    setGpsError(err.message);
+                  },
+                  { enableHighAccuracy: true, timeout: 10000 }
+                );
+              }}
+              style={{
+                backgroundColor: '#d4967d',
+                color: 'white',
+                border: 'none',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                marginRight: '8px'
+              }}
+            >
+              Try Again
+            </button>
+            <button
+              onClick={() => setGpsStatus('manual')}
+              style={{
+                backgroundColor: '#e5e3dc',
+                color: '#495a58',
+                border: '1px solid #d4967d',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }}
+            >
+              Continue Manually
+            </button>
+          </div>
+        )}
+
+        {/* Share Modal */}
+        {showShareModal && (
+          <div style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 50,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
+          }}>
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '16px',
+              padding: '24px',
+              maxWidth: '400px',
+              width: '100%',
+              position: 'relative'
+            }}>
+              <button
+                onClick={() => setShowShareModal(false)}
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  color: '#6B7280'
+                }}
+              >
+                ✕
+              </button>
+              <ShareButtons
+                title="Falls Park Self-Guided Walking Tour"
+                text={`I'm exploring Falls Park in Greenville, SC with this amazing self-guided tour! ${completedStops.size}/${tourStops.length} stops completed. Check it out:`}
+                url="https://tours.basecampdataanalytics.com"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Review Prompt */}
+        <ReviewPrompt
+          stopsCompleted={completedStops.size}
+          totalStops={tourStops.length}
+          onDismiss={() => setShowReviewPrompt(false)}
+        />
+
+        {/* Group Share Button - for group purchases */}
+        {tourPurchased && <GroupShareLink />}
       </div>
+
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
