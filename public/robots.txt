@@ -1,11 +1,11 @@
 # Robots.txt for Falls Park Self-Guided Tour
-# https://tours.basecampdataanalytics.com
+# https://falls-park-tour.vercel.app
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://tours.basecampdataanalytics.com/sitemap.xml
+Sitemap: https://falls-park-tour.vercel.app/sitemap.xml
 
 # Block API endpoints from indexing
 Disallow: /api/

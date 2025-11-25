@@ -38,7 +38,7 @@ STRIPE_SECRET_KEY=sk_test_your_secret_key
 5. Deploy!
 
 **Custom domain setup:**
-- Add `tours.basecampdataanalytics.com` in Vercel domain settings
+- Add `falls-park-tour.vercel.app` in Vercel domain settings
 - Update your DNS to point to Vercel
 
 ## Environment Variables Reference

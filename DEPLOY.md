@@ -57,7 +57,7 @@ STRIPE_SECRET_KEY = sk_test_your_secret_key
 
 **In Vercel:**
 1. Go to your project → Settings → Domains
-2. Add custom domain: `tours.basecampdataanalytics.com`
+2. Add custom domain: `falls-park-tour.vercel.app`
 
 **In your domain provider (Squarespace/GoDaddy/etc):**
 1. Add CNAME record: `tours` → `cname.vercel-dns.com`
@@ -76,7 +76,7 @@ STRIPE_SECRET_KEY = sk_test_your_secret_key
 ### 6. QR Code Generation
 
 **Once deployed, create QR codes for:**
-- Main URL: `https://tours.basecampdataanalytics.com`
+- Main URL: `https://falls-park-tour.vercel.app`
 - Print QR codes for hotel lobbies, visitor centers
 
 **Simple QR code tools:**

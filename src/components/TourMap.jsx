@@ -1225,7 +1225,7 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
               <ShareButtons
                 title="Falls Park Self-Guided Walking Tour"
                 text={`I'm exploring Falls Park in Greenville, SC with this amazing self-guided tour! ${completedStops.size}/${tourStops.length} stops completed. Check it out:`}
-                url="https://tours.basecampdataanalytics.com"
+                url="https://falls-park-tour.vercel.app"
               />
             </div>
           </div>

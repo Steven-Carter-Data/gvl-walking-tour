@@ -95,7 +95,7 @@ See `.env.example` for required configuration variables:
 - [ ] Stripe configuration for live payments
 - [ ] GPS accuracy testing at actual stop locations
 - [ ] QR code generation and hotel placement
-- [ ] Domain setup: tours.basecampdataanalytics.com
+- [ ] Domain setup: falls-park-tour.vercel.app
 
 ## 🧪 Testing
 
@@ -119,7 +119,7 @@ npm i -g vercel
 vercel --prod
 
 # Configure environment variables in Vercel dashboard
-# Set custom domain: tours.basecampdataanalytics.com
+# Set custom domain: falls-park-tour.vercel.app
 ```
 
 ### Environment Variables (Production)

@@ -102,7 +102,7 @@ vercel env add STRIPE_SECRET_KEY production
 **Free Tier URL**: `greenville-tour.vercel.app`
 
 **Custom Subdomain Setup** (for future upgrade):
-1. Add CNAME record: `tours.basecampdataanalytics.com → cname.vercel-dns.com`
+1. Add CNAME record: `falls-park-tour.vercel.app → cname.vercel-dns.com`
 2. Configure in Vercel dashboard
 3. Upgrade to Pro plan ($20/month)
 
@@ -207,7 +207,7 @@ Generate QR codes linking to your tour landing page:
 
 **Phase 2 Features:**
 - Upgrade to Vercel Pro ($20/month)
-- Custom domain: `tours.basecampdataanalytics.com`
+- Custom domain: `falls-park-tour.vercel.app`
 - Professional photos and imagery
 - Additional tour routes
 - User accounts and tour history

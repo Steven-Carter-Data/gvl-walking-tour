@@ -32,8 +32,8 @@ function GroupShareLink() {
   };
 
   const getShareUrl = () => {
-    if (!shareCode) return 'https://tours.basecampdataanalytics.com';
-    return `https://tours.basecampdataanalytics.com/?group=${shareCode}`;
+    if (!shareCode) return 'https://falls-park-tour.vercel.app';
+    return `https://falls-park-tour.vercel.app/?group=${shareCode}`;
   };
 
   const handleCopyLink = async () => {

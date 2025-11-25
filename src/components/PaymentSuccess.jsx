@@ -259,7 +259,7 @@ function PaymentSuccess() {
           <ShareButtons
             title="Falls Park Self-Guided Walking Tour"
             text="I just got access to an amazing self-guided tour of Falls Park in Greenville, SC! GPS-triggered audio at historic stops. Check it out:"
-            url="https://tours.basecampdataanalytics.com"
+            url="https://falls-park-tour.vercel.app"
           />
         </div>
 
