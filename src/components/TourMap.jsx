@@ -228,7 +228,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * c; // Distance in meters
 }
 
-function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBack }) {
+function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tourPurchased, onStopTriggered, onBack }) {
   const [showWelcomeAudio, setShowWelcomeAudio] = useState(true);
   const [welcomeAudioPlaying, setWelcomeAudioPlaying] = useState(false);
   const welcomeAudioRef = useRef(null);
@@ -259,13 +259,19 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
     }
   }, [completedStops]);
 
-  // Update GPS status based on userLocation
+  // Update GPS status based on userLocation and locationError
   useEffect(() => {
     if (userLocation) {
       setGpsStatus('active');
       setGpsError(null);
+    } else if (locationError === 'denied') {
+      setGpsStatus('denied');
+      setGpsError('Location access was denied');
+    } else if (locationError) {
+      setGpsStatus('error');
+      setGpsError('Unable to get your location');
     }
-  }, [userLocation]);
+  }, [userLocation, locationError]);
 
   // Mark a stop as completed
   const markStopCompleted = (stopId) => {
@@ -1184,6 +1190,104 @@ function TourMap({ userLocation, tourStops, tourPurchased, onStopTriggered, onBa
             >
               Continue Manually
             </button>
+          </div>
+        )}
+
+        {gpsStatus === 'denied' && (
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 40,
+            backgroundColor: 'rgba(255, 255, 255, 0.98)',
+            borderRadius: '16px',
+            padding: '28px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+            textAlign: 'center',
+            maxWidth: '340px'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔒</div>
+            <h3 style={{ color: '#303636', margin: '0 0 12px 0', fontSize: '20px', fontWeight: '700' }}>
+              Location Access Needed
+            </h3>
+            <p style={{ color: '#495a58', margin: '0 0 16px 0', fontSize: '14px', lineHeight: '1.5' }}>
+              To use GPS-triggered audio at tour stops, please enable location access in your browser settings.
+            </p>
+
+            <div style={{
+              backgroundColor: '#f5f4f0',
+              borderRadius: '12px',
+              padding: '16px',
+              marginBottom: '20px',
+              textAlign: 'left'
+            }}>
+              <p style={{ color: '#303636', margin: '0 0 12px 0', fontSize: '13px', fontWeight: '600' }}>
+                How to enable location:
+              </p>
+              <ol style={{ color: '#495a58', margin: 0, paddingLeft: '20px', fontSize: '13px', lineHeight: '1.6' }}>
+                <li>Tap the <strong>lock icon</strong> or <strong>site settings</strong> in your browser's address bar</li>
+                <li>Find <strong>"Location"</strong> and change it to <strong>"Allow"</strong></li>
+                <li>Tap <strong>"Try Again"</strong> below</li>
+              </ol>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button
+                onClick={() => {
+                  setGpsStatus('loading');
+                  if (onRetryLocation) {
+                    onRetryLocation();
+                  } else {
+                    navigator.geolocation.getCurrentPosition(
+                      () => setGpsStatus('active'),
+                      (err) => {
+                        if (err.code === err.PERMISSION_DENIED) {
+                          setGpsStatus('denied');
+                        } else {
+                          setGpsStatus('error');
+                          setGpsError(err.message);
+                        }
+                      },
+                      { enableHighAccuracy: true, timeout: 10000 }
+                    );
+                  }
+                }}
+                style={{
+                  backgroundColor: '#d4967d',
+                  color: 'white',
+                  border: 'none',
+                  padding: '14px 28px',
+                  borderRadius: '8px',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  flex: 1
+                }}
+              >
+                Try Again
+              </button>
+              <button
+                onClick={() => setGpsStatus('manual')}
+                style={{
+                  backgroundColor: '#e5e3dc',
+                  color: '#495a58',
+                  border: '1px solid #d4967d',
+                  padding: '14px 28px',
+                  borderRadius: '8px',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  flex: 1
+                }}
+              >
+                Skip for Now
+              </button>
+            </div>
+
+            <p style={{ color: '#8a9593', margin: '16px 0 0 0', fontSize: '12px' }}>
+              You can still enjoy the tour manually without GPS
+            </p>
           </div>
         )}
 

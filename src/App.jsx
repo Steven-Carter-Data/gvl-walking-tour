@@ -33,6 +33,7 @@ function App() {
   const [currentStop, setCurrentStop] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUnlocked, setAudioUnlocked] = useState(false);
+  const [locationError, setLocationError] = useState(null);
 
   // Check for payment status changes (e.g., returning from Stripe checkout)
   useEffect(() => {
@@ -84,11 +85,23 @@ function App() {
         },
         (error) => {
           console.error('❌ GPS tracking error:', error);
-          
+
+          // Track the specific error type
+          if (error.code === error.PERMISSION_DENIED) {
+            setLocationError('denied');
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            setLocationError('unavailable');
+          } else if (error.code === error.TIMEOUT) {
+            setLocationError('timeout');
+          } else {
+            setLocationError('unknown');
+          }
+
           // Fallback to single position request
           navigator.geolocation.getCurrentPosition(
             (position) => {
               console.log('📍 Fallback GPS position obtained');
+              setLocationError(null); // Clear error on success
               setUserLocation({
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
@@ -97,6 +110,9 @@ function App() {
             },
             (fallbackError) => {
               console.error('❌ Fallback GPS also failed:', fallbackError);
+              if (fallbackError.code === fallbackError.PERMISSION_DENIED) {
+                setLocationError('denied');
+              }
             },
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
           );
@@ -174,6 +190,28 @@ function App() {
       {currentScreen === 'map' && (
         <TourMap
           userLocation={userLocation}
+          locationError={locationError}
+          onRetryLocation={() => {
+            setLocationError(null);
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                setLocationError(null);
+                setUserLocation({
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                  accuracy: position.coords.accuracy
+                });
+              },
+              (err) => {
+                if (err.code === err.PERMISSION_DENIED) {
+                  setLocationError('denied');
+                } else {
+                  setLocationError('error');
+                }
+              },
+              { enableHighAccuracy: true, timeout: 10000 }
+            );
+          }}
           tourStops={tourData.stops}
           tourPurchased={tourPurchased}
           onStopTriggered={handleStopTriggered}
