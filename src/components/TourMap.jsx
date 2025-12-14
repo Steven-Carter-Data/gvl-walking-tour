@@ -1207,86 +1207,103 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
             textAlign: 'center',
             maxWidth: '340px'
           }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔒</div>
-            <h3 style={{ color: '#303636', margin: '0 0 12px 0', fontSize: '20px', fontWeight: '700' }}>
-              Location Access Needed
+            <div style={{ fontSize: '56px', marginBottom: '16px' }}>📍</div>
+            <h3 style={{ color: '#303636', margin: '0 0 12px 0', fontSize: '22px', fontWeight: '700' }}>
+              We Need Your Permission
             </h3>
-            <p style={{ color: '#495a58', margin: '0 0 16px 0', fontSize: '14px', lineHeight: '1.5' }}>
-              To use GPS-triggered audio at tour stops, please enable location access in your browser settings.
+            <p style={{ color: '#495a58', margin: '0 0 20px 0', fontSize: '16px', lineHeight: '1.6' }}>
+              This tour uses your phone's location to automatically play audio when you arrive at each stop.
             </p>
 
             <div style={{
-              backgroundColor: '#f5f4f0',
+              backgroundColor: '#fff3cd',
+              border: '2px solid #ffc107',
               borderRadius: '12px',
-              padding: '16px',
-              marginBottom: '20px',
+              padding: '20px',
+              marginBottom: '24px',
               textAlign: 'left'
             }}>
-              <p style={{ color: '#303636', margin: '0 0 12px 0', fontSize: '13px', fontWeight: '600' }}>
-                How to enable location:
+              <p style={{ color: '#303636', margin: '0 0 16px 0', fontSize: '17px', fontWeight: '700' }}>
+                To turn on location, please:
               </p>
-              <ol style={{ color: '#495a58', margin: 0, paddingLeft: '20px', fontSize: '13px', lineHeight: '1.6' }}>
-                <li>Tap the <strong>lock icon</strong> or <strong>site settings</strong> in your browser's address bar</li>
-                <li>Find <strong>"Location"</strong> and change it to <strong>"Allow"</strong></li>
-                <li>Tap <strong>"Try Again"</strong> below</li>
-              </ol>
+              <div style={{ color: '#303636', fontSize: '16px', lineHeight: '2' }}>
+                <p style={{ margin: '0 0 12px 0' }}>
+                  <strong>Step 1:</strong> Close this tour and go to your phone's <strong>Settings</strong> app
+                </p>
+                <p style={{ margin: '0 0 12px 0' }}>
+                  <strong>Step 2:</strong> Tap <strong>Privacy</strong> (or <strong>Privacy & Security</strong>)
+                </p>
+                <p style={{ margin: '0 0 12px 0' }}>
+                  <strong>Step 3:</strong> Tap <strong>Location Services</strong>
+                </p>
+                <p style={{ margin: '0 0 12px 0' }}>
+                  <strong>Step 4:</strong> Find your browser (Safari, Chrome, etc.) and tap it
+                </p>
+                <p style={{ margin: '0' }}>
+                  <strong>Step 5:</strong> Select <strong>"While Using the App"</strong> or <strong>"Allow"</strong>
+                </p>
+              </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-              <button
-                onClick={() => {
-                  setGpsStatus('loading');
-                  if (onRetryLocation) {
-                    onRetryLocation();
-                  } else {
-                    navigator.geolocation.getCurrentPosition(
-                      () => setGpsStatus('active'),
-                      (err) => {
-                        if (err.code === err.PERMISSION_DENIED) {
-                          setGpsStatus('denied');
-                        } else {
-                          setGpsStatus('error');
-                          setGpsError(err.message);
-                        }
-                      },
-                      { enableHighAccuracy: true, timeout: 10000 }
-                    );
-                  }
-                }}
-                style={{
-                  backgroundColor: '#d4967d',
-                  color: 'white',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '8px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  flex: 1
-                }}
-              >
-                Try Again
-              </button>
-              <button
-                onClick={() => setGpsStatus('manual')}
-                style={{
-                  backgroundColor: '#e5e3dc',
-                  color: '#495a58',
-                  border: '1px solid #d4967d',
-                  padding: '14px 28px',
-                  borderRadius: '8px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  flex: 1
-                }}
-              >
-                Skip for Now
-              </button>
-            </div>
+            <p style={{ color: '#495a58', margin: '0 0 20px 0', fontSize: '15px', fontWeight: '600' }}>
+              After changing the setting, come back here and tap the button below:
+            </p>
 
-            <p style={{ color: '#8a9593', margin: '16px 0 0 0', fontSize: '12px' }}>
-              You can still enjoy the tour manually without GPS
+            <button
+              onClick={() => {
+                setGpsStatus('loading');
+                if (onRetryLocation) {
+                  onRetryLocation();
+                } else {
+                  navigator.geolocation.getCurrentPosition(
+                    () => setGpsStatus('active'),
+                    (err) => {
+                      if (err.code === err.PERMISSION_DENIED) {
+                        setGpsStatus('denied');
+                      } else {
+                        setGpsStatus('error');
+                        setGpsError(err.message);
+                      }
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                  );
+                }
+              }}
+              style={{
+                backgroundColor: '#d4967d',
+                color: 'white',
+                border: 'none',
+                padding: '18px 36px',
+                borderRadius: '12px',
+                fontSize: '18px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                width: '100%',
+                marginBottom: '16px'
+              }}
+            >
+              I've Enabled Location - Try Again
+            </button>
+
+            <button
+              onClick={() => setGpsStatus('manual')}
+              style={{
+                backgroundColor: 'transparent',
+                color: '#495a58',
+                border: '2px solid #ccc',
+                padding: '14px 28px',
+                borderRadius: '12px',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                width: '100%'
+              }}
+            >
+              Continue Without Location
+            </button>
+
+            <p style={{ color: '#8a9593', margin: '20px 0 0 0', fontSize: '14px', lineHeight: '1.5' }}>
+              Don't worry! You can still enjoy the full tour by tapping each stop manually on the map.
             </p>
           </div>
         )}
