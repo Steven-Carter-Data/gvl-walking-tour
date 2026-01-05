@@ -205,18 +205,20 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
           </div>
 
           {/* Quick Stats Row */}
-          <div className="flex justify-center gap-8 mt-8">
-            <div className="text-center">
+          <div className="flex justify-center mt-8" style={{gap: '32px'}}>
+            <div className="text-center" style={{minWidth: '70px'}}>
               <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.stops}</div>
-              <div className="text-xs uppercase tracking-wide" style={{color: 'rgba(255,255,255,0.8)'}}>Stops</div>
+              <div className="text-xs uppercase font-semibold" style={{color: 'rgba(255,255,255,0.9)', letterSpacing: '0.1em'}}>Stops</div>
             </div>
-            <div className="text-center">
+            <div style={{width: '1px', backgroundColor: 'rgba(255,255,255,0.3)', alignSelf: 'stretch'}}></div>
+            <div className="text-center" style={{minWidth: '70px'}}>
               <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.duration}</div>
-              <div className="text-xs uppercase tracking-wide" style={{color: 'rgba(255,255,255,0.8)'}}>Minutes</div>
+              <div className="text-xs uppercase font-semibold" style={{color: 'rgba(255,255,255,0.9)', letterSpacing: '0.1em'}}>Minutes</div>
             </div>
-            <div className="text-center">
+            <div style={{width: '1px', backgroundColor: 'rgba(255,255,255,0.3)', alignSelf: 'stretch'}}></div>
+            <div className="text-center" style={{minWidth: '70px'}}>
               <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.distance}</div>
-              <div className="text-xs uppercase tracking-wide" style={{color: 'rgba(255,255,255,0.8)'}}>Miles</div>
+              <div className="text-xs uppercase font-semibold" style={{color: 'rgba(255,255,255,0.9)', letterSpacing: '0.1em'}}>Miles</div>
             </div>
           </div>
         </div>
@@ -235,24 +237,6 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
           <p className="text-base font-medium" style={{color: 'white'}}>
             No fixed cost, no pressure. Just great stories at whatever value you decide.
           </p>
-        </div>
-      </div>
-
-      {/* 5-Star Rating - Compact */}
-      <div className="px-6 py-4" style={{backgroundColor: '#e5e3dc'}}>
-        <div className="max-w-md mx-auto">
-          <div className="bc-card-bg rounded-xl p-4 shadow-lg border-2 flex items-center justify-center gap-4" style={{borderColor: '#d4967d'}}>
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <svg key={star} className="w-6 h-6" viewBox="0 0 24 24" fill="#d4967d" stroke="#495a58" strokeWidth="1">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                </svg>
-              ))}
-            </div>
-            <span className="text-lg font-bold" style={{color: '#495a58'}}>
-              5.0 Star Rated
-            </span>
-          </div>
         </div>
       </div>
 
@@ -325,11 +309,11 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
                 style={{ backgroundColor: '#e5e3dc', borderColor: '#d4967d' }}
               >
                 <div
-                  className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: '#d4967d' }}
+                  className="flex-shrink-0 w-6 h-6 flex items-center justify-center"
+                  style={{ marginTop: '2px' }}
                 >
-                  <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
-                    <path d="M1 5.5L5 9.5L13 1.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M2 10L8 16L18 4" stroke="#d4967d" strokeWidth="3" strokeLinecap="square" strokeLinejoin="miter"/>
                   </svg>
                 </div>
                 <div>
