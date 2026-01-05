@@ -5,29 +5,28 @@ import TourMap from './components/TourMap';
 import AudioPlayer from './components/AudioPlayer';
 import PaymentSuccess from './components/PaymentSuccess';
 import AdminPanel from './components/AdminPanel';
-import tourData from './data/falls_park_tour_stops.json';
+import tourConfig from './config/tourConfig.js';
+import { createPaymentSession } from './utils/stripe.js';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState(() => {
-    // Check URL parameters
     const urlParams = new URLSearchParams(window.location.search);
-    
+
     // Check if we're on the success page
     if (urlParams.get('session_id')) {
       return 'success';
     }
-    
+
     // Check if user wants to go directly to tour
     if (urlParams.get('tour') === 'true') {
       return 'map';
     }
-    
+
     return 'welcome';
   });
   const [userLocation, setUserLocation] = useState(null);
   const [tourPurchased, setTourPurchased] = useState(() => {
-    // Check if tour access has been granted via payment
-    return localStorage.getItem('tour_access') === 'granted' || 
+    return localStorage.getItem('tour_access') === 'granted' ||
            localStorage.getItem('tourPurchased') === 'true';
   });
   const [currentStop, setCurrentStop] = useState(null);
@@ -35,17 +34,16 @@ function App() {
   const [audioUnlocked, setAudioUnlocked] = useState(false);
   const [locationError, setLocationError] = useState(null);
 
-  // Check for payment status changes (e.g., returning from Stripe checkout)
+  // Check for payment status changes
   useEffect(() => {
     const checkPaymentStatus = () => {
       const hasAccess = localStorage.getItem('tour_access') === 'granted' ||
                        localStorage.getItem('tourPurchased') === 'true';
 
       if (hasAccess && !tourPurchased) {
-        console.log('✅ Payment found in localStorage, updating state');
+        console.log('Payment found in localStorage, updating state');
         setTourPurchased(true);
 
-        // Check URL parameters for tour mode
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('tour') === 'true') {
           setCurrentScreen('map');
@@ -53,22 +51,18 @@ function App() {
       }
     };
 
-    // Check on mount
     checkPaymentStatus();
-
-    // Listen for storage events (in case user has multiple tabs open)
     window.addEventListener('storage', checkPaymentStatus);
-
     return () => window.removeEventListener('storage', checkPaymentStatus);
   }, [tourPurchased]);
 
+  // GPS tracking - only start when on map screen
   useEffect(() => {
     let watchId;
-    
-    // Start continuous GPS tracking
-    if (navigator.geolocation) {
-      console.log('🛰️ Starting continuous GPS tracking...');
-      
+
+    if (currentScreen === 'map' && navigator.geolocation) {
+      console.log('Starting GPS tracking...');
+
       watchId = navigator.geolocation.watchPosition(
         (position) => {
           const newLocation = {
@@ -79,14 +73,12 @@ function App() {
             speed: position.coords.speed,
             timestamp: position.timestamp
           };
-          
-          console.log('📍 GPS Update:', newLocation);
+
           setUserLocation(newLocation);
         },
         (error) => {
-          console.error('❌ GPS tracking error:', error);
+          console.error('GPS tracking error:', error);
 
-          // Track the specific error type
           if (error.code === error.PERMISSION_DENIED) {
             setLocationError('denied');
           } else if (error.code === error.POSITION_UNAVAILABLE) {
@@ -100,8 +92,7 @@ function App() {
           // Fallback to single position request
           navigator.geolocation.getCurrentPosition(
             (position) => {
-              console.log('📍 Fallback GPS position obtained');
-              setLocationError(null); // Clear error on success
+              setLocationError(null);
               setUserLocation({
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
@@ -109,7 +100,7 @@ function App() {
               });
             },
             (fallbackError) => {
-              console.error('❌ Fallback GPS also failed:', fallbackError);
+              console.error('Fallback GPS also failed:', fallbackError);
               if (fallbackError.code === fallbackError.PERMISSION_DENIED) {
                 setLocationError('denied');
               }
@@ -117,43 +108,39 @@ function App() {
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
           );
         },
-        { 
-          enableHighAccuracy: true,    // Use GPS, not network location
-          timeout: 15000,              // 15 second timeout
-          maximumAge: 5000             // Accept positions up to 5 seconds old
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 5000
         }
       );
     }
 
-    // Cleanup: stop watching location when component unmounts
     return () => {
       if (watchId) {
         navigator.geolocation.clearWatch(watchId);
-        console.log('🛑 GPS tracking stopped');
+        console.log('GPS tracking stopped');
       }
     };
-  }, []);
+  }, [currentScreen]);
 
   const handleScreenChange = (screen) => {
     setCurrentScreen(screen);
-    // Unlock audio on first user interaction
     if (!audioUnlocked) {
       unlockAudio();
     }
   };
 
   const unlockAudio = () => {
-    console.log('🔓 Attempting to unlock audio for autoplay...');
-    // Create a silent audio context to unlock audio
+    console.log('Attempting to unlock audio for autoplay...');
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const buffer = audioContext.createBuffer(1, 1, 22050);
     const source = audioContext.createBufferSource();
     source.buffer = buffer;
     source.connect(audioContext.destination);
     source.start(0);
-    
     setAudioUnlocked(true);
-    console.log('✅ Audio unlocked for autoplay');
+    console.log('Audio unlocked for autoplay');
   };
 
   const handlePurchaseComplete = () => {
@@ -167,11 +154,35 @@ function App() {
     setIsPlaying(true);
   };
 
+  // Quick checkout handler - processes payment with default amount
+  const handleQuickCheckout = async (amount) => {
+    try {
+      const paymentData = {
+        type: 'individual',
+        amount: amount,
+        isCustom: false,
+        groupSize: 1,
+        currency: tourConfig.pricing.currency.toLowerCase(),
+        tourId: tourConfig.id,
+      };
+
+      const result = await createPaymentSession(paymentData);
+
+      if (!result.success) {
+        throw new Error(result.error || 'Payment session failed');
+      }
+    } catch (error) {
+      console.error('Quick checkout error:', error);
+      alert('Payment processing failed. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {currentScreen === 'welcome' && (
         <WelcomeScreen
           onScreenChange={() => setCurrentScreen('pricing')}
+          onQuickCheckout={handleQuickCheckout}
           tourPurchased={tourPurchased}
           onStartTourMap={() => setCurrentScreen('map')}
         />
@@ -212,7 +223,7 @@ function App() {
               { enableHighAccuracy: true, timeout: 10000 }
             );
           }}
-          tourStops={tourData.stops}
+          tourStops={tourConfig.stops}
           tourPurchased={tourPurchased}
           onStopTriggered={handleStopTriggered}
           onBack={() => handleScreenChange('welcome')}

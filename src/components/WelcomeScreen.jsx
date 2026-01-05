@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Circle, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import tourData from '../data/falls_park_tour_stops.json';
+import tourConfig from '../config/tourConfig.js';
 
 // Fix for default markers in React Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -39,27 +39,23 @@ const previewStartIcon = new L.Icon({
   iconAnchor: [20, 20],
 });
 
-function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
+function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStartTourMap }) {
   const [showPreview, setShowPreview] = useState(false);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
-  const [showMapPreview, setShowMapPreview] = useState(true); // Changed to true - show by default
   const audioRef = useRef(null);
-
-  const previewStop = tourData.stops[0]; // Liberty Bridge - the first stop
 
   // Calculate map bounds that encompass all tour stops with tighter zoom
   const calculateTourBounds = () => {
-    if (!tourData.stops || tourData.stops.length === 0) return null;
+    if (!tourConfig.stops || tourConfig.stops.length === 0) return null;
 
-    const lats = tourData.stops.map(stop => stop.coordinates.lat);
-    const lngs = tourData.stops.map(stop => stop.coordinates.lng);
+    const lats = tourConfig.stops.map(stop => stop.coordinates.lat);
+    const lngs = tourConfig.stops.map(stop => stop.coordinates.lng);
 
     const minLat = Math.min(...lats);
     const maxLat = Math.max(...lats);
     const minLng = Math.min(...lngs);
     const maxLng = Math.max(...lngs);
 
-    // Even tighter zoom - reduced padding further
     const padding = 0.0003;
     return [
       [minLat - padding, minLng - padding],
@@ -68,11 +64,6 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
   };
 
   const tourBounds = calculateTourBounds();
-
-  // Create tour route path
-  const tourRoute = tourData.stops
-    .sort((a, b) => a.order - b.order)
-    .map(stop => [stop.coordinates.lat, stop.coordinates.lng]);
 
   const handlePreviewPlay = async () => {
     setShowPreview(true);
@@ -83,31 +74,34 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
           audioRef.current.pause();
           setIsPreviewPlaying(false);
         } else {
-          audioRef.current.currentTime = 0; // Start from beginning
+          audioRef.current.currentTime = 0;
           await audioRef.current.play();
           setIsPreviewPlaying(true);
         }
       } catch (error) {
         console.log('Audio autoplay prevented - user interaction required');
-        // This is normal browser behavior
       }
     }
   };
 
   const handleStartTour = () => {
     if (tourPurchased && onStartTourMap) {
-      // User has already paid, go directly to tour map
       onStartTourMap();
     } else {
-      // User hasn't paid yet, go to group size selector first
       onScreenChange();
+    }
+  };
+
+  const handleQuickCheckout = () => {
+    if (onQuickCheckout) {
+      onQuickCheckout(tourConfig.pricing.defaultAmount);
     }
   };
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#e5e3dc'}}>
       {/* Hero Section with Video Background */}
-      <div className="relative overflow-hidden" style={{minHeight: '100vh', height: '100vh'}}>
+      <div className="relative overflow-hidden" style={{minHeight: '85vh'}}>
         {/* Video Background */}
         <video
           autoPlay
@@ -127,438 +121,311 @@ function WelcomeScreen({ onScreenChange, tourPurchased, onStartTourMap }) {
             objectFit: 'cover'
           }}
         >
-          <source src="/video/falls-park-flyover.mp4" type="video/mp4" />
+          <source src={tourConfig.hero.video} type="video/mp4" />
         </video>
 
-        {/* Gradient Overlays for Better Text Visibility */}
+        {/* Gradient Overlays */}
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-60"></div>
         <div className="absolute inset-0" style={{backgroundColor: 'rgba(73, 90, 88, 0.3)'}}></div>
 
         {/* Content Overlay */}
-        <div className="relative px-6 py-20 text-center" style={{minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-          <p className="text-lg font-semibold mb-6" style={{
+        <div className="relative px-6 py-16 text-center" style={{minHeight: '85vh', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+          <p className="text-lg font-semibold mb-4" style={{
             color: '#ffffff',
-            textShadow: '2px 2px 12px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8)',
+            textShadow: '2px 2px 12px rgba(0,0,0,0.9)',
             letterSpacing: '0.05em'
           }}>
-            Basecamp Presents:
+            {tourConfig.content.brandLine}
           </p>
-          <h1 className="text-5xl md:text-6xl font-bold mb-4" style={{
+          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{
             fontFamily: 'Anton, sans-serif',
             fontWeight: '400',
             letterSpacing: '0.02em',
             color: '#ffffff',
-            textShadow: '3px 3px 15px rgba(0,0,0,0.95), 0 0 50px rgba(0,0,0,0.8), 2px 2px 30px rgba(0,0,0,0.9)',
+            textShadow: '3px 3px 15px rgba(0,0,0,0.95)',
             lineHeight: '1.2'
           }}>
             <span style={{
               borderBottom: '4px solid #d4967d',
               paddingBottom: '8px',
               display: 'inline-block'
-            }}>Falls Park</span><br />
+            }}>{tourConfig.shortName.split(' ')[0]} {tourConfig.shortName.split(' ')[1]}</span><br />
             <span>Self-Guided Walking Tour</span>
           </h1>
 
           <p className="text-xl md:text-2xl mb-8 max-w-lg mx-auto leading-relaxed font-medium" style={{
             color: '#ffffff',
-            textShadow: '3px 3px 15px rgba(0,0,0,0.95), 0 0 50px rgba(0,0,0,0.8), 2px 2px 30px rgba(0,0,0,0.9)'
+            textShadow: '3px 3px 15px rgba(0,0,0,0.95)'
           }}>
-            Skip the Boring History Lesson.<br />
-            Let Falls Park Tell Its Story.
+            {tourConfig.tagline}
           </p>
 
-          {/* CTA Button */}
-          <div className="mb-6">
-            <button
-              onClick={handleStartTour}
-              className="px-8 py-4 rounded-xl text-xl font-bold text-white transition-all duration-200 hover:transform hover:scale-105 shadow-2xl border-2 border-white border-opacity-40"
-              style={{
-                backgroundColor: '#d4967d',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                backdropFilter: 'blur(10px)'
-              }}
-            >
-              {tourPurchased ? 'Start Your Tour' : 'Start Tour - Pay What You Want'}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Section with proper contrast */}
-      <div className="px-6 py-8 bc-card-bg shadow-lg">
-        <div className="grid grid-cols-3 gap-6 max-w-md mx-auto">
-          <div className="text-center">
-            <div className="text-3xl font-black mb-2" style={{color: '#d4967d'}}>7</div>
-            <div className="text-xs font-semibold uppercase tracking-wide" style={{color: '#495a58'}}>
-              Historic Stops
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-black mb-2" style={{color: '#d4967d'}}>45</div>
-            <div className="text-xs font-semibold uppercase tracking-wide" style={{color: '#495a58'}}>
-              Minutes
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-black mb-2" style={{color: '#d4967d'}}>1.2</div>
-            <div className="text-xs font-semibold uppercase tracking-wide" style={{color: '#495a58'}}>
-              Miles
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Urgency Section */}
-      <div className="px-6 py-8" style={{backgroundColor: '#d4967d'}}>
-        <div className="max-w-md mx-auto text-center">
-          <div className="mb-4">
-            <h3 className="text-3xl font-black mb-3" style={{
-              fontFamily: 'Anton, sans-serif',
-              letterSpacing: '0.1em',
-              color: 'white',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
-            }}>
-              PAY WHAT YOU WANT
-            </h3>
-            <div className="w-20 h-1 mx-auto rounded-full" style={{backgroundColor: '#495a58'}}></div>
-          </div>
-          <p className="text-lg font-medium leading-relaxed" style={{color: 'white'}}>
-            Choose your own price — pay what feels fair to you. No fixed cost, no pressure. Just great stories at whatever value you decide.
-          </p>
-        </div>
-      </div>
-
-      {/* 5-Star Rating Section */}
-      <div className="px-6 py-6" style={{backgroundColor: '#e5e3dc'}}>
-        <div className="max-w-md mx-auto">
-          <div className="bc-card-bg rounded-2xl p-6 shadow-xl border-2" style={{borderColor: '#d4967d'}}>
-            <div className="text-center">
-              {/* Star Rating */}
-              <div className="flex items-center justify-center gap-2 mb-3">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <svg
-                    key={star}
-                    className="w-8 h-8"
-                    style={{
-                      filter: 'drop-shadow(0 2px 4px rgba(212, 150, 125, 0.3))',
-                      animation: `star-pulse-${star} 2s ease-in-out infinite`
-                    }}
-                    viewBox="0 0 24 24"
-                    fill="#d4967d"
-                    stroke="#495a58"
-                    strokeWidth="1"
-                  >
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                ))}
-              </div>
-
-              {/* Rating Text */}
-              <div className="mb-2">
-                <span className="text-2xl font-black" style={{color: '#495a58'}}>
-                  5.0 STAR RATED
-                </span>
-              </div>
-
-              {/* Subtext */}
-              <p className="text-sm font-semibold" style={{color: '#d4967d'}}>
-                ⭐ Loved by visitors exploring Greenville
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes star-pulse-1 {
-          0%, 100% { transform: scale(1); }
-          10% { transform: scale(1.2); }
-        }
-        @keyframes star-pulse-2 {
-          0%, 100% { transform: scale(1); }
-          20% { transform: scale(1.2); }
-        }
-        @keyframes star-pulse-3 {
-          0%, 100% { transform: scale(1); }
-          30% { transform: scale(1.2); }
-        }
-        @keyframes star-pulse-4 {
-          0%, 100% { transform: scale(1); }
-          40% { transform: scale(1.2); }
-        }
-        @keyframes star-pulse-5 {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.2); }
-        }
-      `}</style>
-
-      {/* Content Section with proper Basecamp colors */}
-      <div className="flex-1 px-6 py-8 space-y-6" style={{backgroundColor: '#e5e3dc'}}>
-        
-        {/* Comparison Section - Mobile-First Clean Design */}
-        <div className="bc-card-bg rounded-2xl p-6 md:p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <div className="text-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{color: '#303636', fontFamily: 'Anton, sans-serif', fontWeight: '700'}}>
-              WHY SELF-GUIDED?
-            </h2>
-            <p className="text-base md:text-lg font-medium" style={{color: '#495a58'}}>
-              More freedom for less money
-            </p>
-          </div>
-
-          {/* Clean Comparison List - Stacked on Mobile */}
-          <div className="space-y-5">
-            {[
-              {
-                benefit: "Pay What You Want",
-                detail: "vs $25-40 fixed guided tour price"
-              },
-              {
-                benefit: "Start Anytime You Want",
-                detail: "vs fixed 10am or 2pm tour times"
-              },
-              {
-                benefit: "Walk at Your Own Pace",
-                detail: "vs being rushed through with a group"
-              },
-              {
-                benefit: "Pause for Lunch or Photos",
-                detail: "vs stuck on rigid group schedule"
-              },
-              {
-                benefit: "Tour Again Whenever",
-                detail: "vs one-time guided experience"
-              },
-              {
-                benefit: "45 Minutes of Expert Narration",
-                detail: "professional storytelling included"
-              }
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="p-5 md:p-6 rounded-2xl shadow-md border"
+          {/* CTA Buttons - Streamlined */}
+          <div className="space-y-4 max-w-sm mx-auto">
+            {tourPurchased ? (
+              <button
+                onClick={handleStartTour}
+                className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white transition-all duration-200 hover:transform hover:scale-105 shadow-2xl"
                 style={{
-                  backgroundColor: '#e5e3dc',
-                  borderColor: '#d4967d',
-                  borderWidth: '2px'
+                  backgroundColor: '#d4967d',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
                 }}
               >
-                <div className="flex items-start gap-4">
-                  <div
-                    className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-sm"
-                    style={{
-                      backgroundColor: '#d4967d',
-                      border: '3px solid #e5e3dc'
+                Start Your Tour
+              </button>
+            ) : (
+              <>
+                {/* Quick Checkout - Primary CTA */}
+                <button
+                  onClick={handleQuickCheckout}
+                  className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white transition-all duration-200 hover:transform hover:scale-105 shadow-2xl"
+                  style={{
+                    backgroundColor: '#d4967d',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                  }}
+                >
+                  Continue with ${tourConfig.pricing.defaultAmount}
+                </button>
+
+                {/* Choose Your Price - Secondary CTA */}
+                <button
+                  onClick={handleStartTour}
+                  className="w-full px-6 py-3 rounded-xl text-lg font-semibold transition-all duration-200 hover:transform hover:scale-105"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.15)',
+                    color: '#ffffff',
+                    border: '2px solid rgba(255,255,255,0.4)',
+                    backdropFilter: 'blur(10px)',
+                  }}
+                >
+                  Choose Your Own Price
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Quick Stats Row */}
+          <div className="flex justify-center gap-8 mt-8">
+            <div className="text-center">
+              <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.stops}</div>
+              <div className="text-xs uppercase tracking-wide" style={{color: 'rgba(255,255,255,0.8)'}}>Stops</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.duration}</div>
+              <div className="text-xs uppercase tracking-wide" style={{color: 'rgba(255,255,255,0.8)'}}>Minutes</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.distance}</div>
+              <div className="text-xs uppercase tracking-wide" style={{color: 'rgba(255,255,255,0.8)'}}>Miles</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Pay What You Want Banner - Condensed */}
+      <div className="px-6 py-6" style={{backgroundColor: '#d4967d'}}>
+        <div className="max-w-md mx-auto text-center">
+          <h3 className="text-2xl font-black mb-2" style={{
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '0.1em',
+            color: 'white',
+          }}>
+            PAY WHAT YOU WANT
+          </h3>
+          <p className="text-base font-medium" style={{color: 'white'}}>
+            No fixed cost, no pressure. Just great stories at whatever value you decide.
+          </p>
+        </div>
+      </div>
+
+      {/* 5-Star Rating - Compact */}
+      <div className="px-6 py-4" style={{backgroundColor: '#e5e3dc'}}>
+        <div className="max-w-md mx-auto">
+          <div className="bc-card-bg rounded-xl p-4 shadow-lg border-2 flex items-center justify-center gap-4" style={{borderColor: '#d4967d'}}>
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <svg key={star} className="w-6 h-6" viewBox="0 0 24 24" fill="#d4967d" stroke="#495a58" strokeWidth="1">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              ))}
+            </div>
+            <span className="text-lg font-bold" style={{color: '#495a58'}}>
+              5.0 Star Rated
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content - Condensed */}
+      <div className="px-6 py-6 space-y-6" style={{backgroundColor: '#e5e3dc'}}>
+
+        {/* Interactive Map Preview */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
+          <div className="text-center mb-4">
+            <h3 className="text-xl font-bold mb-1" style={{color: '#303636'}}>Your Walking Route</h3>
+            <p className="text-base" style={{color: '#495a58'}}>{tourConfig.stats.stops} historic stops throughout {tourConfig.location.split(',')[0]}</p>
+          </div>
+
+          <div className="rounded-xl border overflow-hidden relative" style={{borderColor: '#d4967d', height: '250px'}}>
+            <MapContainer
+              bounds={tourBounds}
+              boundsOptions={{padding: [10, 10]}}
+              style={{ height: '100%', width: '100%' }}
+              zoomControl={false}
+              attributionControl={false}
+            >
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+              {tourConfig.stops.map((stop) => (
+                <div key={stop.id}>
+                  <Marker
+                    position={[stop.coordinates.lat, stop.coordinates.lng]}
+                    icon={stop.order === 1 ? previewStartIcon : previewStopIcon}
+                  />
+                  <Circle
+                    center={[stop.coordinates.lat, stop.coordinates.lng]}
+                    radius={stop.radius_m}
+                    pathOptions={{
+                      color: '#d4967d',
+                      fillColor: '#d4967d',
+                      fillOpacity: 0.1,
+                      weight: 1,
                     }}
-                  >
-                    <svg width="16" height="13" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M1 5.5L5 9.5L13 1.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-base md:text-lg mb-2" style={{color: '#303636'}}>
-                      {item.benefit}
-                    </h3>
-                    <p className="text-sm md:text-base leading-relaxed" style={{color: '#495a58'}}>
-                      {item.detail}
-                    </p>
-                  </div>
+                  />
+                </div>
+              ))}
+            </MapContainer>
+
+            <div className="absolute bottom-3 left-3 right-3 bg-white bg-opacity-95 rounded-lg p-3 backdrop-blur-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-bold text-sm" style={{color: '#303636'}}>
+                    {tourConfig.stats.stops}-Stop Journey
+                  </h4>
+                  <p className="text-xs" style={{color: '#495a58'}}>
+                    ~{tourConfig.stats.duration} min | {tourConfig.stats.distance} mi | Professional audio
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Why Self-Guided - Condensed to 3 key points */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
+          <h3 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
+            Why Self-Guided?
+          </h3>
+
+          <div className="space-y-3">
+            {tourConfig.content.valueProps.slice(0, 3).map((item, index) => (
+              <div
+                key={index}
+                className="p-4 rounded-xl border flex items-start gap-3"
+                style={{ backgroundColor: '#e5e3dc', borderColor: '#d4967d' }}
+              >
+                <div
+                  className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: '#d4967d' }}
+                >
+                  <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
+                    <path d="M1 5.5L5 9.5L13 1.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-bold text-base" style={{color: '#303636'}}>{item.benefit}</h4>
+                  <p className="text-sm" style={{color: '#495a58'}}>{item.detail}</p>
                 </div>
               </div>
             ))}
           </div>
-
-          {/* Bottom CTA */}
-          <div className="mt-6 p-5 rounded-xl text-center" style={{backgroundColor: '#d4967d', color: '#ffffff'}}>
-            <p className="text-lg md:text-xl font-bold mb-1">
-              More Freedom. Better Value. Your Price.
-            </p>
-            <p className="text-sm font-medium opacity-90">
-              Experience Falls Park on your terms
-            </p>
-          </div>
         </div>
 
-        {/* Interactive Map Preview Card - Always Visible */}
-        <div className="bc-card-bg rounded-2xl p-6 md:p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
-          {/* Centered header with icon above text - All Devices */}
-          <div className="text-center mb-6">
-            <div className="inline-flex w-12 h-12 md:w-14 md:h-14 rounded-xl items-center justify-center shadow-lg mb-3" style={{backgroundColor: '#495a58'}}>
-              <div className="text-xl md:text-2xl text-white">🗺️</div>
-            </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-1" style={{color: '#303636'}}>Your Complete Walking Route</h3>
-            <p className="text-sm md:text-base font-medium" style={{color: '#495a58'}}>7 historic stops throughout Falls Park</p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="rounded-xl border overflow-hidden relative" style={{borderColor: '#d4967d', height: '300px'}}>
-              <MapContainer
-                bounds={tourBounds}
-                boundsOptions={{padding: [10, 10]}}
-                style={{ height: '100%', width: '100%' }}
-                zoomControl={false}
-                attributionControl={false}
-              >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-
-                {/* Tour stop markers */}
-                {tourData.stops.map((stop) => (
-                  <div key={stop.id}>
-                    <Marker
-                      position={[stop.coordinates.lat, stop.coordinates.lng]}
-                      icon={stop.order === 1 ? previewStartIcon : previewStopIcon}
-                    />
-
-                    {/* Geofence circles (smaller for preview) */}
-                    <Circle
-                      center={[stop.coordinates.lat, stop.coordinates.lng]}
-                      radius={stop.radius_m}
-                      pathOptions={{
-                        color: '#d4967d',
-                        fillColor: '#d4967d',
-                        fillOpacity: 0.1,
-                        weight: 1,
-                      }}
-                    />
-                  </div>
-                ))}
-              </MapContainer>
-
-              {/* Map overlay with tour info */}
-              <div className="absolute bottom-4 left-4 right-4 bg-white bg-opacity-95 rounded-lg p-4 backdrop-blur-sm">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-bold text-sm" style={{color: '#303636'}}>
-                      Your 7-Stop Journey
-                    </h4>
-                    <p className="text-xs" style={{color: '#495a58'}}>
-                      ~45 minutes • 1.2 miles • Professional audio narration
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full" style={{backgroundColor: '#d4967d'}}></div>
-                    <span className="text-xs font-medium" style={{color: '#495a58'}}>Tour Stops</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick tour info below map */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-3 rounded-lg border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
-                <div className="text-lg font-bold" style={{color: '#495a58'}}>START</div>
-                <div className="text-xs" style={{color: '#495a58'}}>Liberty Bridge</div>
-              </div>
-              <div className="text-center p-3 rounded-lg border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
-                <div className="text-lg font-bold" style={{color: '#495a58'}}>7</div>
-                <div className="text-xs" style={{color: '#495a58'}}>Historic Stops</div>
-              </div>
-              <div className="text-center p-3 rounded-lg border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
-                <div className="text-lg font-bold" style={{color: '#495a58'}}>END</div>
-                <div className="text-xs" style={{color: '#495a58'}}>Park Gardens</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Audio Preview Card */}
-        <div className="bc-card-bg rounded-2xl p-8 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <div className="flex items-center mb-6">
-            <div className="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#d4967d'}}>
-              <div className="text-2xl text-white">🎧</div>
+        {/* Audio Preview - Compact */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
+          <div className="flex items-center mb-4">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#d4967d'}}>
+              <div className="text-xl text-white">🎧</div>
             </div>
             <div className="ml-4">
-              <h3 className="text-2xl font-bold" style={{color: '#303636'}}>Audio Preview</h3>
-              <p className="font-medium" style={{color: '#495a58'}}>Experience Premium Quality</p>
+              <h3 className="text-xl font-bold" style={{color: '#303636'}}>Audio Preview</h3>
+              <p className="text-sm" style={{color: '#495a58'}}>Hear our professional narration</p>
             </div>
           </div>
-
-          <p className="text-lg leading-relaxed mb-6" style={{color: '#495a58'}}>
-            Listen to our professionally narrated sample and discover the exceptional quality of our immersive storytelling experience.
-          </p>
 
           <button
             onClick={handlePreviewPlay}
             className="bc-btn-primary w-full"
           >
             <div className="flex items-center justify-center">
-              <span className="mr-3 text-2xl">
+              <span className="mr-3 text-xl">
                 {isPreviewPlaying ? '⏸️' : '▶️'}
               </span>
-              {isPreviewPlaying ? 'Pause Premium Preview' : 'Play Premium Preview'}
+              {isPreviewPlaying ? 'Pause Preview' : 'Play Preview'}
             </div>
           </button>
 
           {showPreview && (
-            <div className="mt-6 p-6 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
-              <div className="flex items-center mb-3">
-                <div className="w-3 h-3 rounded-full mr-3" style={{backgroundColor: '#d4967d'}}></div>
-                <h4 className="font-bold text-lg" style={{color: '#303636'}}>
-                  "Tour Preview Sample"
-                </h4>
-              </div>
-              <p className="leading-relaxed mb-4" style={{color: '#495a58'}}>
-                Get a taste of our professional storytelling experience and discover what makes Falls Park's history come alive through engaging narration and fascinating historical insights.
+            <div className="mt-4 p-4 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
+              <p className="text-sm leading-relaxed" style={{color: '#495a58'}}>
+                Experience professional storytelling that brings local history to life through engaging narration.
               </p>
             </div>
           )}
         </div>
-      </div>
 
-      {/* Contact Section */}
-      <div className="px-6 py-8 bg-white border-t-2" style={{borderColor: '#d4967d'}}>
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full" style={{backgroundColor: '#d4967d'}}>
-            <div className="text-2xl text-white">📧</div>
-          </div>
-          <h3 className="text-2xl font-bold mb-4" style={{color: '#303636'}}>
-            Questions, Comments, or Suggestions?
+        {/* Final CTA */}
+        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border text-center" style={{borderColor: '#d4967d', backgroundColor: '#d4967d'}}>
+          <h3 className="text-xl font-bold mb-2" style={{color: 'white'}}>
+            Ready to Explore?
           </h3>
-          <p className="text-lg mb-6" style={{color: '#495a58'}}>
-            We'd love to hear from you! Send us your feedback, reviews, or any questions about the tour experience.
+          <p className="text-base mb-4" style={{color: 'rgba(255,255,255,0.9)'}}>
+            Start your self-guided adventure today
           </p>
-          <div className="bg-white p-6 rounded-2xl border-2 shadow-lg" style={{borderColor: '#d4967d'}}>
-            <p className="text-sm font-medium mb-2" style={{color: '#495a58'}}>
-              Contact us at:
-            </p>
-            <a
-              href="mailto:services@basecampdataanalytics.com"
-              className="text-lg md:text-xl font-bold hover:underline transition-all duration-200 break-all text-center block"
-              style={{color: '#d4967d'}}
-            >
-              services@basecampdataanalytics.com
-            </a>
-            <p className="text-sm mt-3" style={{color: '#495a58'}}>
-              We typically respond within 24 hours
-            </p>
-          </div>
+          <button
+            onClick={tourPurchased ? handleStartTour : handleQuickCheckout}
+            className="w-full px-6 py-3 rounded-xl text-lg font-bold transition-all duration-200 hover:transform hover:scale-105"
+            style={{
+              backgroundColor: 'white',
+              color: '#d4967d',
+            }}
+          >
+            {tourPurchased ? 'Start Tour' : `Get Started - $${tourConfig.pricing.defaultAmount}`}
+          </button>
         </div>
       </div>
 
-      {/* Footer with Basecamp colors */}
-      <div className="bc-muted-bg text-white py-8 px-6">
+      {/* Contact - Minimal */}
+      <div className="px-6 py-6 bg-white border-t-2" style={{borderColor: '#d4967d'}}>
+        <div className="max-w-md mx-auto text-center">
+          <p className="text-base mb-2" style={{color: '#495a58'}}>
+            Questions? Contact us:
+          </p>
+          <a
+            href={`mailto:${tourConfig.support.email}`}
+            className="text-lg font-semibold hover:underline"
+            style={{color: '#d4967d'}}
+          >
+            {tourConfig.support.email}
+          </a>
+        </div>
+      </div>
+
+      {/* Footer - Minimal */}
+      <div className="bc-muted-bg text-white py-6 px-6">
         <div className="text-center">
-          <p className="text-white font-medium mb-2">
+          <p className="text-sm" style={{color: '#d4967d'}}>
             Powered by Basecamp Data Analytics
           </p>
-          <p className="text-sm" style={{color: '#d4967d'}}>
-            Start at Liberty Bridge • Self-paced experience • Premium quality audio
-          </p>
         </div>
       </div>
 
-      {/* Hidden Audio Element for Preview */}
+      {/* Hidden Audio Element */}
       <audio
         ref={audioRef}
-        src="/audio/preview-sample.wav"
-        onEnded={() => {
-          setIsPreviewPlaying(false);
-        }}
-        onPause={() => {
-          setIsPreviewPlaying(false);
-        }}
+        src={tourConfig.hero.previewAudio}
+        onEnded={() => setIsPreviewPlaying(false)}
+        onPause={() => setIsPreviewPlaying(false)}
         preload="metadata"
       />
     </div>

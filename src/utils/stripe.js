@@ -2,29 +2,36 @@ import stripePromise from '../config/stripe.js';
 
 export const createPaymentSession = async (paymentData) => {
   try {
-    // For development, create a mock Stripe session or direct integration
     const isDevelopment = import.meta.env.DEV;
-    
-    if (isDevelopment) {
-      // In development, create Stripe session directly on client side for testing
-      const stripe = await stripePromise;
-      
-      // Mock checkout session creation (you would replace this with actual Stripe test mode)
-      console.log('Development mode: Mock payment session created', paymentData);
-      
-      // For now, simulate successful payment redirect
-      // In real development, you'd set up a local server or use Stripe's test mode
-      alert(`Development Mode: Would process payment of $${paymentData.amount} for ${paymentData.type} tour. 
 
-For testing with real Stripe:
-1. Set up a local server to handle /api/create-checkout-session
-2. Or deploy to Vercel for testing
-3. Use test card: 4242 4242 4242 4242`);
-      
-      return { success: false, error: 'Development mode - deploy to test Stripe integration' };
+    // In development, allow testing with Stripe test mode
+    // Set VITE_ENABLE_STRIPE_DEV=true in .env.local to enable
+    const enableStripeInDev = import.meta.env.VITE_ENABLE_STRIPE_DEV === 'true';
+
+    if (isDevelopment && !enableStripeInDev) {
+      // Development mode without Stripe - offer demo mode
+      console.log('Development mode: Payment data', paymentData);
+
+      const useDemoMode = window.confirm(
+        `Development Mode\n\nAmount: $${paymentData.amount}\n\nClick OK to simulate successful payment and access the tour.\nClick Cancel to test the full Stripe flow (requires deployment).`
+      );
+
+      if (useDemoMode) {
+        // Grant access in demo mode
+        localStorage.setItem('tour_access', 'granted');
+        localStorage.setItem('payment_session', JSON.stringify({
+          amount_total: paymentData.amount * 100,
+          payment_status: 'demo_mode',
+          metadata: { demo: true, amount: paymentData.amount }
+        }));
+        window.location.href = '/?tour=true';
+        return { success: true };
+      }
+
+      return { success: false, error: 'Demo mode cancelled - deploy to Vercel to test Stripe' };
     }
-    
-    // Production: Call backend API to create a Stripe checkout session
+
+    // Production or dev with Stripe enabled: Call backend API
     const response = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: {
@@ -41,13 +48,13 @@ For testing with real Stripe:
     });
 
     const session = await response.json();
-    
+
     if (session.error) {
       throw new Error(session.error);
     }
 
     const stripe = await stripePromise;
-    
+
     // Redirect to Stripe checkout
     const result = await stripe.redirectToCheckout({
       sessionId: session.id,
@@ -66,10 +73,22 @@ For testing with real Stripe:
 
 export const verifyPayment = async (sessionId) => {
   try {
-    // In production, verify payment status with your backend
+    // Check for demo mode payment
+    const storedSession = localStorage.getItem('payment_session');
+    if (storedSession) {
+      const parsed = JSON.parse(storedSession);
+      if (parsed.payment_status === 'demo_mode' || parsed.payment_status === 'promo_code') {
+        return {
+          success: true,
+          session: parsed
+        };
+      }
+    }
+
+    // In production, verify payment status with backend
     const response = await fetch(`/api/verify-payment?session_id=${sessionId}`);
     const data = await response.json();
-    
+
     return {
       success: data.status === 'complete',
       session: data

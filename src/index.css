@@ -13,6 +13,7 @@ body {
   min-height: 100vh;
   background-color: #e5e3dc;
   color: #303636;
+  font-size: 18px; /* Increased for accessibility - easier reading for all ages */
 }
 
 /* Loading spinner animation */
@@ -255,13 +256,15 @@ body {
 .text-center { text-align: center; }
 .text-left { text-align: left; }
 
-.text-xs { font-size: 0.75rem; }
-.text-sm { font-size: 0.875rem; }
-.text-lg { font-size: 1.125rem; }
-.text-xl { font-size: 1.25rem; }
-.text-2xl { font-size: 1.5rem; }
-.text-3xl { font-size: 1.875rem; }
-.text-4xl { font-size: 2.25rem; }
+/* Font sizes adjusted for 18px base - accessibility friendly */
+.text-xs { font-size: 0.833rem; }  /* ~15px - minimum readable */
+.text-sm { font-size: 0.889rem; }  /* ~16px */
+.text-base { font-size: 1rem; }    /* 18px - base */
+.text-lg { font-size: 1.111rem; }  /* ~20px */
+.text-xl { font-size: 1.333rem; }  /* ~24px */
+.text-2xl { font-size: 1.556rem; } /* ~28px */
+.text-3xl { font-size: 1.889rem; } /* ~34px */
+.text-4xl { font-size: 2.222rem; } /* ~40px */
 
 .font-medium { font-weight: 500; }
 .font-semibold { font-weight: 600; }
