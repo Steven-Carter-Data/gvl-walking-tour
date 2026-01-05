@@ -1201,7 +1201,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
             right: 0,
             bottom: 0,
             zIndex: 50,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1209,156 +1209,102 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
           }}>
             <div style={{
               backgroundColor: '#ffffff',
-              borderRadius: '20px',
+              borderRadius: '24px',
               width: '100%',
-              maxWidth: '400px',
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)'
+              maxWidth: '360px',
+              boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
+              overflow: 'hidden'
             }}>
               {/* Header */}
               <div style={{
                 backgroundColor: '#d4967d',
-                padding: '24px 20px',
-                borderRadius: '20px 20px 0 0',
+                padding: '28px 24px',
                 textAlign: 'center'
               }}>
-                <div style={{ fontSize: '48px', marginBottom: '8px' }}>📍</div>
-                <h3 style={{ color: 'white', margin: 0, fontSize: '22px', fontWeight: '700' }}>
-                  Location Access Needed
-                </h3>
+                <div style={{ fontSize: '56px', marginBottom: '12px' }}>📍</div>
+                <h2 style={{
+                  color: 'white',
+                  margin: 0,
+                  fontSize: '24px',
+                  fontWeight: '700',
+                  lineHeight: '1.2'
+                }}>
+                  Location Blocked
+                </h2>
+                <p style={{
+                  color: 'rgba(255,255,255,0.9)',
+                  margin: '8px 0 0 0',
+                  fontSize: '16px'
+                }}>
+                  Quick fix - just 2 taps!
+                </p>
               </div>
 
               {/* Body */}
-              <div style={{ padding: '20px' }}>
-                <p style={{
-                  color: '#495a58',
-                  margin: '0 0 20px 0',
-                  fontSize: '15px',
-                  lineHeight: '1.5',
-                  textAlign: 'center'
-                }}>
-                  This tour plays audio automatically when you reach each stop. To enable this, please turn on location access.
-                </p>
+              <div style={{ padding: '24px' }}>
 
-                {/* Instructions Box */}
+                {/* The ONE thing they need to do */}
                 <div style={{
-                  backgroundColor: '#fffbeb',
-                  border: '1px solid #f59e0b',
-                  borderRadius: '12px',
-                  padding: '16px',
+                  backgroundColor: '#fef3c7',
+                  border: '2px solid #f59e0b',
+                  borderRadius: '16px',
+                  padding: '20px',
                   marginBottom: '20px'
                 }}>
                   <p style={{
                     color: '#92400e',
-                    margin: '0 0 12px 0',
-                    fontSize: '15px',
+                    margin: '0 0 16px 0',
+                    fontSize: '18px',
                     fontWeight: '700',
                     textAlign: 'center'
                   }}>
-                    How to enable location:
+                    Tap the lock icon in Chrome's address bar
                   </p>
 
-                  {/* Step by step */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                      <div style={{
-                        backgroundColor: '#d4967d',
-                        color: 'white',
-                        borderRadius: '50%',
-                        width: '28px',
-                        height: '28px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '14px',
-                        fontWeight: '700',
-                        flexShrink: 0
-                      }}>1</div>
-                      <p style={{ margin: 0, color: '#303636', fontSize: '14px', lineHeight: '1.4' }}>
-                        Open your phone's <strong>Settings</strong> app
-                      </p>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                      <div style={{
-                        backgroundColor: '#d4967d',
-                        color: 'white',
-                        borderRadius: '50%',
-                        width: '28px',
-                        height: '28px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '14px',
-                        fontWeight: '700',
-                        flexShrink: 0
-                      }}>2</div>
-                      <p style={{ margin: 0, color: '#303636', fontSize: '14px', lineHeight: '1.4' }}>
-                        Tap <strong>Privacy & Security</strong>
-                      </p>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                      <div style={{
-                        backgroundColor: '#d4967d',
-                        color: 'white',
-                        borderRadius: '50%',
-                        width: '28px',
-                        height: '28px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '14px',
-                        fontWeight: '700',
-                        flexShrink: 0
-                      }}>3</div>
-                      <p style={{ margin: 0, color: '#303636', fontSize: '14px', lineHeight: '1.4' }}>
-                        Tap <strong>Location Services</strong>
-                      </p>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                      <div style={{
-                        backgroundColor: '#d4967d',
-                        color: 'white',
-                        borderRadius: '50%',
-                        width: '28px',
-                        height: '28px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '14px',
-                        fontWeight: '700',
-                        flexShrink: 0
-                      }}>4</div>
-                      <p style={{ margin: 0, color: '#303636', fontSize: '14px', lineHeight: '1.4' }}>
-                        Find <strong>Safari</strong> or <strong>Chrome</strong>
-                      </p>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                      <div style={{
-                        backgroundColor: '#d4967d',
-                        color: 'white',
-                        borderRadius: '50%',
-                        width: '28px',
-                        height: '28px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '14px',
-                        fontWeight: '700',
-                        flexShrink: 0
-                      }}>5</div>
-                      <p style={{ margin: 0, color: '#303636', fontSize: '14px', lineHeight: '1.4' }}>
-                        Select <strong>"While Using"</strong> or <strong>"Allow"</strong>
-                      </p>
-                    </div>
+                  {/* Visual indicator */}
+                  <div style={{
+                    backgroundColor: '#fff',
+                    borderRadius: '12px',
+                    padding: '12px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    marginBottom: '16px',
+                    border: '1px solid #e5e7eb'
+                  }}>
+                    <span style={{ fontSize: '20px' }}>🔒</span>
+                    <span style={{
+                      color: '#6b7280',
+                      fontSize: '14px',
+                      flex: 1,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      falls-park-tour.vercel.app
+                    </span>
+                    <span style={{
+                      backgroundColor: '#d4967d',
+                      color: 'white',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: '600'
+                    }}>TAP HERE</span>
                   </div>
+
+                  <p style={{
+                    color: '#78350f',
+                    margin: 0,
+                    fontSize: '16px',
+                    textAlign: 'center',
+                    fontWeight: '600'
+                  }}>
+                    Then change Location to <span style={{color: '#059669'}}>"Allow"</span>
+                  </p>
                 </div>
 
-                {/* Buttons */}
+                {/* Primary action */}
                 <button
                   onClick={() => {
                     setGpsStatus('loading');
@@ -1366,7 +1312,9 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                       onRetryLocation();
                     } else {
                       navigator.geolocation.getCurrentPosition(
-                        () => setGpsStatus('active'),
+                        (pos) => {
+                          setGpsStatus('active');
+                        },
                         (err) => {
                           if (err.code === err.PERMISSION_DENIED) {
                             setGpsStatus('denied');
@@ -1383,43 +1331,46 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                     backgroundColor: '#d4967d',
                     color: 'white',
                     border: 'none',
-                    padding: '16px',
-                    borderRadius: '12px',
-                    fontSize: '17px',
+                    padding: '18px',
+                    borderRadius: '14px',
+                    fontSize: '18px',
                     fontWeight: '700',
                     cursor: 'pointer',
                     width: '100%',
-                    marginBottom: '12px'
+                    marginBottom: '12px',
+                    boxShadow: '0 4px 12px rgba(212, 150, 125, 0.4)'
                   }}
                 >
-                  I've Enabled It - Try Again
+                  Done! Try Again
                 </button>
 
+                {/* Skip option */}
                 <button
                   onClick={() => setGpsStatus('manual')}
                   style={{
-                    backgroundColor: '#f3f4f6',
-                    color: '#495a58',
+                    backgroundColor: 'transparent',
+                    color: '#6b7280',
                     border: 'none',
                     padding: '14px',
-                    borderRadius: '12px',
-                    fontSize: '15px',
-                    fontWeight: '600',
+                    fontSize: '16px',
+                    fontWeight: '500',
                     cursor: 'pointer',
-                    width: '100%'
+                    width: '100%',
+                    textDecoration: 'underline'
                   }}
                 >
-                  Skip - I'll Tap Stops Manually
+                  Skip - I'll tap stops manually
                 </button>
 
+                {/* Reassurance */}
                 <p style={{
                   color: '#9ca3af',
-                  margin: '16px 0 0 0',
-                  fontSize: '13px',
-                  lineHeight: '1.4',
+                  margin: '12px 0 0 0',
+                  fontSize: '14px',
+                  lineHeight: '1.5',
                   textAlign: 'center'
                 }}>
-                  You can enjoy the full tour without location by tapping each stop on the map.
+                  The tour works fine either way. GPS just auto-plays audio when you arrive at each stop.
                 </p>
               </div>
             </div>
