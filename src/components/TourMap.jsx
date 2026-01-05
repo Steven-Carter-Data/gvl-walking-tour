@@ -1243,64 +1243,99 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
               {/* Body */}
               <div style={{ padding: '24px' }}>
 
-                {/* The ONE thing they need to do */}
+                {/* Step 1 */}
+                <div style={{
+                  backgroundColor: '#f0fdf4',
+                  border: '2px solid #22c55e',
+                  borderRadius: '16px',
+                  padding: '16px',
+                  marginBottom: '16px'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginBottom: '12px'
+                  }}>
+                    <div style={{
+                      backgroundColor: '#22c55e',
+                      color: 'white',
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '16px',
+                      fontWeight: '700',
+                      flexShrink: 0
+                    }}>1</div>
+                    <p style={{
+                      color: '#166534',
+                      margin: 0,
+                      fontSize: '17px',
+                      fontWeight: '700'
+                    }}>
+                      Look at the TOP of your screen
+                    </p>
+                  </div>
+
+                  <p style={{
+                    color: '#15803d',
+                    margin: 0,
+                    fontSize: '15px',
+                    lineHeight: '1.5',
+                    paddingLeft: '40px'
+                  }}>
+                    In your browser's address bar, tap the <strong>tune/settings icon</strong> (Android) or <strong>ᴬᴬ icon</strong> (iPhone Safari) next to the website address.
+                  </p>
+                </div>
+
+                {/* Step 2 */}
                 <div style={{
                   backgroundColor: '#fef3c7',
                   border: '2px solid #f59e0b',
                   borderRadius: '16px',
-                  padding: '20px',
+                  padding: '16px',
                   marginBottom: '20px'
                 }}>
-                  <p style={{
-                    color: '#92400e',
-                    margin: '0 0 16px 0',
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    textAlign: 'center'
-                  }}>
-                    Tap the lock icon in Chrome's address bar
-                  </p>
-
-                  {/* Visual indicator */}
                   <div style={{
-                    backgroundColor: '#fff',
-                    borderRadius: '12px',
-                    padding: '12px 16px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
-                    marginBottom: '16px',
-                    border: '1px solid #e5e7eb'
+                    gap: '12px',
+                    marginBottom: '12px'
                   }}>
-                    <span style={{ fontSize: '20px' }}>🔒</span>
-                    <span style={{
-                      color: '#6b7280',
-                      fontSize: '14px',
-                      flex: 1,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      falls-park-tour.vercel.app
-                    </span>
-                    <span style={{
-                      backgroundColor: '#d4967d',
+                    <div style={{
+                      backgroundColor: '#f59e0b',
                       color: 'white',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      fontWeight: '600'
-                    }}>TAP HERE</span>
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '16px',
+                      fontWeight: '700',
+                      flexShrink: 0
+                    }}>2</div>
+                    <p style={{
+                      color: '#92400e',
+                      margin: 0,
+                      fontSize: '17px',
+                      fontWeight: '700'
+                    }}>
+                      Change Location to "Allow"
+                    </p>
                   </div>
 
                   <p style={{
                     color: '#78350f',
                     margin: 0,
-                    fontSize: '16px',
-                    textAlign: 'center',
-                    fontWeight: '600'
+                    fontSize: '15px',
+                    lineHeight: '1.5',
+                    paddingLeft: '40px'
                   }}>
-                    Then change Location to <span style={{color: '#059669'}}>"Allow"</span>
+                    Find <strong>"Location"</strong> in the menu and tap it to change from "Block" to <span style={{color: '#059669', fontWeight: '700'}}>"Allow"</span>
                   </p>
                 </div>
 
