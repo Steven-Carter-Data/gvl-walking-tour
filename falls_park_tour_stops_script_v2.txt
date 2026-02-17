@@ -1,0 +1,596 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    FALLS PARK TOUR SCRIPT v2.0
+                    With Delivery Notes & Pause Markers
+═══════════════════════════════════════════════════════════════════════════════
+
+LEGEND:
+[PAUSE]     = 1-2 second pause
+[LONG PAUSE] = 3-4 second pause (let it land)
+[WARM]      = Conversational, friendly tone
+[DRAMATIC]  = Slower, lower, more weight
+[PLAYFUL]   = Light, smile in your voice
+[HUSHED]    = Quieter, like sharing a secret
+[ENERGY UP] = Pick up the pace, excitement
+
+═══════════════════════════════════════════════════════════════════════════════
+20-SECOND PREVIEW (For Landing Page)
+═══════════════════════════════════════════════════════════════════════════════
+
+[ENERGY UP - Hook them fast]
+
+A waterfall that powered an empire. [PAUSE] A bridge that defied gravity. [PAUSE] A tree with roots like Medusa's hair. [PAUSE] And a jar of mayonnaise that became a Southern legend.
+
+[WARM]
+This is Falls Park — and you've never heard its story like this.
+
+Walk where Cherokee hunters stood. Cross a bridge with no supports. Meet the woman who built an empire from mayonnaise. This is your Greenville — and it's waiting.
+
+[PAUSE]
+
+Let's begin.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+WELCOME TO THE APP (Plays after purchase, before tour starts)
+═══════════════════════════════════════════════════════════════════════════════
+
+[WARM - Like greeting a friend]
+
+Hey — welcome to your Falls Park Tour!
+
+I'm Steven Carter, and I'll be your guide today.
+
+[PAUSE]
+
+Here's the thing about this tour: there's no group to keep up with. No schedule. No rushing. You're in complete control.
+
+[CONVERSATIONAL]
+As you walk through the park, the app will notify you when you reach each stop. Just hit play, and I'll tell you a story about what happened right where you're standing.
+
+[PAUSE]
+
+You can pause anytime — grab a coffee, take photos, sit by the river. This is your tour, your pace.
+
+[DRAMATIC - slow down here]
+What you're about to discover is how a polluted industrial site... hidden under a highway bridge... became the crown jewel of South Carolina.
+
+[WARM]
+You'll meet inventors, pioneers, and a woman who built an empire with mayonnaise. You'll hear about Cherokee hunters, textile barons, and a tree that refused to die.
+
+[PAUSE]
+
+So — look around. Take a breath.
+
+[PAUSE]
+
+Our first stop is called the Cradle of Greenville. It's where the city's story truly begins.
+
+Let's go.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STOP 1: CRADLE OF GREENVILLE
+═══════════════════════════════════════════════════════════════════════════════
+
+[DRAMATIC - Set the scene]
+
+Long before there was a city... [PAUSE] long before there was even a name for this place... [PAUSE] the Cherokee stood right here.
+
+[LONG PAUSE]
+
+The waterfall you're looking at? It's been shaping lives for thousands of years.
+
+[WARM]
+Welcome to the Cradle of Greenville.
+
+[PAUSE]
+
+[HUSHED - Like sharing ancient knowledge]
+The Cherokee — along with the Catawba and other peoples — didn't just pass through here. They lived here. They fished in these shallows. Hunted deer in these woods. Gathered river cane along these banks to weave into baskets, mats, and arrows.
+
+Archaeological digs have confirmed it: Cherokee villages once lined this river, right where downtown Greenville stands today.
+
+[PAUSE]
+
+[ENERGY UP - Story time]
+Now fast-forward to the late 1700s.
+
+A Virginia trader named Richard Pearis set up camp right here. He married a Cherokee woman, gained large tracts of land through his ties to the tribe, and built a trading post and mill along this very river.
+
+[DRAMATIC]
+But then came the Revolutionary War. [PAUSE] And Pearis picked the wrong side.
+
+[PAUSE]
+
+He backed the British. [PAUSE] Got captured. [PAUSE] And lost everything.
+
+[WARM]
+After the Revolution, new owners bought the land, laid out four hundred acres of plots, and named the town... [PAUSE] "Pleasantburg."
+
+[PLAYFUL]
+Yeah. That didn't stick.
+
+By the 1830s, it was officially Greenville — named after Revolutionary General Nathanael Greene.
+
+[PAUSE]
+
+[WARM - Wrapping up]
+So why call this spot the "Cradle of Greenville"? Because right here — where water powered the first mills and traders set up shop — a city was born.
+
+[PLAYFUL]
+And let's be honest: if you were founding a city, you'd probably pick a spot with a waterfall too. Free energy and great views? [PAUSE] Hard to beat.
+
+[PAUSE]
+
+[DRAMATIC - Tease the next stop]
+But the bridge you're about to cross? [PAUSE] It's hiding an engineering secret that most people never notice.
+
+Let's go find out.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STOP 2: LIBERTY BRIDGE
+═══════════════════════════════════════════════════════════════════════════════
+
+[WARM]
+You're either standing on it... or looking right at it. [PAUSE] The Liberty Bridge.
+
+[PAUSE]
+
+[HUSHED - Like revealing a secret]
+Now — look carefully. Notice anything... unusual?
+
+[LONG PAUSE - Let them look]
+
+The bridge curves. [PAUSE] And there are no vertical supports underneath.
+
+[DRAMATIC]
+That's because you're standing on one of only two bridges like this... [PAUSE] in the entire United States.
+
+[PAUSE]
+
+[ENERGY UP - Engineering excitement]
+This is a cantilevered pedestrian suspension bridge. Unlike traditional suspension bridges that are anchored at both ends, this one is only anchored on one side. It's 345 feet of engineering magic, curving 12 degrees to frame that perfect view of the falls below.
+
+[WARM]
+Designed by architect Miguel Rosales and opened in 2004, it earned awards from the American Society of Civil Engineers and the Arthur G. Hayden Medal for innovation.
+
+[PAUSE]
+
+[DRAMATIC - The bigger story]
+But here's what really matters.
+
+Before this bridge existed... [PAUSE] most Greenville residents didn't even know there was a waterfall here.
+
+[PAUSE]
+
+An old highway bridge and decades of overgrowth had hidden it completely. The Liberty Bridge didn't just cross the river — it revealed it. It transformed this forgotten spot into what locals now call... [PAUSE] Greenville's front porch.
+
+[PAUSE]
+
+[PLAYFUL - Trivia time]
+Alright — trivia time!
+
+I told you this is one of only two cantilevered pedestrian suspension bridges in the U.S. [PAUSE] Can you guess where the other one is?
+
+[LONG PAUSE - Give them time to think]
+
+It's in Henderson, Kentucky — the Audubon Pedestrian Bridge. [PAUSE] Did you get it?
+
+[WARM - Transition]
+Now — look downstream. See those old brick walls covered in ivy?
+
+[PAUSE]
+
+That's where Greenville's industrial empire was born. And that story... [PAUSE] involves a lot of noise, a lot of cotton, and a surprising amount of baseball.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STOP 3: REEDY RIVER FALLS AND OLD MILL RUINS
+═══════════════════════════════════════════════════════════════════════════════
+
+[DRAMATIC - Transport them]
+
+Close your eyes for a second. [PAUSE] Actually — keep them open. You need to see this.
+
+But imagine a different soundtrack.
+
+[PAUSE]
+
+Instead of the gentle rush of the river... [PAUSE] picture smoke from factory chimneys. Carts hauling raw cotton. The roar of machinery echoing through this valley.
+
+[PAUSE]
+
+A hundred years ago, this peaceful scene was the beating heart of Greenville's textile empire.
+
+[WARM]
+Look around — probably behind you. You'll see brick walls and old foundations, now draped in ivy. Those are the ruins of Greenville's first textile mills.
+
+[PAUSE]
+
+[ENERGY UP - Story time]
+The story starts in the 1870s. Three entrepreneurs from Boston teamed up with the heirs of Greenville's founding visionary, Vardry McBee. They launched a cotton-spinning venture in an old sawmill right here along the Reedy.
+
+Then in 1876, they built Camperdown Mill — a massive plant that quickly became one of South Carolina's most profitable operations.
+
+[DRAMATIC]
+Camperdown spun more than yarn. [PAUSE] It spun fortunes.
+
+[PAUSE]
+
+But like every good drama, there were twists: depressions, bankruptcies, changes in ownership, fierce competition. [PAUSE] After decades of rise and decline, Camperdown Mill was demolished... [PAUSE] in 1959.
+
+[WARM - Human stories]
+Now here's the part most people don't know.
+
+[HUSHED]
+Workers didn't just work at the mills — they lived in mill villages nearby. Company houses. Company schools. Company churches. Company stores... where wages often came back as credit.
+
+[PLAYFUL]
+And when the machines fell silent? The mill leagues took the field. Baseball was the pastime of choice — local teams fueling community spirit after long, grueling shifts.
+
+[PAUSE]
+
+[DRAMATIC]
+By the early 1900s, Greenville's "Textile Crescent" — a ring of mills like Poe, Woodside, and Brandon — had turned this city into the so-called... [PAUSE] "Textile Capital of the World."
+
+[WARM - Reflection]
+So next time you hear the gentle rush of the Reedy... try to imagine it layered with another soundscape: the thunder of looms, the rhythm of spindles, and the voices of thousands of workers whose lives were woven into Greenville's fabric.
+
+[PAUSE]
+
+[PLAYFUL - Transition]
+Speaking of unexpected stories... [PAUSE] the next building on our tour housed carriages, then mayonnaise, and now... concerts.
+
+Yeah. You heard that right.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STOP 4: WYCHE PAVILION
+═══════════════════════════════════════════════════════════════════════════════
+
+[DRAMATIC - Hook first]
+
+A woman with a mayonnaise recipe built an empire... [PAUSE] right where you're standing.
+
+[LONG PAUSE]
+
+[WARM]
+Welcome to Wyche Pavilion.
+
+[PAUSE]
+
+[ENERGY UP - The story]
+This beautiful brick shell by the Reedy has worn many hats over the last century.
+
+It started in 1904 as the paint shop for the Greenville Coach Factory. Horse-drawn carriages rolled out of here with shiny new coats of paint. But as cars replaced carriages, the business sputtered out. By 1911, the factory closed.
+
+[PAUSE]
+
+[DRAMATIC - Enter the hero]
+Enter Eugenia Duke.
+
+[PAUSE]
+
+She wasn't a textile baron. She wasn't an industrialist. She was a woman with a recipe.
+
+[WARM]
+During World War I, she started selling sandwiches to soldiers training at Camp Sevier. But it wasn't the bread or the meat they loved — it was her mayonnaise.
+
+[HUSHED - Like sharing a secret recipe]
+Richer. Tangier. Smoother than anything else around. Extra egg yolks. Apple cider vinegar. The soldiers couldn't get enough.
+
+[ENERGY UP]
+By 1923, Eugenia moved into this very building to start bottling her mayonnaise for sale. Imagine crates of glass jars lined up right where you're standing, ready to spread across the South.
+
+[PAUSE]
+
+She sold the brand to C.F. Sauer Company in 1929, but the recipe — and Greenville's claim to fame — lived on.
+
+[PLAYFUL]
+To this day, Duke's Mayonnaise has a cult following. In the South, that little "twang"? [PAUSE] It's a badge of honor.
+
+[PAUSE]
+
+[WARM - The transformation]
+After Eugenia moved on, the building sat abandoned for decades. Then the Peace Center bought the property and reimagined it — leaving the outer brick walls as an open-air pavilion. It was renamed for Tommy and Harriet Wyche, who played key roles in Greenville's downtown transformation.
+
+Today, this space hosts weddings, concerts, and community gatherings.
+
+[PAUSE]
+
+[DRAMATIC - The arc]
+Think about that arc: [PAUSE] from painting carriages... [PAUSE] to bottling mayo... [PAUSE] to hosting parties and concerts.
+
+That's Greenville in a nutshell — a city that reinvents its old bones for new stories.
+
+[PAUSE]
+
+[PLAYFUL - Trivia]
+Trivia time! Eugenia Duke began selling her famous sandwiches during World War I. What year was that?
+
+[LONG PAUSE]
+
+1917 — the same year the United States entered the war.
+
+[WARM - Transition]
+Now — our next stop is about a different kind of brilliance. [PAUSE] A kid from Greenville who loved tinkering with radios... and ended up changing the world.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STOP 5: CHARLES H. TOWNES
+═══════════════════════════════════════════════════════════════════════════════
+
+[DRAMATIC - Big opening]
+
+Every time you scan groceries... [PAUSE] every time a surgeon uses precision instruments... [PAUSE] every time you stream a movie or print something in 3D...
+
+[LONG PAUSE]
+
+...you can thank a kid from Greenville who loved tinkering with radios.
+
+[PAUSE]
+
+His name was Charles Townes. [PAUSE] And he invented the laser.
+
+[WARM]
+Look at the statue in front of you. That's him — sitting on a park bench, pen in hand, mid-thought. [PAUSE] We'll come back to why he's sitting and not standing. There's a story there.
+
+Townes was born right here in Greenville in 1915. As a boy, he was obsessed with gadgets, radios, and the natural world. He went to Furman University — which we'll talk about at our next stop — graduating at just 19 years old.
+
+[PAUSE]
+
+[ENERGY UP - The invention]
+In the early 1950s, Townes developed the maser — a microwave amplification device — the precursor to the laser.
+
+[PLAYFUL]
+Laser stands for Light Amplification by Stimulated Emission of Radiation. [PAUSE] That's a mouthful. But the idea is simple and powerful: a focused beam of light, coherent and precise.
+
+[DRAMATIC]
+When he unveiled it in 1954, some scientists thought it was just a neat trick.
+
+[PAUSE]
+
+Within a few decades... [PAUSE] lasers were everywhere.
+
+[PAUSE]
+
+[WARM]
+For this work, Townes shared the 1964 Nobel Prize in Physics. He also became known for bridging faith and science — writing essays on how discovery and belief can coexist.
+
+[PAUSE]
+
+[HUSHED - The details]
+Now look at this statue closely. There's a story here.
+
+Mayor Knox White originally wanted Townes standing — to contrast with the seated statues nearby. But Townes objected. He insisted on historical accuracy.
+
+[PLAYFUL]
+You see, he was sitting on a park bench — not standing — when he made his breakthrough discovery. True to his meticulous nature, he also made sure they got the details right: his wingtip shoes, the "Parker" brand on the pen.
+
+[PAUSE]
+
+[WARM]
+This stop isn't just a statue. It's a reminder that big ideas can come from small places... and that curiosity, mixed with persistence, can literally change the world.
+
+[PAUSE]
+
+[PLAYFUL - Trivia]
+Trivia time! The laser has endless uses, but what was the very first medical procedure it was widely used for?
+
+[LONG PAUSE]
+
+Eye surgery — particularly to correct vision and treat retinal conditions.
+
+[WARM - Transition]
+Now — there's a tree up ahead with roots like you've never seen. And a university story that's been unfolding for almost 200 years.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STOP 6: THE MEDUSA TREE AND FURMAN UNIVERSITY
+═══════════════════════════════════════════════════════════════════════════════
+
+[DRAMATIC - The visual hook]
+
+Look at that tree.
+
+[LONG PAUSE - Let them look]
+
+See those roots? [PAUSE] Sprawling and twisting across the embankment like giant tentacles?
+
+[PAUSE]
+
+From some angles, they look like the writhing snakes of Medusa's hair. [PAUSE] That's how it got its name.
+
+[WARM]
+Welcome to one of Greenville's most photographed natural wonders: the Medusa Tree.
+
+[PAUSE]
+
+If you step a little closer — carefully — you can see where the bark has smoothed over decades of exposure. Some of those roots are as thick as your arm. Touch one if you can reach it. That's nearly a century of survival under your fingertips.
+
+[PAUSE]
+
+[ENERGY UP - The story]
+This American beech is nearly 90 years old — and it's a survivor.
+
+Run your eyes along those roots. [PAUSE] They're not just sitting on top of the ground — they're gripping it. Clawing into rock and earth like fingers holding on for dear life.
+
+[DRAMATIC]
+Decades ago, roadwork along what was once Furman Way — now part of the Swamp Rabbit Trail — caused erosion that stripped away the soil around its base. Most trees would have withered. [PAUSE] This one refused.
+
+[PAUSE]
+
+Instead of dying, it adapted. Those exposed roots thickened. Hardened. Became the very thing that keeps it standing. In 2023, Greenville gave it the Heritage Tree Award — the city's way of saying: [PAUSE] we see you, and you're not going anywhere.
+
+[PAUSE]
+
+[WARM - Transition to Furman]
+Now — this road was named for Furman University. And there's a story there that mirrors this tree in a surprising way.
+
+Furman started in 1826 as a tiny Baptist school with a big name and not much else. Here's how small: [PAUSE] its first graduating class had exactly six students. [PAUSE] Six.
+
+[PLAYFUL]
+But from those six students came something remarkable. Furman grew into one of the most respected liberal arts universities in the South. Its alumni include a governor, multiple Rhodes Scholars, and — you already know this one — Charles Townes, the man who invented the laser.
+
+[PAUSE]
+
+[HUSHED - The personal touch]
+For over a century, Furman's campus sat right here along the Reedy River, in the heart of downtown. Students walked these same paths. In the 1950s, the university moved to a sprawling new campus north of town — the one with the iconic bell tower reflected in a lake that shows up on every "most beautiful campuses" list.
+
+[PAUSE]
+
+[DRAMATIC - The connection]
+Here's what ties this all together: [PAUSE] just as the Medusa Tree survived by adapting when the ground shifted beneath it... [PAUSE] Furman grew by evolving when the world changed around it.
+
+Both are still standing. Both are stronger for it.
+
+[PAUSE]
+
+[WARM - Transition]
+We're almost at the end of our journey. [PAUSE] The final stop is where everything comes together — the gardens that transformed a forgotten riverbank into Greenville's living room.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STOP 7: FALLS PARK GARDENS (FINAL STOP)
+═══════════════════════════════════════════════════════════════════════════════
+
+[WARM - Slow, reflective]
+
+We've reached the end.
+
+[LONG PAUSE]
+
+Take a moment. [PAUSE] Look around. [PAUSE] The flowerbeds. The winding paths. The sound of the Reedy.
+
+[PAUSE]
+
+This is Falls Park Gardens — and it's the perfect ending to Greenville's story of rebirth.
+
+[PAUSE]
+
+[DRAMATIC - The contrast]
+It wasn't always like this.
+
+For much of the 20th century, the Reedy was in rough shape. Textile mills had polluted the river. A four-lane highway bridge — the Camperdown Bridge — blocked the view of the falls.
+
+[PAUSE]
+
+Imagine walking through downtown Greenville back then... [PAUSE] and not even knowing there was a waterfall here.
+
+[PAUSE]
+
+[ENERGY UP - The turnaround]
+But in 1967, the Carolina Foothills Garden Club saw potential where others saw neglect.
+
+They began reclaiming this land — cleaning up the riverbanks, planting gardens, restoring beauty to this hidden spot. It took decades of persistence and partnership.
+
+[DRAMATIC]
+Then in 2002... [PAUSE] the Camperdown Bridge came down.
+
+[PAUSE]
+
+Two years later, the Liberty Bridge opened. And finally — finally — the falls were revealed as the heart of Greenville.
+
+[WARM - The gardens]
+The gardens you're standing in are a patchwork of special spaces. Flowering dogwoods. Native azaleas. A rock garden bursting with seasonal color.
+
+[HUSHED]
+Nearby, there's Pedrick's Garden — designed to mimic the petals of a sunflower, with raised beds and a fountain. It's a tribute to Pedrick Lowrey, whose love of sunflowers inspired its creation.
+
+And tucked into quiet corners of the park... [PAUSE] shaded benches and old stone walls, where the noise of the city fades and only birds and river sounds remain.
+
+[PAUSE]
+
+[DRAMATIC - The meaning]
+But what makes these gardens truly special isn't the flowers or the design.
+
+It's the life that fills them.
+
+[WARM]
+This is where families picnic. Where couples take wedding photos. Where festivals bring the whole city together.
+
+[PAUSE]
+
+Just as the mill villages once gave workers a place to live... [PAUSE] these gardens now give the community a place to breathe.
+
+[PAUSE]
+
+[PLAYFUL - Final trivia]
+One last trivia question for you.
+
+The Camperdown Bridge — the one that blocked the view of the falls for decades — what year was it finally removed?
+
+[LONG PAUSE]
+
+2002. [PAUSE] The moment that opened the way for everything you see today.
+
+[PAUSE]
+
+[WARM - Closing]
+So that's our journey.
+
+From the Cradle of Greenville... [PAUSE] to the roar of the mills... [PAUSE] the visionaries and inventors... [PAUSE] the roots of the Medusa Tree... [PAUSE] and finally, these gardens.
+
+[PAUSE]
+
+You've walked through the story of a city that refuses to stop reinventing itself.
+
+[LONG PAUSE]
+
+[DRAMATIC - The quotable moment]
+Every city has a story. [PAUSE] Greenville's is one of falling down and getting back up — literally built around a waterfall that was hidden for decades... [PAUSE] and then revealed to the world.
+
+You just walked through that story. [PAUSE] And now it's part of yours.
+
+[LONG PAUSE]
+
+[GENUINE - Personal closing]
+Thank you for joining me today. It's been my pleasure to be your guide.
+
+If you enjoyed this tour, I'd love to hear from you — there's a link in the app to leave a quick review or share a comment. It really does help other visitors find their way here.
+
+[PAUSE]
+
+Now — take your time. Explore the gardens. Sit by the river. Let Greenville's front porch be yours for a while.
+
+[PAUSE]
+
+[PLAYFUL - Easter egg]
+Oh — one more thing. If you walk about two minutes south on Main Street, there's a coffee shop called Methodical Coffee. It's one of the best in the Southeast. Grab a pour-over, sit outside, and watch the city go by. [PAUSE] You've earned it.
+
+[PAUSE]
+
+Thanks again. [PAUSE] And enjoy the rest of your day.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                           END OF SCRIPT
+═══════════════════════════════════════════════════════════════════════════════
+
+RECORDING NOTES:
+
+1. STAND while recording — it adds energy to your voice
+2. SMILE when saying warm lines — listeners can hear it
+3. Record each stop SEPARATELY — don't try to do it all at once
+4. Listen back at 1.5x speed — if it sounds natural, your pacing is good
+5. Honor the pauses — they're as important as the words
+6. Vary your distance from the mic for intimate vs. dramatic sections
+
+OPTIONAL ENHANCEMENTS:
+- Subtle water/river sounds under river-focused sections
+- Light ambient park sounds (birds) for garden section
+- Brief musical transition between stops (2-3 seconds)
+
+TOTAL ESTIMATED TIME:
+- Preview: ~20 seconds
+- Welcome: ~2 minutes
+- Stop 1: ~3 minutes
+- Stop 2: ~2.5 minutes
+- Stop 3: ~3 minutes
+- Stop 4: ~3 minutes
+- Stop 5: ~2.5 minutes
+- Stop 6: ~2.5 minutes
+- Stop 7: ~3.5 minutes
+
+FULL TOUR: ~22-25 minutes of audio
