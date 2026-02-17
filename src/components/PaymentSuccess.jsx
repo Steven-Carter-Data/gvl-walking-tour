@@ -126,8 +126,10 @@ function PaymentSuccess() {
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#e5e3dc'}}>
+      <title>You're All Set! | Falls Park Walking Tour</title>
+      <meta name="description" content="Payment confirmed. Start your Falls Park self-guided walking tour now. Download audio for offline use or begin exploring immediately." />
       {/* Header - Success */}
-      <div className="bc-primary-bg text-white">
+      <header className="bc-primary-bg text-white">
         <div className="px-6 py-8 text-center">
           <div className="text-4xl mb-4">🎉</div>
           <h1 className="text-2xl font-bold mb-2" style={{color: 'white'}}>
@@ -137,9 +139,9 @@ function PaymentSuccess() {
             {tourConfig.content.thankYouMessage}
           </p>
         </div>
-      </div>
+      </header>
 
-      <div className="px-6 py-6 max-w-md mx-auto">
+      <main className="px-6 py-6 max-w-md mx-auto">
         {/* Primary CTA - Start Tour (Above the fold) */}
         <div className="bc-card-bg rounded-2xl p-6 shadow-xl mb-6 text-center" style={{borderColor: '#d4967d', border: '2px solid'}}>
           <h2 className="text-xl font-bold mb-2" style={{color: '#303636'}}>
@@ -257,7 +259,7 @@ function PaymentSuccess() {
             {tourConfig.support.email}
           </a>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

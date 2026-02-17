@@ -31,20 +31,30 @@ function PricingSelection({ onBack }) {
     }
   };
 
-  const handlePromoCodeSubmit = () => {
-    const validPromoCodes = ['ADMIN2024', 'REVIEW', 'TOUR_DEV'];
+  const handlePromoCodeSubmit = async () => {
+    try {
+      const response = await fetch('/api/validate-promo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: promoCode }),
+      });
+      const result = await response.json();
 
-    if (validPromoCodes.includes(promoCode.toUpperCase())) {
-      localStorage.setItem('tour_access', 'granted');
-      localStorage.setItem('promo_used', promoCode.toUpperCase());
-      localStorage.setItem('payment_session', JSON.stringify({
-        amount_total: 0,
-        payment_status: 'promo_code',
-        metadata: { promo_code: promoCode.toUpperCase() }
-      }));
-      window.location.href = '/?tour=true';
-    } else {
-      alert('Invalid promo code. Please try again.');
+      if (result.valid) {
+        localStorage.setItem('tour_access', 'granted');
+        localStorage.setItem('promo_used', promoCode.toUpperCase());
+        localStorage.setItem('payment_session', JSON.stringify({
+          amount_total: 0,
+          payment_status: 'promo_code',
+          metadata: { promo_code: promoCode.toUpperCase() }
+        }));
+        window.location.href = '/?tour=true';
+      } else {
+        alert('Invalid promo code. Please try again.');
+      }
+    } catch (error) {
+      console.error('Promo validation error:', error);
+      alert('Unable to validate promo code. Please try again.');
     }
   };
 
@@ -82,19 +92,23 @@ function PricingSelection({ onBack }) {
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#e5e3dc'}}>
+      <title>Choose Your Price | Falls Park Walking Tour</title>
+      <meta name="description" content="Pay what you want for the Falls Park self-guided audio tour. Choose from preset amounts or set your own price. 7 GPS-triggered stops in Greenville SC." />
       {/* Header - Simplified */}
-      <div className="bc-primary-bg text-white">
+      <header className="bc-primary-bg text-white">
         <div className="px-6 py-6">
           {/* Back Button */}
-          <button
-            onClick={onBack}
-            className="mb-4 flex items-center text-white opacity-80 hover:opacity-100 transition-opacity"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back
-          </button>
+          <nav>
+            <button
+              onClick={onBack}
+              className="mb-4 flex items-center text-white opacity-80 hover:opacity-100 transition-opacity"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back
+            </button>
+          </nav>
 
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-2" style={{color: 'white'}}>
@@ -105,9 +119,9 @@ function PricingSelection({ onBack }) {
             </p>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="px-6 py-6 max-w-md mx-auto">
+      <main className="px-6 py-6 max-w-md mx-auto">
         {/* Price Selection - Primary Focus */}
         <div className="bc-card-bg rounded-2xl p-6 shadow-lg mb-6">
           <div className="text-center mb-4">
@@ -220,9 +234,9 @@ function PricingSelection({ onBack }) {
 
         {/* What's Included - Compact */}
         <div className="bc-card-bg rounded-2xl p-5 shadow-lg mb-6">
-          <h3 className="text-lg font-bold mb-3 text-center" style={{color: '#303636'}}>
+          <h2 className="text-lg font-bold mb-3 text-center" style={{color: '#303636'}}>
             What's Included
-          </h3>
+          </h2>
           <div className="grid grid-cols-2 gap-2 text-sm">
             {[
               { icon: "📍", text: `${tourConfig.stats.stops} GPS-triggered stops` },
@@ -241,9 +255,9 @@ function PricingSelection({ onBack }) {
         {/* Your Contribution Helps - Compact */}
         <div className="bc-card-bg rounded-2xl p-5 shadow-lg mb-6 text-center">
           <div className="text-2xl mb-2">💝</div>
-          <h3 className="text-lg font-bold mb-2" style={{color: '#303636'}}>
+          <h2 className="text-lg font-bold mb-2" style={{color: '#303636'}}>
             Your Contribution Matters
-          </h3>
+          </h2>
           <p className="text-sm" style={{color: '#495a58'}}>
             {tourConfig.content.contributionMessage}
           </p>
@@ -297,7 +311,7 @@ function PricingSelection({ onBack }) {
             )}
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

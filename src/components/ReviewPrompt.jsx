@@ -26,9 +26,7 @@ function ReviewPrompt({ stopsCompleted, totalStops, onDismiss }) {
     ga4.reviewClicked();
     localStorage.setItem('review_prompt_shown', 'true');
     localStorage.setItem('review_prompt_clicked', 'true');
-    // Open Google Business Profile review link (you'll need to update this URL)
-    // Format: https://g.page/r/YOUR_PLACE_ID/review
-    window.open('https://g.page/r/YOUR_PLACE_ID/review', '_blank');
+    window.open('https://g.page/r/ChIJcTkL5TIwWIgRZHZrqV-BIDA/review', '_blank');
     setIsVisible(false);
     onDismiss?.();
   };

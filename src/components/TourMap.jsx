@@ -563,8 +563,10 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
+      <title>Tour Map | Falls Park Self-Guided Walking Tour</title>
+      <meta name="description" content="Interactive GPS tour map for Falls Park, Greenville SC. Follow the walking route with auto-triggered audio at each historic stop." />
       {/* Compact Header */}
-      <div className="relative bc-primary-bg text-white shadow-lg z-20">
+      <header className="relative bc-primary-bg text-white shadow-lg z-20">
         <div className="absolute inset-0 bg-opacity-10"></div>
         <div className="relative px-4 py-3">
           <div className="flex items-center justify-between">
@@ -590,7 +592,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Welcome Audio Section */}
       {showWelcomeAudio && (
@@ -639,7 +641,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
       )}
 
       {/* Map */}
-      <div className="flex-1 relative">
+      <main className="flex-1 relative">
         <MapContainer
           center={defaultCenter}
           zoom={tourBounds ? undefined : 17}
@@ -960,7 +962,10 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
               }}>
                 <img
                   src="/complete_route.png"
-                  alt="Complete walking route map"
+                  alt="Complete walking route map showing all 7 tour stops through Falls Park and downtown Greenville SC"
+                  loading="lazy"
+                  width="800"
+                  height="600"
                   style={{
                     maxWidth: '100%',
                     maxHeight: '70vh',
@@ -1465,7 +1470,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
 
         {/* Group Share Button - for group purchases */}
         {tourPurchased && <GroupShareLink />}
-      </div>
+      </main>
 
       <style>{`
         @keyframes spin {

@@ -9,7 +9,7 @@ A GPS-triggered self-guided audio tour web application for Falls Park and downto
 - **Stripe Payments**: Secure $9.99 purchase flow with serverless backend
 - **Offline Support**: Download content for reliable offline experience
 - **Mobile-First**: Optimized for iOS Safari and Android Chrome
-- **10 Historical Stops**: Professional narration covering Greenville's transformation
+- **7 Historical Stops**: Professional narration covering Greenville's transformation
 
 ## 🚀 Quick Start
 
@@ -45,7 +45,7 @@ See `.env.example` for required configuration variables:
 3. Purchase full tour via Stripe ($9.99)
 4. Optional: Download for offline use
 5. Walk to Liberty Bridge to start GPS-triggered experience
-6. Complete 10 stops at your own pace (~45 minutes)
+6. Complete 7 stops at your own pace (~45 minutes)
 
 ### For Developers
 - Development: `npm run dev` (requires Node 20+)
@@ -55,16 +55,13 @@ See `.env.example` for required configuration variables:
 
 ## 🗺️ Tour Stops
 
-1. **Liberty Bridge** - Falls Park entrance & preview stop
-2. **Reedy River Falls** - Textile era to park restoration
-3. **Old Mill Ruins** - Industrial heritage along trail
-4. **West End Gateway** - Revitalization story
-5. **Peace Center Plaza** - Warehouse to performing arts
-6. **Historic Main Street** - Urban design success
-7. **Old Courthouse/Poinsett** - Civic architecture
-8. **Shoeless Joe Jackson** - Baseball legend statue
-9. **Wyche Pavilion** - Carriage factory to community space
-10. **Falls Park Gardens** - Tour conclusion and recap
+1. **Cradle of Greenville** - Where the city began, Cherokee history to founding
+2. **Liberty Bridge** - Engineering marvel and the hidden waterfall revealed
+3. **Reedy River Falls & Old Mill Ruins** - Textile empire and industrial heritage
+4. **Wyche Pavilion** - From carriages to Duke's Mayonnaise to concerts
+5. **Charles H. Townes** - Greenville's Nobel Prize-winning laser inventor
+6. **Medusa Tree & Furman University** - A resilient tree and 200 years of education
+7. **Falls Park Gardens** - The rebirth of Greenville's front porch
 
 ## 🏗️ Architecture
 
@@ -100,7 +97,7 @@ See `.env.example` for required configuration variables:
 ## 🧪 Testing
 
 Critical testing requirements:
-- **On-location GPS testing** at all 10 Falls Park stops
+- **On-location GPS testing** at all 7 Falls Park stops
 - **Mobile browser compatibility** (iOS Safari, Android Chrome)
 - **Stripe payment processing** with test cards
 - **Offline functionality** after content download
@@ -147,7 +144,7 @@ Mobile browsers restrict autoplay - ensure user gesture triggers before attempti
 
 ## 💰 Business Model
 
-- **Price**: $9.99 one-time purchase
+- **Price**: Pay-what-you-want ($3-$15, default $8)
 - **Target**: 50 sales/month by month 3
 - **Costs**: ~$17/month (Stripe fees + hosting)
 - **Break-even**: Month 2 after $450 initial investment

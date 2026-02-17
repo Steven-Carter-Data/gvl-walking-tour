@@ -1,11 +1,9 @@
 // OpenRouteService walking route API service
 // Get your free API key from: https://openrouteservice.org/dev/#/signup
 
-// Hardcoded API key for production - your OpenRouteService API key
-const ORS_API_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjJhMGEwYTg4Mzc3NTQyOTk4NzQ2OGI1OGM5MTdiZTJjIiwiaCI6Im11cm11cjY0In0=';
+// API key loaded from environment variable (VITE_OPENROUTESERVICE_API_KEY in .env)
+const ORS_API_KEY = import.meta.env.VITE_OPENROUTESERVICE_API_KEY || '';
 const ORS_BASE_URL = 'https://api.openrouteservice.org/v2/directions/foot-walking/geojson';
-
-console.log('🔍 API Key Status: HARDCODED - Ready for real sidewalk routing!');
 
 /**
  * Fetches walking route between two points using OpenRouteService
@@ -18,8 +16,6 @@ export async function getWalkingRoute(startCoords, endCoords) {
     // Try real API first if key is available
     if (ORS_API_KEY && ORS_API_KEY !== 'demo-key') {
       console.log('🚶‍♂️ Using OpenRouteService API for real walking directions...');
-      console.log('API Key length:', ORS_API_KEY.length);
-      console.log('Request coordinates:', startCoords, '->', endCoords);
       
       const response = await fetch(ORS_BASE_URL, {
         method: 'POST',

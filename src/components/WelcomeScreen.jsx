@@ -100,8 +100,10 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#e5e3dc'}}>
+      <title>Greenville SC Walking Tour | Falls Park Self-Guided Audio Tour</title>
+      <meta name="description" content="Best things to do in Greenville SC! Self-guided walking tour of Falls Park with GPS-triggered audio at 7 historic stops. Pay what you want." />
       {/* Hero Section with Video Background */}
-      <div className="relative overflow-hidden" style={{minHeight: '85vh'}}>
+      <header className="relative overflow-hidden" style={{minHeight: '85vh'}}>
         {/* Video Background */}
         <video
           autoPlay
@@ -222,31 +224,31 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Pay What You Want Banner - Condensed */}
-      <div className="px-6 py-6" style={{backgroundColor: '#d4967d'}}>
+      <section className="px-6 py-6" style={{backgroundColor: '#d4967d'}}>
         <div className="max-w-md mx-auto text-center">
-          <h3 className="text-2xl font-black mb-2" style={{
+          <h2 className="text-2xl font-black mb-2" style={{
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.1em',
             color: 'white',
           }}>
             PAY WHAT YOU WANT
-          </h3>
+          </h2>
           <p className="text-base font-medium" style={{color: 'white'}}>
             No fixed cost, no pressure. Just great stories at whatever value you decide.
           </p>
         </div>
-      </div>
+      </section>
 
       {/* Main Content - Condensed */}
-      <div className="px-6 py-6 space-y-6" style={{backgroundColor: '#e5e3dc'}}>
+      <main className="px-6 py-6 space-y-6" style={{backgroundColor: '#e5e3dc'}}>
 
         {/* Interactive Map Preview */}
         <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
           <div className="text-center mb-4">
-            <h3 className="text-xl font-bold mb-1" style={{color: '#303636'}}>Your Walking Route</h3>
+            <h2 className="text-xl font-bold mb-1" style={{color: '#303636'}}>Your Walking Route</h2>
             <p className="text-base" style={{color: '#495a58'}}>{tourConfig.stats.stops} historic stops throughout {tourConfig.location.split(',')[0]}</p>
           </div>
 
@@ -283,9 +285,9 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             <div className="absolute bottom-3 left-3 right-3 bg-white bg-opacity-95 rounded-lg p-3 backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-sm" style={{color: '#303636'}}>
+                  <h3 className="font-bold text-sm" style={{color: '#303636'}}>
                     {tourConfig.stats.stops}-Stop Journey
-                  </h4>
+                  </h3>
                   <p className="text-xs" style={{color: '#495a58'}}>
                     ~{tourConfig.stats.duration} min | {tourConfig.stats.distance} mi | Professional audio
                   </p>
@@ -297,9 +299,9 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
 
         {/* Why Self-Guided - Condensed to 3 key points */}
         <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <h3 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
+          <h2 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
             Why Self-Guided?
-          </h3>
+          </h2>
 
           <div className="space-y-3">
             {tourConfig.content.valueProps.slice(0, 3).map((item, index) => (
@@ -317,7 +319,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold text-base" style={{color: '#303636'}}>{item.benefit}</h4>
+                  <h3 className="font-bold text-base" style={{color: '#303636'}}>{item.benefit}</h3>
                   <p className="text-sm" style={{color: '#495a58'}}>{item.detail}</p>
                 </div>
               </div>
@@ -332,7 +334,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
               <div className="text-xl text-white">🎧</div>
             </div>
             <div className="ml-4">
-              <h3 className="text-xl font-bold" style={{color: '#303636'}}>Audio Preview</h3>
+              <h2 className="text-xl font-bold" style={{color: '#303636'}}>Audio Preview</h2>
               <p className="text-sm" style={{color: '#495a58'}}>Hear our professional narration</p>
             </div>
           </div>
@@ -360,9 +362,9 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
 
         {/* Final CTA */}
         <div className="bc-card-bg rounded-2xl p-6 shadow-xl border text-center" style={{borderColor: '#d4967d', backgroundColor: '#d4967d'}}>
-          <h3 className="text-xl font-bold mb-2" style={{color: 'white'}}>
+          <h2 className="text-xl font-bold mb-2" style={{color: 'white'}}>
             Ready to Explore?
-          </h3>
+          </h2>
           <p className="text-base mb-4" style={{color: 'rgba(255,255,255,0.9)'}}>
             Start your self-guided adventure today
           </p>
@@ -377,32 +379,32 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             {tourPurchased ? 'Start Tour' : `Get Started - $${tourConfig.pricing.defaultAmount}`}
           </button>
         </div>
-      </div>
+      </main>
 
-      {/* Contact - Minimal */}
-      <div className="px-6 py-6 bg-white border-t-2" style={{borderColor: '#d4967d'}}>
-        <div className="max-w-md mx-auto text-center">
-          <p className="text-base mb-2" style={{color: '#495a58'}}>
-            Questions? Contact us:
-          </p>
-          <a
-            href={`mailto:${tourConfig.support.email}`}
-            className="text-lg font-semibold hover:underline"
-            style={{color: '#d4967d'}}
-          >
-            {tourConfig.support.email}
-          </a>
+      {/* Contact & Footer */}
+      <footer>
+        <div className="px-6 py-6 bg-white border-t-2" style={{borderColor: '#d4967d'}}>
+          <div className="max-w-md mx-auto text-center">
+            <p className="text-base mb-2" style={{color: '#495a58'}}>
+              Questions? Contact us:
+            </p>
+            <a
+              href={`mailto:${tourConfig.support.email}`}
+              className="text-lg font-semibold hover:underline"
+              style={{color: '#d4967d'}}
+            >
+              {tourConfig.support.email}
+            </a>
+          </div>
         </div>
-      </div>
-
-      {/* Footer - Minimal */}
-      <div className="bc-muted-bg text-white py-6 px-6">
-        <div className="text-center">
-          <p className="text-sm" style={{color: '#d4967d'}}>
-            Powered by Basecamp Data Analytics
-          </p>
+        <div className="bc-muted-bg text-white py-6 px-6">
+          <div className="text-center">
+            <p className="text-sm" style={{color: '#d4967d'}}>
+              Powered by Basecamp Data Analytics
+            </p>
+          </div>
         </div>
-      </div>
+      </footer>
 
       {/* Hidden Audio Element */}
       <audio
