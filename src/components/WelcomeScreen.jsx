@@ -40,7 +40,6 @@ const previewStartIcon = new L.Icon({
 });
 
 function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStartTourMap }) {
-  const [showPreview, setShowPreview] = useState(false);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
   const audioRef = useRef(null);
 
@@ -66,8 +65,6 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
   const tourBounds = calculateTourBounds();
 
   const handlePreviewPlay = async () => {
-    setShowPreview(true);
-
     if (audioRef.current) {
       try {
         if (isPreviewPlaying) {
@@ -206,6 +203,27 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             )}
           </div>
 
+          {/* Audio Preview Button */}
+          <div className="max-w-sm mx-auto mt-4">
+            <button
+              onClick={handlePreviewPlay}
+              className="w-full px-6 py-3 rounded-xl text-lg font-semibold transition-all duration-200 hover:transform hover:scale-105"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.15)',
+                color: '#ffffff',
+                border: '2px solid rgba(255,255,255,0.4)',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <div className="flex items-center justify-center">
+                <span className="mr-3 text-xl">
+                  {isPreviewPlaying ? '⏸️' : '🎧'}
+                </span>
+                {isPreviewPlaying ? 'Pause Audio Preview' : 'Play Audio Preview'}
+              </div>
+            </button>
+          </div>
+
           {/* Quick Stats Row */}
           <div className="flex justify-center mt-8" style={{gap: '32px'}}>
             <div className="text-center" style={{minWidth: '70px'}}>
@@ -327,37 +345,27 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
           </div>
         </div>
 
-        {/* Audio Preview - Compact */}
+        {/* Meet Your Guide */}
         <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <div className="flex items-center mb-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#d4967d'}}>
-              <div className="text-xl text-white">🎧</div>
-            </div>
-            <div className="ml-4">
-              <h2 className="text-xl font-bold" style={{color: '#303636'}}>Audio Preview</h2>
-              <p className="text-sm" style={{color: '#495a58'}}>Hear our professional narration</p>
-            </div>
+          <h2 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
+            Meet Your Guide
+          </h2>
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="/images/tour-guide.png"
+              alt="Your tour guide"
+              className="rounded-full shadow-lg border-4"
+              style={{
+                width: '120px',
+                height: '120px',
+                objectFit: 'cover',
+                borderColor: '#d4967d',
+              }}
+            />
+            <p className="mt-4 text-sm leading-relaxed" style={{color: '#495a58'}}>
+              Your narrator brings each stop to life with stories of Greenville's rich history, from its textile mill origins to its modern-day renaissance.
+            </p>
           </div>
-
-          <button
-            onClick={handlePreviewPlay}
-            className="bc-btn-primary w-full"
-          >
-            <div className="flex items-center justify-center">
-              <span className="mr-3 text-xl">
-                {isPreviewPlaying ? '⏸️' : '▶️'}
-              </span>
-              {isPreviewPlaying ? 'Pause Preview' : 'Play Preview'}
-            </div>
-          </button>
-
-          {showPreview && (
-            <div className="mt-4 p-4 rounded-xl border" style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}>
-              <p className="text-sm leading-relaxed" style={{color: '#495a58'}}>
-                Experience professional storytelling that brings local history to life through engaging narration.
-              </p>
-            </div>
-          )}
         </div>
 
         {/* Final CTA */}
