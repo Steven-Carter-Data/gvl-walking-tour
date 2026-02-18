@@ -354,16 +354,16 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             <img
               src="/images/tour-guide.png"
               alt="Your tour guide"
-              className="rounded-full shadow-lg border-4"
+              className="rounded-xl shadow-lg border-4"
               style={{
-                width: '120px',
-                height: '120px',
+                width: '140px',
+                height: '140px',
                 objectFit: 'cover',
                 borderColor: '#d4967d',
               }}
             />
             <p className="mt-4 text-sm leading-relaxed" style={{color: '#495a58'}}>
-              Your narrator brings each stop to life with stories of Greenville's rich history, from its textile mill origins to its modern-day renaissance.
+              Hi, I'm your narrator! I live right here in Greenville County and love sharing the stories behind this incredible city — from its textile mill origins to the vibrant downtown you see today.
             </p>
           </div>
         </div>
