@@ -1,14 +1,51 @@
-# Robots.txt for Falls Park Self-Guided Tour
+# Robots.txt for Falls Park Self-Guided Walking Tour
 # https://falls-park-tour.vercel.app
+# Last updated: 2026-03-09
 
+# Allow all search engine crawlers
 User-agent: *
 Allow: /
-
-# Sitemap location
-Sitemap: https://falls-park-tour.vercel.app/sitemap.xml
+Allow: /stops/
+Allow: /things-to-do-greenville-sc.html
+Allow: /falls-park-history.html
+Allow: /greenville-walking-tours.html
+Allow: /downtown-greenville-tour.html
+Allow: /greenville-sc-audio-tour.html
+Allow: /greenville-sc-family-activities.html
+Allow: /greenville-sc-date-ideas.html
+Allow: /liberty-bridge-greenville.html
+Allow: /reedy-river-greenville.html
 
 # Block API endpoints from indexing
 Disallow: /api/
+Disallow: /api/create-checkout-session
+Disallow: /api/verify-payment
 
-# Block audio files from indexing (save bandwidth)
+# Block audio/video files from indexing (save bandwidth)
 Disallow: /audio/
+Disallow: /video/
+
+# Block development/build assets
+Disallow: /assets/*.js
+Disallow: /assets/*.css.map
+
+# Google-specific directives
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Google Image Bot
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /og-image.jpg
+Allow: /twitter-card.jpg
+Disallow: /audio/
+Disallow: /video/
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# Sitemap location
+Sitemap: https://falls-park-tour.vercel.app/sitemap.xml

@@ -1,18 +1,40 @@
 {
-  "name": "Falls Park Self-Guided Walking Tour",
-  "short_name": "Falls Park Tour",
-  "description": "GPS-triggered audio walking tour of Falls Park & Downtown Greenville, SC",
+  "name": "Self-Guided Falls Park Walking Tour - Greenville SC",
+  "short_name": "Falls Park Walking Tour",
+  "description": "GPS-triggered audio walking tour of Falls Park and Downtown Greenville, South Carolina. 10 historic stops with professional narration. Pay what you want.",
   "start_url": "/",
+  "id": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#495a58",
   "background_color": "#e5e3dc",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["travel", "education", "entertainment"],
   "icons": [
     {
       "src": "/vite.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Start Tour",
+      "short_name": "Tour",
+      "description": "Begin the Falls Park walking tour",
+      "url": "/?tour=true",
+      "icons": [{ "src": "/vite.svg", "sizes": "any" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

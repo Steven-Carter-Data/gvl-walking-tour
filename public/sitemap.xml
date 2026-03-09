@@ -1,39 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage (Main App) -->
   <url>
     <loc>https://falls-park-tour.vercel.app/</loc>
-    <lastmod>2026-02-17</lastmod>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://falls-park-tour.vercel.app/og-image.jpg</image:loc>
+      <image:title>Falls Park Self-Guided Walking Tour Greenville SC</image:title>
+      <image:caption>GPS-triggered audio walking tour of Falls Park and Downtown Greenville, South Carolina</image:caption>
+    </image:image>
   </url>
-  <url>
-    <loc>https://falls-park-tour.vercel.app/?tour=true</loc>
-    <lastmod>2026-02-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://falls-park-tour.vercel.app/?screen=pricing</loc>
-    <lastmod>2026-02-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+
+  <!-- Primary SEO Content Pages -->
   <url>
     <loc>https://falls-park-tour.vercel.app/things-to-do-greenville-sc.html</loc>
-    <lastmod>2026-02-17</lastmod>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://falls-park-tour.vercel.app/falls-park-history.html</loc>
-    <lastmod>2026-02-17</lastmod>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://falls-park-tour.vercel.app/greenville-walking-tours.html</loc>
-    <lastmod>2026-02-17</lastmod>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- Keyword-Targeted Landing Pages -->
+  <url>
+    <loc>https://falls-park-tour.vercel.app/downtown-greenville-tour.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/greenville-sc-audio-tour.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/greenville-sc-family-activities.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/greenville-sc-date-ideas.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/liberty-bridge-greenville.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/reedy-river-greenville.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Individual Tour Stop Pages -->
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/liberty-bridge.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/reedy-river-falls.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/west-end-district.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/peace-center.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/main-street-greenville.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/courthouse-poinsett-hotel.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/shoeless-joe-jackson.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/wyche-pavilion.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://falls-park-tour.vercel.app/stops/falls-park-gardens.html</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>

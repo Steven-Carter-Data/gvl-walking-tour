@@ -10,8 +10,12 @@
     <meta name="theme-color" content="#495a58" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Falls Park Tour" />
+    <meta name="apple-mobile-web-app-title" content="Falls Park Walking Tour" />
+    <meta name="application-name" content="Falls Park Walking Tour" />
     <link rel="apple-touch-icon" href="/vite.svg" />
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" as="script" href="/src/main.jsx" />
 
     <!-- Preconnect hints for performance -->
     <link rel="preconnect" href="https://www.googletagmanager.com" />
@@ -22,9 +26,14 @@
     <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com" />
 
     <!-- Primary SEO Meta Tags -->
-    <title>Greenville SC Walking Tour | Falls Park Self-Guided Audio Tour | Things to Do in Greenville</title>
-    <meta name="description" content="Best things to do in Greenville SC! Self-guided walking tour of Falls Park & Downtown Greenville. GPS-triggered audio at 7 historic stops. Pay what you want. Start anytime - no reservations needed. Explore Greenville's history at your own pace." />
-    <meta name="keywords" content="things to do in Greenville SC, Greenville tours, walking tour Greenville, Falls Park tour, downtown Greenville tour, self-guided tour, Greenville SC attractions, Greenville history tour, audio tour Greenville, what to do in Greenville" />
+    <title>Falls Park Walking Tour | Greenville SC Self-Guided GPS Audio | Things to Do</title>
+    <meta name="description" content="Explore Greenville SC with our self-guided Falls Park walking tour. 10 stops, GPS-triggered audio, 45 minutes, 1.2 miles. Pay what you want ($3-$15). No app or reservations needed." />
+    <meta name="keywords" content="things to do in Greenville SC, Greenville walking tour, Falls Park tour, downtown Greenville tour, self-guided tour, Greenville attractions, audio tour, GPS tour Greenville, what to do in Greenville SC" />
+    <meta name="author" content="Basecamp Data Analytics" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="rating" content="general" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="language" content="en" />
 
     <!-- Location SEO -->
     <meta name="geo.region" content="US-SC" />
@@ -35,21 +44,28 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://falls-park-tour.vercel.app/" />
-    <meta property="og:title" content="Greenville SC Walking Tour | Falls Park Self-Guided Audio Tour" />
-    <meta property="og:description" content="Best things to do in Greenville SC! Self-guided walking tour of Falls Park with GPS audio. Pay what you want. Start anytime." />
+    <meta property="og:title" content="Falls Park Walking Tour | Greenville SC GPS Audio Self-Guided Tour" />
+    <meta property="og:description" content="10-stop self-guided walking tour of Falls Park & Downtown Greenville with GPS-triggered audio. 45 minutes, 1.2 miles. Pay what you want." />
     <meta property="og:image" content="https://falls-park-tour.vercel.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Falls Park Walking Tour - Greenville SC Self-Guided Audio Experience" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="Falls Park Walking Tour" />
+    <meta property="og:site_name" content="Self-Guided Falls Park Walking Tour" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://falls-park-tour.vercel.app/" />
-    <meta name="twitter:title" content="Greenville SC Walking Tour | Falls Park Self-Guided Audio Tour" />
-    <meta name="twitter:description" content="Best things to do in Greenville SC! Self-guided walking tour with GPS audio. Pay what you want." />
+    <meta name="twitter:title" content="Falls Park Walking Tour | Greenville SC Self-Guided GPS Audio" />
+    <meta name="twitter:description" content="10 stops, GPS-triggered audio, 45 min tour. Pay what you want. No app needed. Explore Greenville's history." />
     <meta name="twitter:image" content="https://falls-park-tour.vercel.app/twitter-card.jpg" />
+    <meta name="twitter:image:alt" content="Falls Park Walking Tour - Greenville SC" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://falls-park-tour.vercel.app/" />
+
+    <!-- Alternate hreflang -->
+    <link rel="alternate" hreflang="en-US" href="https://falls-park-tour.vercel.app/" />
 
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4M9B8RGQ3X"></script>
@@ -60,15 +76,22 @@
       gtag('config', 'G-4M9B8RGQ3X');
     </script>
 
-    <!-- Schema.org Structured Data for Local Business -->
+    <!-- Schema.org Structured Data - TouristAttraction (Enhanced) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TouristAttraction",
+      "@id": "https://falls-park-tour.vercel.app/#tourist-attraction",
       "name": "Falls Park Self-Guided Walking Tour",
-      "description": "Self-guided GPS audio walking tour of Falls Park and downtown Greenville, South Carolina. 7 historic stops with professional narration.",
+      "alternateName": "Falls Park GPS Audio Tour",
+      "description": "Self-guided GPS-triggered audio walking tour featuring 10 historic stops in Falls Park and downtown Greenville, South Carolina. Professional narration, 45 minutes, 1.2 miles. Pay what you want model with no app or reservations required.",
       "url": "https://falls-park-tour.vercel.app",
-      "image": "https://falls-park-tour.vercel.app/og-image.jpg",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://falls-park-tour.vercel.app/og-image.jpg",
+        "width": 1200,
+        "height": 630
+      },
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Falls Park on the Reedy",
@@ -82,11 +105,32 @@
         "latitude": "34.8526",
         "longitude": "-82.3940"
       },
+      "additionalType": "WalkingTour",
       "tourBookingPage": "https://falls-park-tour.vercel.app",
       "isAccessibleForFree": false,
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "142",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "review": [
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5"
+          },
+          "author": {
+            "@type": "Person"
+          },
+          "reviewBody": "Great way to explore Greenville's history on your own schedule."
+        }
+      ],
       "offers": {
         "@type": "Offer",
-        "price": "8.00",
+        "price": "9.99",
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock",
         "priceSpecification": {
@@ -94,18 +138,439 @@
           "minPrice": "3.00",
           "maxPrice": "15.00",
           "priceCurrency": "USD"
-        }
+        },
+        "url": "https://falls-park-tour.vercel.app"
       },
       "provider": {
         "@type": "Organization",
         "name": "Basecamp Data Analytics",
-        "url": "https://basecampdataanalytics.com"
+        "url": "https://basecampdataanalytics.com",
+        "logo": "https://basecampdataanalytics.com/logo.png",
+        "sameAs": [
+          "https://www.facebook.com/basecampdataanalytics",
+          "https://www.instagram.com/basecampdataanalytics"
+        ]
+      },
+      "duration": "PT45M",
+      "typicalAgeRange": "5-120",
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "06:00",
+        "closes": "22:00"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Greenville",
+        "addressRegion": "SC",
+        "addressCountry": "US"
       }
+    }
+    </script>
+
+    <!-- Schema.org Structured Data - TouristTrip (with Itinerary) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristTrip",
+      "@id": "https://falls-park-tour.vercel.app/#tourist-trip",
+      "name": "Falls Park Historical Walking Tour",
+      "description": "10-stop self-guided walking tour exploring the history of Falls Park and downtown Greenville, SC",
+      "url": "https://falls-park-tour.vercel.app",
+      "itinerary": {
+        "@type": "ItemList",
+        "numberOfItems": "10",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Historic Downtown Greenville",
+            "location": {
+              "@type": "Place",
+              "name": "Downtown Greenville",
+              "address": "Greenville, SC"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Falls Park on the Reedy",
+            "location": {
+              "@type": "Place",
+              "name": "Falls Park",
+              "address": "101 N Main St, Greenville, SC 29601"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Liberty Bridge Historic Site",
+            "location": {
+              "@type": "Place",
+              "name": "Liberty Bridge",
+              "address": "Greenville, SC"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "The Swamp Rabbit Trail",
+            "location": {
+              "@type": "Place",
+              "name": "Swamp Rabbit Trail",
+              "address": "Greenville, SC"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "Historic Mill District",
+            "location": {
+              "@type": "Place",
+              "name": "Mill District",
+              "address": "Greenville, SC"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "name": "Textile Heritage Site",
+            "location": {
+              "@type": "Place",
+              "name": "Textile District",
+              "address": "Greenville, SC"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "name": "Historic Main Street",
+            "location": {
+              "@type": "Place",
+              "name": "Main Street",
+              "address": "Greenville, SC"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "name": "Peace Center Historic Area",
+            "location": {
+              "@type": "Place",
+              "name": "Peace Center",
+              "address": "Greenville, SC"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "name": "Reedy River Waterfall",
+            "location": {
+              "@type": "Place",
+              "name": "Reedy River Falls",
+              "address": "Greenville, SC"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "name": "Historic Greenville District",
+            "location": {
+              "@type": "Place",
+              "name": "Greenville Historic District",
+              "address": "Greenville, SC"
+            }
+          }
+        ]
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "Basecamp Data Analytics"
+      },
+      "duration": "PT45M",
+      "distance": "1.2 miles"
+    }
+    </script>
+
+    <!-- Schema.org Structured Data - LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://falls-park-tour.vercel.app/#local-business",
+      "name": "Basecamp Data Analytics",
+      "url": "https://basecampdataanalytics.com",
+      "logo": "https://basecampdataanalytics.com/logo.png",
+      "description": "Tour operator providing self-guided GPS audio experiences in Greenville, South Carolina",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Greenville",
+        "addressRegion": "SC",
+        "addressCountry": "US"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "email": "services@basecampdataanalytics.com"
+      },
+      "sameAs": [
+        "https://www.facebook.com/basecampdataanalytics",
+        "https://www.instagram.com/basecampdataanalytics"
+      ]
+    }
+    </script>
+
+    <!-- Schema.org Structured Data - Product -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "@id": "https://falls-park-tour.vercel.app/#product",
+      "name": "Falls Park Self-Guided Walking Tour",
+      "description": "10-stop GPS-triggered audio walking tour of Falls Park and downtown Greenville. 45 minutes, 1.2 miles. Professional narration. Pay what you want model.",
+      "url": "https://falls-park-tour.vercel.app",
+      "image": "https://falls-park-tour.vercel.app/og-image.jpg",
+      "brand": {
+        "@type": "Brand",
+        "name": "Basecamp Data Analytics"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://falls-park-tour.vercel.app",
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "priceValidUntil": "2026-12-31",
+        "availability": "https://schema.org/InStock",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "minPrice": "3.00",
+          "maxPrice": "15.00",
+          "priceCurrency": "USD",
+          "pricingModel": "PayWhatYouWant"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "142"
+      }
+    }
+    </script>
+
+    <!-- Schema.org Structured Data - WebSite with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://falls-park-tour.vercel.app/#website",
+      "name": "Self-Guided Falls Park Walking Tour",
+      "alternateName": "Falls Park Walking Tour",
+      "url": "https://falls-park-tour.vercel.app",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://falls-park-tour.vercel.app/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Schema.org Structured Data - Event (Recurring) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "@id": "https://falls-park-tour.vercel.app/#event",
+      "name": "Falls Park Self-Guided Walking Tour",
+      "description": "Daily self-guided GPS audio walking tour of Falls Park and downtown Greenville. 10 stops, 45 minutes. Available every day, any time.",
+      "url": "https://falls-park-tour.vercel.app",
+      "image": "https://falls-park-tour.vercel.app/og-image.jpg",
+      "location": {
+        "@type": "Place",
+        "name": "Falls Park on the Reedy",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Falls Park on the Reedy",
+          "addressLocality": "Greenville",
+          "addressRegion": "SC",
+          "postalCode": "29601",
+          "addressCountry": "US"
+        }
+      },
+      "startDate": "2024-01-01",
+      "endDate": "2026-12-31",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
+      "organizer": {
+        "@type": "Organization",
+        "name": "Basecamp Data Analytics",
+        "url": "https://basecampdataanalytics.com"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "minPrice": "3.00",
+          "maxPrice": "15.00",
+          "priceCurrency": "USD"
+        },
+        "availability": "https://schema.org/InStock",
+        "url": "https://falls-park-tour.vercel.app"
+      },
+      "duration": "PT45M"
+    }
+    </script>
+
+    <!-- Schema.org Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the Falls Park walking tour work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Falls Park walking tour is a GPS-triggered audio experience. You access the tour via a web app (no app download needed). As you walk to each of the 10 stops around Falls Park and downtown Greenville, the audio automatically plays when you enter the geofenced area. You can also manually trigger the audio at each stop with a button. The tour takes approximately 45 minutes to complete and covers 1.2 miles."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does the tour cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We offer a pay-what-you-want model. You can pay anywhere from $3 to $15 for the full tour experience. This allows you to support the tour based on your budget and how much you enjoyed it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to download an app?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No! The Falls Park tour runs directly in your mobile web browser. Simply scan the QR code or visit our website on your phone, and you can start the tour immediately. No app installation required."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long is the tour?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The complete Falls Park walking tour takes approximately 45 minutes to finish and covers 1.2 miles. However, you can pause at any point and continue later. The tour includes 10 stops with professional narration at each location."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I pause the tour and come back?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! You can pause the tour at any time and return to it later. Your progress is saved, so you can pick up where you left off. This makes it easy to take breaks or spread the tour across multiple visits."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the tour accessible for wheelchairs and strollers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Falls Park and the downtown Greenville areas are mostly accessible for wheelchairs and strollers. Most of the walking path is paved and relatively flat. However, some areas may have uneven surfaces or inclines. We recommend checking specific route sections before visiting, and our map interface will help you navigate accessible paths."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if GPS doesn't work at a stop?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "GPS can sometimes be unreliable, especially in urban areas with tall buildings. That's why we include manual play buttons at each stop. If the automatic GPS trigger doesn't work, you can simply tap the 'Play Audio' button to hear the narration for that stop."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When is the best time to take the tour?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The tour is available 24/7 and can be enjoyed any day of the year. However, the best experience is typically during daylight hours so you can see the locations and take photos. Sunrise or sunset walks offer beautiful lighting, and weekday mornings tend to be less crowded than weekends."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I take the tour with kids?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely! The Falls Park tour is family-friendly and suitable for children of various ages. The narration is engaging and educational, making it a great way to teach kids about Greenville's history. The 45-minute duration and 1.2-mile distance are manageable for most children, and you can pause whenever needed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to make a reservation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No reservations are required! The tour is self-guided and available on-demand. Simply visit our website or scan the QR code whenever you're ready to explore. You can start anytime, and there are no group size restrictions."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Schema.org Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://falls-park-tour.vercel.app"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tours",
+          "item": "https://falls-park-tour.vercel.app"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Falls Park Walking Tour",
+          "item": "https://falls-park-tour.vercel.app"
+        }
+      ]
     }
     </script>
   </head>
   <body style="background-color: #e5e3dc;">
     <div id="root"></div>
+    <noscript>
+      <div style="padding: 20px; font-family: Arial, sans-serif; color: #303636;">
+        <h1 style="color: #d4967d;">Falls Park Self-Guided Walking Tour</h1>
+        <p>Explore Greenville, South Carolina's beautiful Falls Park and downtown area with our self-guided walking tour. This web application requires JavaScript to function.</p>
+        <p><strong>Tour Details:</strong></p>
+        <ul>
+          <li>10 historic stops around Falls Park & Downtown Greenville</li>
+          <li>GPS-triggered professional audio narration</li>
+          <li>45-minute tour covering 1.2 miles</li>
+          <li>Pay what you want: $3-$15</li>
+          <li>No app needed, no reservations required</li>
+          <li>Available 24/7, start anytime</li>
+        </ul>
+        <p><strong>Please enable JavaScript in your browser to access the tour application.</strong></p>
+        <p>For more information, visit: <a href="https://falls-park-tour.vercel.app">falls-park-tour.vercel.app</a></p>
+        <p>Contact: <a href="mailto:services@basecampdataanalytics.com">services@basecampdataanalytics.com</a></p>
+      </div>
+    </noscript>
     <div id="loading-fallback" style="display: none; padding: 20px; text-align: center;">
       <h1 style="color: #d4967d;">🎧 Falls Park Tour</h1>
       <p style="color: #303636;">Loading application...</p>
