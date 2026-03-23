@@ -250,11 +250,11 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
           <h2 className="text-2xl font-black mb-2" style={{
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.1em',
-            color: 'white',
+            color: '#f0ece4',
           }}>
             PAY WHAT YOU WANT
           </h2>
-          <p className="text-base font-medium" style={{color: 'white'}}>
+          <p className="text-base font-medium" style={{color: '#f0ece4'}}>
             No fixed cost, no pressure. Just great stories at whatever value you decide.
           </p>
         </div>
