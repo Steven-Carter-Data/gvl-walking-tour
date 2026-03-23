@@ -244,13 +244,14 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
         </div>
       </header>
 
-      {/* Pay What You Want Banner - Condensed */}
-      <section className="px-6 py-6" style={{backgroundColor: '#d4967d'}}>
+      {/* Pay What You Want Banner */}
+      <section className="px-6 py-10" style={{backgroundColor: '#d4967d'}}>
         <div className="max-w-md mx-auto text-center">
-          <h2 className="text-2xl font-black mb-2" style={{
+          <h2 className="text-4xl font-black mb-3" style={{
             fontFamily: 'Anton, sans-serif',
-            letterSpacing: '0.1em',
+            letterSpacing: '0.15em',
             color: '#f0ece4',
+            textShadow: '0 2px 8px rgba(0,0,0,0.25)',
           }}>
             PAY WHAT YOU WANT
           </h2>
