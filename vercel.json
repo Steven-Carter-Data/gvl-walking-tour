@@ -2,6 +2,8 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "functions": {
     "api/create-checkout-session.js": {
       "maxDuration": 10
@@ -12,24 +14,16 @@
   },
   "headers": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-      ]
-    },
-    {
       "source": "/sitemap.xml",
       "headers": [
-        { "key": "Content-Type", "value": "application/xml" },
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
     },
     {
       "source": "/robots.txt",
       "headers": [
-        { "key": "Content-Type", "value": "text/plain" },
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
     },
@@ -44,6 +38,14 @@
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=2592000, immutable" }
       ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
     }
   ],
   "rewrites": [
@@ -52,23 +54,7 @@
       "destination": "/api/$1"
     },
     {
-      "source": "/stops/:path",
-      "destination": "/stops/:path"
-    },
-    {
-      "source": "/:path.html",
-      "destination": "/:path.html"
-    },
-    {
-      "source": "/sitemap.xml",
-      "destination": "/sitemap.xml"
-    },
-    {
-      "source": "/robots.txt",
-      "destination": "/robots.txt"
-    },
-    {
-      "source": "/(.*)",
+      "source": "/((?!.*\\.(?:xml|txt|html|json|svg|jpg|png|mp3|wav|mp4|css|js|ico)$).*)",
       "destination": "/index.html"
     }
   ]
