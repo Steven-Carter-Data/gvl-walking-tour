@@ -4,12 +4,12 @@
 
   <!-- Homepage (Main App) -->
   <url>
-    <loc>https://falls-park-tour.vercel.app/</loc>
+    <loc>https://tours.basecampdataanalytics.com/</loc>
     <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://falls-park-tour.vercel.app/images/stops/liberty-bridge-falls-park-entrance_1.jpg</image:loc>
+      <image:loc>https://tours.basecampdataanalytics.com/images/stops/liberty-bridge-falls-park-entrance_1.jpg</image:loc>
       <image:title>Falls Park Self-Guided Walking Tour Greenville SC</image:title>
       <image:caption>GPS-triggered audio walking tour of Falls Park and Downtown Greenville, South Carolina</image:caption>
     </image:image>

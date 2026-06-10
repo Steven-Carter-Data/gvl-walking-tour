@@ -1,5 +1,5 @@
 # Robots.txt for Falls Park Self-Guided Walking Tour
-# https://falls-park-tour.vercel.app
+# https://tours.basecampdataanalytics.com
 # Last updated: 2026-06-10
 
 # Allow all search engine crawlers
@@ -17,4 +17,4 @@ Disallow: /audio/
 Disallow: /video/
 
 # Sitemap location
-Sitemap: https://falls-park-tour.vercel.app/sitemap.xml
+Sitemap: https://tours.basecampdataanalytics.com/sitemap.xml
