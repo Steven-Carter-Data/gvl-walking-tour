@@ -46,7 +46,7 @@ function ReviewPrompt({ stopsCompleted, totalStops, onDismiss }) {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/55 z-50 flex items-center justify-center p-4">
       <div
         className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
         style={{ animation: 'slideUp 0.3s ease-out' }}

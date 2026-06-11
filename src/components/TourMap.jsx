@@ -589,7 +589,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
       <meta name="description" content="Interactive GPS tour map for Falls Park, Greenville SC. Follow the walking route with auto-triggered audio at each historic stop." />
       {/* Compact Header */}
       <header className="relative bc-primary-bg text-white shadow-lg z-20">
-        <div className="absolute inset-0 bg-opacity-10"></div>
+        <div className="absolute inset-0"></div>
         <div className="relative px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -618,7 +618,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
 
       {/* Welcome Audio Section */}
       {showWelcomeAudio && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/55 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center">

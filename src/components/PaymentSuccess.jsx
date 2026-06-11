@@ -143,118 +143,105 @@ function PaymentSuccess() {
   }
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: '#e5e3dc'}}>
+    <div className="min-h-screen bg-cream">
       <title>You're All Set! | Falls Park Walking Tour</title>
       <meta name="description" content="Payment confirmed. Start your Falls Park self-guided walking tour now. Download audio for offline use or begin exploring immediately." />
       {/* Header - Success */}
-      <header className="bc-primary-bg text-white">
-        <div className="px-6 py-8 text-center">
-          <div className="text-4xl mb-4">🎉</div>
-          <h1 className="text-2xl font-bold mb-2" style={{color: 'white'}}>
-            You're All Set!
-          </h1>
-          <p className="text-lg" style={{color: 'white'}}>
-            {tourConfig.content.thankYouMessage}
-          </p>
-        </div>
+      <header className="bg-sage px-6 pt-12 pb-10 text-center">
+        <p
+          className="text-xs font-bold uppercase text-terracotta mb-3"
+          style={{ letterSpacing: '0.25em' }}
+        >
+          {tourConfig.content.thankYouMessage}
+        </p>
+        <h1
+          className="font-display uppercase text-white"
+          style={{ fontSize: 'clamp(2.2rem, 8vw, 3rem)', lineHeight: 1.05 }}
+        >
+          You're all set
+        </h1>
+        <p className="font-serif italic text-white/85 mt-2" style={{ fontSize: '1.05rem' }}>
+          {tourConfig.stats.stops} stories are yours — for life.
+        </p>
       </header>
 
-      <main className="px-6 py-6 max-w-md mx-auto">
-        {/* Primary CTA - Start Tour (Above the fold) */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-xl mb-6 text-center" style={{borderColor: '#d4967d', border: '2px solid'}}>
-          <h2 className="text-xl font-bold mb-2" style={{color: '#303636'}}>
-            Ready to Explore?
-          </h2>
-          <p className="text-base mb-4" style={{color: '#495a58'}}>
-            Head to {tourConfig.startPoint} to begin your tour
+      <main className="px-6 max-w-md mx-auto pb-16">
+        {/* Primary CTA */}
+        <section className="pt-10 text-center">
+          <p className="text-base text-sage mb-5">
+            Head to <span className="font-bold text-ink">{tourConfig.startPoint}</span> to begin your tour
           </p>
-          <button
-            onClick={handleStartTour}
-            className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white shadow-lg hover:transform hover:scale-105 transition-all duration-200"
-            style={{backgroundColor: '#d4967d'}}
-          >
-            Start Your Tour
+          <button onClick={handleStartTour} className="btn-primary text-xl">
+            Start Your Tour <span aria-hidden>→</span>
           </button>
-        </div>
+        </section>
 
-        {/* What You Get - Compact confirmation */}
-        <div className="bc-card-bg rounded-2xl p-5 shadow-lg mb-6">
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="flex items-center gap-2">
-              <span style={{color: '#d4967d'}}>✓</span>
-              <span style={{color: '#303636'}}>{tourConfig.stats.stops} tour stops</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span style={{color: '#d4967d'}}>✓</span>
-              <span style={{color: '#303636'}}>GPS-triggered audio</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span style={{color: '#d4967d'}}>✓</span>
-              <span style={{color: '#303636'}}>Lifetime access</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span style={{color: '#d4967d'}}>✓</span>
-              <span style={{color: '#303636'}}>Share with group</span>
-            </div>
+        {/* What you get */}
+        <section className="pt-12">
+          <p className="kicker mb-4">Included With Your Tour</p>
+          <div>
+            {[
+              `${tourConfig.stats.stops} tour stops`,
+              'GPS-triggered audio',
+              'Lifetime access',
+              'Share with your group',
+            ].map((feature, index) => (
+              <div key={feature} className={`flex items-center justify-between py-3 ${index > 0 ? 'hairline' : ''}`}>
+                <span className="text-ink font-semibold text-[15px]">{feature}</span>
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0" aria-hidden>
+                  <path d="M2 10L8 16L18 4" stroke="#d4967d" strokeWidth="3" strokeLinecap="square" strokeLinejoin="miter" />
+                </svg>
+              </div>
+            ))}
           </div>
-        </div>
+        </section>
 
-        {/* Optional Download - Collapsed by default */}
-        <div className="bc-card-bg rounded-2xl p-5 shadow-lg mb-6">
+        {/* Optional offline download */}
+        <section className="pt-10">
           {!showDownloadOption ? (
             <button
               onClick={() => setShowDownloadOption(true)}
-              className="w-full text-center text-base font-medium"
-              style={{color: '#495a58'}}
+              className="w-full text-center text-sm font-semibold text-sage underline underline-offset-4 bg-transparent border-none cursor-pointer"
             >
-              📱 Download for offline use (optional)
+              Download audio for offline use (optional)
             </button>
           ) : (
             <div className="text-center">
-              <h3 className="text-base font-bold mb-2" style={{color: '#303636'}}>
-                Download for Offline Use
-              </h3>
-              <p className="text-sm mb-4" style={{color: '#495a58'}}>
-                Download audio for areas with poor cell service
+              <p className="kicker justify-center mb-3">Offline Mode</p>
+              <p className="text-sm text-sage mb-5">
+                Download the audio now for areas with poor cell service.
               </p>
 
               {downloadStatus === 'idle' && (
-                <button
-                  onClick={handleDownloadOffline}
-                  className="w-full px-6 py-3 rounded-xl text-white font-semibold"
-                  style={{backgroundColor: '#d4967d'}}
-                >
+                <button onClick={handleDownloadOffline} className="btn-outline">
                   Download Audio Files
                 </button>
               )}
 
               {downloadStatus === 'downloading' && (
                 <div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div className="w-full bg-sage/15 rounded-full h-1.5 mb-2 overflow-hidden">
                     <div
-                      className="h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${downloadProgress}%`, backgroundColor: '#d4967d' }}
+                      className="h-1.5 rounded-full bg-terracotta transition-all duration-300"
+                      style={{ width: `${downloadProgress}%` }}
                     ></div>
                   </div>
-                  <p className="text-sm" style={{color: '#495a58'}}>
-                    Downloading... {downloadProgress}%
-                  </p>
+                  <p className="text-sm text-sage">Downloading… {downloadProgress}%</p>
                 </div>
               )}
 
               {downloadStatus === 'completed' && (
-                <div className="p-3 rounded-xl" style={{backgroundColor: '#e8f5e8'}}>
-                  <p className="font-semibold text-green-800">✓ Download Complete!</p>
-                </div>
+                <p className="font-semibold text-green-800 bg-green-100 rounded-xl px-4 py-3">
+                  ✓ Download complete — you're ready for anywhere
+                </p>
               )}
 
               {downloadStatus === 'error' && (
                 <div>
-                  <p className="text-sm text-red-600 mb-2">Download failed, but tour will still work online</p>
+                  <p className="text-sm text-red-700 mb-2">Download failed, but the tour still works online</p>
                   <button
                     onClick={handleDownloadOffline}
-                    className="text-sm font-medium"
-                    style={{color: '#d4967d'}}
+                    className="text-sm font-semibold text-terracotta-deep underline underline-offset-4 bg-transparent border-none cursor-pointer"
                   >
                     Try Again
                   </button>
@@ -262,21 +249,18 @@ function PaymentSuccess() {
               )}
             </div>
           )}
-        </div>
+        </section>
 
-        {/* Support - Minimal */}
-        <div className="text-center">
-          <p className="text-sm mb-1" style={{color: '#495a58'}}>
-            Need help?
-          </p>
+        {/* Support */}
+        <section className="pt-12 text-center hairline mt-10">
+          <p className="text-sm text-sage mt-8 mb-1">Need help?</p>
           <a
             href={`mailto:${tourConfig.support.email}`}
-            className="text-base font-semibold hover:underline"
-            style={{color: '#d4967d'}}
+            className="text-base font-semibold text-terracotta-deep hover:underline"
           >
             {tourConfig.support.email}
           </a>
-        </div>
+        </section>
       </main>
     </div>
   );

@@ -46,12 +46,10 @@ function EmailCapture({ source = 'landing', title, subtitle }) {
 
   if (status === 'done') {
     return (
-      <div className="bc-card-bg rounded-2xl p-5 shadow-xl border text-center" style={{borderColor: '#495a58'}}>
-        <div className="text-2xl mb-1">✉️</div>
-        <p className="text-base font-bold" style={{color: '#303636'}}>
-          You're on the list!
-        </p>
-        <p className="text-sm" style={{color: '#495a58'}}>
+      <div>
+        <p className="kicker mb-3">For Later</p>
+        <p className="font-bold text-ink text-lg">You're on the list ✓</p>
+        <p className="text-sage text-sm mt-1">
           We'll keep your tour link handy for when you're ready.
         </p>
       </div>
@@ -59,14 +57,13 @@ function EmailCapture({ source = 'landing', title, subtitle }) {
   }
 
   return (
-    <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
-      <h2 className="text-xl font-bold mb-1 text-center" style={{color: '#303636'}}>
-        {title || 'Not Touring Today?'}
-      </h2>
-      <p className="text-sm text-center mb-4" style={{color: '#495a58'}}>
+    <div>
+      <p className="kicker mb-3">For Later</p>
+      <h2 className="display-h text-3xl mb-2">{title || 'Not touring today?'}</h2>
+      <p className="text-sage text-[15px] mb-6">
         {subtitle || "Leave your email and we'll keep your tour link ready for your visit — no spam, just the link."}
       </p>
-      <div className="flex gap-2">
+      <div className="flex items-end gap-3">
         <input
           type="email"
           value={email}
@@ -78,20 +75,20 @@ function EmailCapture({ source = 'landing', title, subtitle }) {
             if (e.key === 'Enter' && status !== 'sending') handleSubmit();
           }}
           placeholder="you@example.com"
-          className="flex-1 min-w-0 p-3 rounded-xl border-2 text-base"
-          style={{borderColor: '#d4967d', color: '#303636', backgroundColor: 'white'}}
+          className="input-line flex-1 min-w-0"
         />
         <button
           onClick={handleSubmit}
           disabled={status === 'sending' || !email.trim()}
-          className="px-5 py-3 rounded-xl text-white font-bold disabled:opacity-50 flex-shrink-0"
-          style={{backgroundColor: '#d4967d'}}
+          aria-label="Send"
+          className="btn-primary flex-shrink-0"
+          style={{ width: 'auto', padding: '0.7rem 1.5rem', fontSize: '0.95rem' }}
         >
-          {status === 'sending' ? '…' : 'Send'}
+          {status === 'sending' ? '…' : 'Send →'}
         </button>
       </div>
       {error && (
-        <p className="text-sm mt-2 px-3 py-2 rounded-lg" style={{backgroundColor: '#fee2e2', color: '#991b1b'}}>
+        <p className="text-sm mt-3 px-3 py-2 rounded-xl bg-red-100 text-red-900">
           {error}
         </p>
       )}

@@ -74,6 +74,22 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
     return () => observer.disconnect();
   }, []);
 
+  // Fade-and-rise sections in as they scroll into view
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return;
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   // Regain access on a new device using the email from checkout
   const handleRestorePurchase = async () => {
     const email = restoreEmail.trim();
@@ -155,39 +171,38 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
     }
   };
 
+  const sortedStops = [...tourConfig.stops].sort((a, b) => a.order - b.order);
+
   return (
-    <div className="min-h-screen" style={{
-      backgroundColor: '#e5e3dc',
-      // Keep the sticky CTA bar from covering the footer
-      paddingBottom: showStickyCta && !tourPurchased ? '84px' : 0,
-    }}>
+    <div
+      className="min-h-screen bg-cream"
+      style={{ paddingBottom: showStickyCta && !tourPurchased ? '84px' : 0 }}
+    >
       <title>Greenville SC Walking Tour | Falls Park Self-Guided Audio Tour</title>
       <meta name="description" content="Best things to do in Greenville SC! Self-guided walking tour of Falls Park with GPS-triggered audio at 7 historic stops. Pay what you want." />
 
       {/* Win-back banner for visitors who backed out of Stripe checkout */}
       {checkoutCancelled && !tourPurchased && (
-        <div className="px-4 py-3" style={{backgroundColor: '#495a58'}}>
+        <div className="bg-sage px-4 py-3">
           <div className="max-w-md mx-auto flex items-start justify-between gap-3">
             <div>
               <p className="text-sm font-bold text-white mb-1">
                 Still deciding? No pressure.
               </p>
-              <p className="text-xs" style={{color: 'rgba(255,255,255,0.85)'}}>
+              <p className="text-xs text-white/85">
                 It really is pay what you want — even ${tourConfig.pricing.presetAmounts[0]} unlocks
                 all {tourConfig.stats.stops} stops. Or try Stop 1 free on the map first.
               </p>
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-2 mt-2.5">
                 <button
                   onClick={() => { onDismissCancelled?.(); onScreenChange(); }}
-                  className="px-3 py-1.5 rounded-lg text-xs font-bold text-white"
-                  style={{backgroundColor: '#d4967d'}}
+                  className="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-terracotta hover:bg-terracotta-deep transition-colors"
                 >
                   Choose Your Price
                 </button>
                 <button
                   onClick={() => { onDismissCancelled?.(); onStartTourMap?.(); }}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold"
-                  style={{backgroundColor: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.4)'}}
+                  className="px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-white/10 border border-white/40 hover:bg-white/20 transition-colors"
                 >
                   Try Stop 1 Free
                 </button>
@@ -196,7 +211,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             <button
               onClick={() => onDismissCancelled?.()}
               aria-label="Dismiss"
-              className="text-white opacity-70 hover:opacity-100 text-lg leading-none flex-shrink-0"
+              className="text-white/70 hover:text-white text-lg leading-none flex-shrink-0"
             >
               ✕
             </button>
@@ -204,73 +219,60 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
         </div>
       )}
 
-      {/* Hero Section with Video Background */}
-      <header ref={heroRef} className="relative overflow-hidden" style={{minHeight: '85vh'}}>
-        {/* Video Background */}
+      {/* ───────────────────────── Hero ───────────────────────── */}
+      <header ref={heroRef} className="relative overflow-hidden" style={{ minHeight: '88vh' }}>
         <video
           autoPlay
           loop
           muted
           playsInline
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            minWidth: '100%',
-            minHeight: '100%',
-            width: 'auto',
-            height: 'auto',
-            transform: 'translate(-50%, -50%)',
-            filter: 'brightness(0.7)',
-            objectFit: 'cover'
-          }}
+          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover"
+          style={{ filter: 'brightness(0.65)' }}
         >
           <source src={tourConfig.hero.video} type="video/mp4" />
         </video>
 
-        {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-60"></div>
-        <div className="absolute inset-0" style={{backgroundColor: 'rgba(73, 90, 88, 0.3)'}}></div>
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70"></div>
+        <div className="absolute inset-0 bg-sage/25"></div>
 
-        {/* Content Overlay */}
-        <div className="relative px-6 py-16 text-center" style={{minHeight: '85vh', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-          <p className="text-lg font-semibold mb-4" style={{
-            color: '#ffffff',
-            textShadow: '2px 2px 12px rgba(0,0,0,0.9)',
-            letterSpacing: '0.05em'
-          }}>
+        {/* Content */}
+        <div
+          className="relative px-6 py-16 text-center flex flex-col justify-center"
+          style={{ minHeight: '88vh' }}
+        >
+          <p
+            className="text-xs font-bold uppercase mb-5 text-white/90"
+            style={{ letterSpacing: '0.3em', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
+          >
             {tourConfig.content.brandLine}
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{
-            fontFamily: 'Anton, sans-serif',
-            fontWeight: '400',
-            letterSpacing: '0.02em',
-            color: '#ffffff',
-            textShadow: '3px 3px 15px rgba(0,0,0,0.95)',
-            lineHeight: '1.2'
-          }}>
-            <span style={{
-              borderBottom: '4px solid #d4967d',
-              paddingBottom: '8px',
-              display: 'inline-block'
-            }}>{tourConfig.shortName.split(' ')[0]} {tourConfig.shortName.split(' ')[1]}</span><br />
-            <span>Self-Guided Walking Tour</span>
+
+          <h1
+            className="font-display text-white uppercase mb-5"
+            style={{
+              fontSize: 'clamp(2.6rem, 9vw, 4rem)',
+              lineHeight: 1.04,
+              letterSpacing: '0.01em',
+              textShadow: '0 4px 24px rgba(0,0,0,0.85)',
+            }}
+          >
+            {tourConfig.shortName.split(' ')[0]} {tourConfig.shortName.split(' ')[1]}
+            <br />
+            <span className="text-terracotta">Walking Tour</span>
           </h1>
 
-          <p className="text-xl md:text-2xl mb-8 max-w-lg mx-auto leading-relaxed font-medium" style={{
-            color: '#ffffff',
-            textShadow: '3px 3px 15px rgba(0,0,0,0.95)'
-          }}>
+          <p
+            className="font-serif italic text-white mb-9 max-w-md mx-auto"
+            style={{ fontSize: '1.2rem', lineHeight: 1.5, textShadow: '0 2px 14px rgba(0,0,0,0.9)' }}
+          >
             {tourConfig.tagline}
           </p>
 
           {/* Location-aware nudge (only when permission was already granted) */}
           {proximity && !tourPurchased && (
-            <div className="max-w-sm mx-auto mb-4">
-              <span className="inline-block px-4 py-2 rounded-full text-sm font-bold" style={{
-                backgroundColor: 'rgba(255,255,255,0.92)',
-                color: '#303636',
-              }}>
+            <div className="max-w-sm mx-auto mb-5">
+              <span className="inline-block px-4 py-2 rounded-full text-sm font-bold bg-white/95 text-ink shadow-lg">
                 {proximity === 'near'
                   ? '📍 You’re just steps from the starting point — perfect timing!'
                   : '🗓️ Planning a visit? Buy once — lifetime access, tour whenever you arrive.'}
@@ -278,386 +280,305 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             </div>
           )}
 
-          {/* CTA Buttons - Streamlined */}
-          <div className="space-y-4 max-w-sm mx-auto">
+          {/* CTAs */}
+          <div className="space-y-3 max-w-sm mx-auto w-full">
             {tourPurchased ? (
-              <button
-                onClick={handleStartTour}
-                className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white transition-all duration-200 hover:transform hover:scale-105 shadow-2xl"
-                style={{
-                  backgroundColor: '#d4967d',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                }}
-              >
-                Start Your Tour
+              <button onClick={handleStartTour} className="btn-primary text-xl">
+                Start Your Tour <span aria-hidden>→</span>
               </button>
             ) : (
               <>
-                {/* Quick Checkout - Primary CTA */}
                 <button
                   onClick={handleQuickCheckout}
                   disabled={isCheckingOut}
-                  className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white transition-all duration-200 hover:transform hover:scale-105 shadow-2xl disabled:opacity-70"
-                  style={{
-                    backgroundColor: '#d4967d',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                  }}
+                  className="btn-primary text-xl"
                 >
-                  {isCheckingOut ? 'Opening Secure Checkout…' : `Unlock Full Tour – $${tourConfig.pricing.defaultAmount}`}
+                  {isCheckingOut
+                    ? 'Opening Secure Checkout…'
+                    : <>Unlock Full Tour · ${tourConfig.pricing.defaultAmount} <span aria-hidden>→</span></>}
                 </button>
 
-                {/* Choose Your Price - Secondary CTA */}
-                <button
-                  onClick={handleStartTour}
-                  className="w-full px-6 py-3 rounded-xl text-lg font-semibold transition-all duration-200 hover:transform hover:scale-105"
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.15)',
-                    color: '#ffffff',
-                    border: '2px solid rgba(255,255,255,0.4)',
-                    backdropFilter: 'blur(10px)',
-                  }}
-                >
+                <button onClick={handleStartTour} className="btn-glass">
                   Choose Your Own Price
                 </button>
 
-                {/* Free sample path - lowest friction entry */}
                 <button
                   onClick={() => onStartTourMap?.()}
-                  className="w-full text-base font-semibold underline"
-                  style={{
-                    color: '#ffffff',
-                    textShadow: '2px 2px 8px rgba(0,0,0,0.9)',
-                    background: 'none',
-                    border: 'none',
-                    padding: '4px',
-                  }}
+                  className="w-full text-sm font-semibold text-white underline underline-offset-4 decoration-terracotta decoration-2 bg-transparent border-none cursor-pointer py-1"
+                  style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}
                 >
-                  🗺️ Or explore the map first — Stop 1 is free
+                  Or explore the map first — Stop 1 is free
                 </button>
               </>
             )}
 
             {checkoutError && (
-              <div className="rounded-xl px-4 py-3 text-sm font-semibold" style={{
-                backgroundColor: 'rgba(254, 226, 226, 0.95)',
-                color: '#991b1b',
-              }}>
+              <div className="rounded-2xl px-4 py-3 text-sm font-semibold bg-red-100/95 text-red-900">
                 {checkoutError}
               </div>
             )}
           </div>
 
           {/* Audio Preview */}
-          <div className="max-w-sm mx-auto mt-4">
+          <div className="max-w-sm mx-auto w-full mt-4">
             {previewEnded && !tourPurchased ? (
               /* Post-preview conversion moment — highest-intent point on the page */
-              <div className="rounded-xl px-5 py-4 text-center" style={{
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                backdropFilter: 'blur(10px)',
-              }}>
-                <p className="text-base font-bold mb-1" style={{color: '#303636'}}>
-                  Like what you hear?
-                </p>
-                <p className="text-sm mb-3" style={{color: '#495a58'}}>
+              <div className="rounded-3xl px-6 py-5 text-center bg-white/95 backdrop-blur shadow-2xl">
+                <p className="font-display uppercase text-ink text-xl mb-1">Like what you hear?</p>
+                <p className="text-sm text-sage mb-4">
                   That's one minute of {tourConfig.stats.duration} — there's a story like this at every stop.
                 </p>
                 <button
                   onClick={handleQuickCheckout}
                   disabled={isCheckingOut}
-                  className="w-full px-6 py-3 rounded-xl text-base font-bold text-white disabled:opacity-70"
-                  style={{backgroundColor: '#d4967d'}}
+                  className="btn-primary text-base"
                 >
                   {isCheckingOut ? 'Opening Secure Checkout…' : `Unlock All ${tourConfig.stats.stops} Stops`}
                 </button>
                 <button
                   onClick={handlePreviewPlay}
-                  className="mt-2 text-sm font-medium underline"
-                  style={{color: '#495a58', background: 'none', border: 'none'}}
+                  className="mt-2.5 text-sm font-medium text-sage underline underline-offset-4 bg-transparent border-none cursor-pointer"
                 >
                   Replay preview
                 </button>
               </div>
             ) : (
-              <button
-                onClick={handlePreviewPlay}
-                className="w-full px-6 py-3 rounded-xl text-lg font-semibold transition-all duration-200 hover:transform hover:scale-105"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.15)',
-                  color: '#ffffff',
-                  border: '2px solid rgba(255,255,255,0.4)',
-                  backdropFilter: 'blur(10px)',
-                }}
-              >
-                <div className="flex items-center justify-center">
-                  <span className="mr-3 text-xl">
-                    {isPreviewPlaying ? '⏸️' : '🎧'}
-                  </span>
-                  {isPreviewPlaying ? 'Pause Audio Preview' : 'Hear a 1-Minute Sample'}
-                </div>
+              <button onClick={handlePreviewPlay} className="btn-glass">
+                <span className="text-lg" aria-hidden>{isPreviewPlaying ? '⏸' : '▶'}</span>
+                {isPreviewPlaying ? 'Pause Audio Preview' : 'Hear a 1-Minute Sample'}
               </button>
             )}
           </div>
 
           {/* Trust signals */}
-          <div className="max-w-sm mx-auto mt-4 flex items-center justify-center flex-wrap" style={{gap: '6px 14px'}}>
-            {['🔒 Secure Stripe checkout', '📱 No app needed', '♾️ Lifetime access'].map((signal) => (
-              <span key={signal} className="text-xs font-semibold" style={{
-                color: 'rgba(255,255,255,0.95)',
-                textShadow: '1px 1px 6px rgba(0,0,0,0.9)',
-              }}>
+          <div className="max-w-sm mx-auto mt-5 flex items-center justify-center flex-wrap gap-x-4 gap-y-1.5">
+            {['Secure Stripe checkout', 'No app needed', 'Lifetime access'].map((signal) => (
+              <span
+                key={signal}
+                className="text-[11px] font-bold uppercase text-white/85"
+                style={{ letterSpacing: '0.14em', textShadow: '0 1px 6px rgba(0,0,0,0.9)' }}
+              >
                 {signal}
               </span>
             ))}
           </div>
 
-          {/* Quick Stats Row */}
-          <div className="flex justify-center mt-8" style={{gap: '32px'}}>
-            <div className="text-center" style={{minWidth: '70px'}}>
-              <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.stops}</div>
-              <div className="text-xs uppercase font-semibold" style={{color: 'rgba(255,255,255,0.9)', letterSpacing: '0.1em'}}>Stops</div>
-            </div>
-            <div style={{width: '1px', backgroundColor: 'rgba(255,255,255,0.3)', alignSelf: 'stretch'}}></div>
-            <div className="text-center" style={{minWidth: '70px'}}>
-              <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.duration}</div>
-              <div className="text-xs uppercase font-semibold" style={{color: 'rgba(255,255,255,0.9)', letterSpacing: '0.1em'}}>Minutes</div>
-            </div>
-            <div style={{width: '1px', backgroundColor: 'rgba(255,255,255,0.3)', alignSelf: 'stretch'}}></div>
-            <div className="text-center" style={{minWidth: '70px'}}>
-              <div className="text-2xl font-black" style={{color: '#d4967d'}}>{tourConfig.stats.distance}</div>
-              <div className="text-xs uppercase font-semibold" style={{color: 'rgba(255,255,255,0.9)', letterSpacing: '0.1em'}}>Miles</div>
-            </div>
+          {/* Stats strip */}
+          <div className="flex justify-center items-stretch gap-8 mt-10 max-w-sm mx-auto border-t border-b border-white/25 py-4">
+            {[
+              { value: tourConfig.stats.stops, label: 'Stops' },
+              { value: tourConfig.stats.duration, label: 'Minutes' },
+              { value: tourConfig.stats.distance, label: 'Miles' },
+            ].map((stat, i) => (
+              <div key={stat.label} className={`text-center px-2 ${i > 0 ? 'border-l border-white/25 pl-8' : ''}`}>
+                <div className="font-display text-terracotta text-3xl">{stat.value}</div>
+                <div
+                  className="text-[11px] uppercase font-bold text-white/85 mt-0.5"
+                  style={{ letterSpacing: '0.18em' }}
+                >
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </header>
 
-      {/* Pay What You Want Banner */}
-      <section className="px-6 py-10" style={{backgroundColor: '#d4967d'}}>
-        <div className="max-w-md mx-auto text-center">
-          <h2 className="text-4xl font-black mb-3" style={{
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '0.15em',
-            color: '#f0ece4',
-            textShadow: '0 2px 8px rgba(0,0,0,0.25)',
-          }}>
-            PAY WHAT YOU WANT
-          </h2>
-          <p className="text-base font-medium" style={{color: '#f0ece4'}}>
-            No fixed cost, no pressure. Just great stories at whatever value you decide.
-          </p>
-        </div>
+      {/* ─────────────────── Pay What You Want band ─────────────────── */}
+      <section className="bg-terracotta px-6 py-12 text-center overflow-hidden">
+        <h2
+          className="font-display uppercase text-white"
+          style={{ fontSize: 'clamp(2.2rem, 8vw, 3.2rem)', lineHeight: 1.05, letterSpacing: '0.04em' }}
+        >
+          Pay What
+          <br />
+          You Want
+        </h2>
+        <p className="font-serif italic text-white/95 mt-3 max-w-xs mx-auto" style={{ fontSize: '1.05rem' }}>
+          No fixed cost, no pressure — just great stories at whatever value you decide.
+        </p>
       </section>
 
-      {/* Main Content - Condensed */}
-      <main className="px-6 py-6 space-y-6" style={{backgroundColor: '#e5e3dc'}}>
+      {/* ───────────────────────── Main ───────────────────────── */}
+      <main className="max-w-md mx-auto px-6">
 
-        {/* Interactive Map Preview */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <div className="text-center mb-4">
-            <h2 className="text-xl font-bold mb-1" style={{color: '#303636'}}>Your Walking Route</h2>
-            <p className="text-base" style={{color: '#495a58'}}>{tourConfig.stats.stops} historic stops throughout {tourConfig.location.split(',')[0]}</p>
-          </div>
+        {/* The Route */}
+        <section className="pt-14 pb-4 reveal">
+          <p className="kicker mb-3">The Route</p>
+          <h2 className="display-h text-3xl mb-2">
+            {tourConfig.stats.distance} miles of
+            <br />
+            <span className="text-terracotta-deep">living history</span>
+          </h2>
+          <p className="text-sage text-base mb-6">
+            {tourConfig.stats.stops} historic stops winding through Falls Park and downtown {tourConfig.location.split(',')[0]}. Tap any marker to peek at its story.
+          </p>
+        </section>
 
-          <div className="rounded-xl border overflow-hidden relative" style={{borderColor: '#d4967d', height: '250px'}}>
-            <Suspense fallback={
-              <div style={{
-                height: '100%',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#e5e3dc',
-                color: '#495a58',
-                fontSize: '14px',
-                fontWeight: 600
-              }}>
-                Loading route map…
-              </div>
-            }>
-              <WelcomePreviewMap />
-            </Suspense>
-
-            <div className="absolute bottom-3 left-3 right-3 bg-white bg-opacity-95 rounded-lg p-3 backdrop-blur-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-bold text-sm" style={{color: '#303636'}}>
-                    {tourConfig.stats.stops}-Stop Journey
-                  </h3>
-                  <p className="text-xs" style={{color: '#495a58'}}>
-                    ~{tourConfig.stats.duration} min | {tourConfig.stats.distance} mi | Professional audio
-                  </p>
-                </div>
-              </div>
+        {/* Full-bleed map */}
+        <div className="-mx-6 relative reveal" style={{ height: '300px' }}>
+          <Suspense fallback={
+            <div className="h-full w-full flex items-center justify-center bg-sand text-sage text-sm font-semibold">
+              Loading route map…
+            </div>
+          }>
+            <WelcomePreviewMap />
+          </Suspense>
+          <div className="absolute bottom-3 left-6 right-6 z-[500] pointer-events-none">
+            <div className="inline-flex items-center gap-2 bg-ink/85 backdrop-blur px-4 py-2 rounded-full">
+              <span className="w-2 h-2 rounded-full bg-terracotta inline-block"></span>
+              <span className="text-white text-xs font-semibold tracking-wide">
+                ~{tourConfig.stats.duration} min · {tourConfig.stats.distance} mi · professional audio
+              </span>
             </div>
           </div>
         </div>
 
-        {/* How It Works - 3 steps, answers "what exactly am I buying?" */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <h2 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
-            How It Works
-          </h2>
-          <div className="space-y-4">
+        {/* How It Works */}
+        <section className="pt-16 reveal">
+          <p className="kicker mb-3">How It Works</p>
+          <h2 className="display-h text-3xl mb-8">Three steps,<br />zero hassle</h2>
+
+          <div className="space-y-9">
             {[
-              { step: '1', title: 'Pay what you want', detail: 'Quick secure checkout — no app to download, no account to create' },
-              { step: '2', title: 'Walk the route', detail: `Follow the map ${tourConfig.stats.distance} miles through Falls Park and downtown` },
-              { step: '3', title: 'Stories play automatically', detail: 'GPS triggers the audio as you arrive at each stop — or tap to play manually' },
+              { num: '1', title: 'Pay what you want', detail: 'Quick secure checkout — no app to download, no account to create.' },
+              { num: '2', title: 'Walk the route', detail: `Follow the map ${tourConfig.stats.distance} miles through Falls Park and downtown.` },
+              { num: '3', title: 'Stories find you', detail: 'GPS triggers the audio as you arrive at each stop — or tap to play manually.' },
             ].map((item) => (
-              <div key={item.step} className="flex items-start gap-4">
-                <div
-                  className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-lg"
-                  style={{backgroundColor: '#d4967d'}}
-                >
-                  {item.step}
-                </div>
-                <div>
-                  <h3 className="font-bold text-base" style={{color: '#303636'}}>{item.title}</h3>
-                  <p className="text-sm" style={{color: '#495a58'}}>{item.detail}</p>
+              <div key={item.num} className="flex items-start gap-5">
+                <span className="ghost-num" aria-hidden>{item.num}</span>
+                <div className="pt-2">
+                  <h3 className="font-bold text-ink text-lg leading-snug">{item.title}</h3>
+                  <p className="text-sage text-[15px] mt-1 leading-relaxed">{item.detail}</p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* What You'll Discover - stop teaser list builds curiosity before the ask */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <h2 className="text-xl font-bold mb-1 text-center" style={{color: '#303636'}}>
-            What You'll Discover
-          </h2>
-          <p className="text-sm text-center mb-4" style={{color: '#495a58'}}>
-            {tourConfig.stats.stops} stories, told where they happened
+        {/* The Stories (timeline) */}
+        <section className="pt-16 reveal">
+          <p className="kicker mb-3">The Stories</p>
+          <h2 className="display-h text-3xl mb-2">What you'll<br />discover</h2>
+          <p className="text-sage text-base mb-8">
+            {tourConfig.stats.stops} stories, told exactly where they happened.
           </p>
-          <div className="space-y-3">
-            {[...tourConfig.stops]
-              .sort((a, b) => a.order - b.order)
-              .map((stop) => (
-                <div
-                  key={stop.id}
-                  className="p-4 rounded-xl border flex items-start gap-3"
-                  style={{backgroundColor: '#e5e3dc', borderColor: '#d4967d'}}
+
+          <div className="timeline space-y-8">
+            {sortedStops.map((stop) => (
+              <div key={stop.id} className="flex items-start gap-4">
+                <span
+                  className="timeline-dot"
+                  style={stop.order === 1 ? { background: 'var(--color-sage)' } : undefined}
                 >
-                  <div
-                    className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                    style={{backgroundColor: stop.order === 1 ? '#495a58' : '#d4967d', marginTop: '2px'}}
-                  >
-                    {stop.order}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-base" style={{color: '#303636'}}>
-                      {stop.title}
-                      {stop.order === 1 && (
-                        <span
-                          className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold text-white align-middle"
-                          style={{backgroundColor: '#495a58'}}
-                        >
-                          FREE SAMPLE
-                        </span>
-                      )}
-                    </h3>
-                    <p className="text-sm" style={{color: '#495a58'}}>{stop.description}</p>
-                  </div>
+                  {stop.order}
+                </span>
+                <div className="-mt-0.5">
+                  <h3 className="font-bold text-ink text-[17px] leading-snug">
+                    {stop.title}
+                    {stop.order === 1 && (
+                      <span
+                        className="ml-2 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold text-white bg-sage align-middle inline-block"
+                        style={{ letterSpacing: '0.08em' }}
+                      >
+                        FREE SAMPLE
+                      </span>
+                    )}
+                  </h3>
+                  <p className="text-sage text-sm mt-1 leading-relaxed">{stop.description}</p>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
-        </div>
+        </section>
 
-        {/* Why Self-Guided - Condensed to 3 key points */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <h2 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
-            Why Self-Guided?
-          </h2>
+        {/* Why Self-Guided */}
+        <section className="pt-16 reveal">
+          <p className="kicker mb-3">Why Self-Guided</p>
+          <h2 className="display-h text-3xl mb-6">Your park,<br />your pace</h2>
 
-          <div className="space-y-3">
+          <div>
             {tourConfig.content.valueProps.slice(0, 3).map((item, index) => (
-              <div
-                key={index}
-                className="p-4 rounded-xl border flex items-start gap-3"
-                style={{ backgroundColor: '#e5e3dc', borderColor: '#d4967d' }}
-              >
-                <div
-                  className="flex-shrink-0 w-6 h-6 flex items-center justify-center"
-                  style={{ marginTop: '2px' }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M2 10L8 16L18 4" stroke="#d4967d" strokeWidth="3" strokeLinecap="square" strokeLinejoin="miter"/>
+              <div key={index} className={`py-5 ${index > 0 ? 'hairline' : ''}`}>
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3 className="font-bold text-ink text-lg">{item.benefit}</h3>
+                  <svg className="flex-shrink-0 translate-y-0.5" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden>
+                    <path d="M2 10L8 16L18 4" stroke="#d4967d" strokeWidth="3" strokeLinecap="square" strokeLinejoin="miter" />
                   </svg>
                 </div>
-                <div>
-                  <h3 className="font-bold text-base" style={{color: '#303636'}}>{item.benefit}</h3>
-                  <p className="text-sm" style={{color: '#495a58'}}>{item.detail}</p>
-                </div>
+                <p className="text-sage text-[15px] mt-0.5">{item.detail}</p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Meet Your Guide */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border" style={{borderColor: '#495a58'}}>
-          <h2 className="text-xl font-bold mb-4 text-center" style={{color: '#303636'}}>
-            Meet Your Guide
-          </h2>
-          <div className="flex flex-col items-center text-center">
+        {/* Your Narrator */}
+        <section className="pt-14 pb-2 reveal">
+          <p className="kicker mb-3">Your Narrator</p>
+          <div className="flex items-start gap-5 mt-5">
             <img
               src="/images/tour-guide.png"
               alt="Your tour guide"
-              className="rounded-xl shadow-lg border-4"
-              style={{
-                width: '140px',
-                height: '140px',
-                objectFit: 'cover',
-                borderColor: '#d4967d',
-              }}
+              className="w-24 h-24 rounded-full object-cover flex-shrink-0 ring-4 ring-terracotta/40 shadow-lg"
             />
-            <p className="mt-4 text-sm leading-relaxed" style={{color: '#495a58'}}>
-              Hi, I'm your narrator! I live right here in Greenville County and love sharing the stories behind this incredible city — from its textile mill origins to the vibrant downtown you see today.
-            </p>
+            <div className="relative">
+              <span
+                className="absolute -top-5 -left-1 font-serif text-terracotta select-none"
+                style={{ fontSize: '3.2rem', lineHeight: 1, opacity: 0.5 }}
+                aria-hidden
+              >
+                “
+              </span>
+              <p className="font-serif italic text-ink text-[17px] leading-relaxed pt-2">
+                I live right here in Greenville County, and I love sharing the stories behind this incredible city — from its textile mill origins to the vibrant downtown you see today.
+              </p>
+              <p className="kicker mt-3" style={{ fontSize: '0.7rem' }}>Your Greenville local</p>
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* Email capture - reach visitors who aren't ready to buy today */}
         {!tourPurchased && (
-          <EmailCapture
-            source="landing"
-            title={proximity === 'near' ? 'Want the Link for Later?' : 'Not Touring Today?'}
-          />
+          <section className="pt-14 pb-16 reveal">
+            <EmailCapture
+              source="landing"
+              title={proximity === 'near' ? 'Want the link for later?' : 'Not touring today?'}
+            />
+          </section>
         )}
-
-        {/* Final CTA */}
-        <div className="bc-card-bg rounded-2xl p-6 shadow-xl border text-center" style={{borderColor: '#d4967d', backgroundColor: '#d4967d'}}>
-          <h2 className="text-xl font-bold mb-2" style={{color: 'white'}}>
-            Ready to Explore?
-          </h2>
-          <p className="text-base mb-4" style={{color: 'rgba(255,255,255,0.9)'}}>
-            Start your self-guided adventure today
-          </p>
-          <button
-            onClick={tourPurchased ? handleStartTour : handleQuickCheckout}
-            disabled={isCheckingOut}
-            className="w-full px-6 py-3 rounded-xl text-lg font-bold transition-all duration-200 hover:transform hover:scale-105 disabled:opacity-70"
-            style={{
-              backgroundColor: 'white',
-              color: '#d4967d',
-            }}
-          >
-            {tourPurchased
-              ? 'Start Tour'
-              : isCheckingOut
-                ? 'Opening Secure Checkout…'
-                : `Unlock Full Tour – $${tourConfig.pricing.defaultAmount}`}
-          </button>
-        </div>
       </main>
 
-      {/* Contact & Footer */}
-      <footer>
-        <div className="px-6 py-6 bg-white border-t-2" style={{borderColor: '#d4967d'}}>
-          <div className="max-w-md mx-auto text-center">
-            <p className="text-base mb-2" style={{color: '#495a58'}}>
-              Questions? Contact us:
-            </p>
+      {/* ─────────────────── Final CTA (full-bleed sage) ─────────────────── */}
+      <section className="bg-sage px-6 pt-14 pb-12 text-center">
+        <div className="max-w-md mx-auto">
+          <h2
+            className="font-display uppercase text-white mb-3"
+            style={{ fontSize: 'clamp(2rem, 7vw, 2.8rem)', lineHeight: 1.08 }}
+          >
+            Ready to <span className="text-terracotta">explore?</span>
+          </h2>
+          <p className="font-serif italic text-white/85 mb-7" style={{ fontSize: '1.05rem' }}>
+            The park is waiting. The stories are ready.
+          </p>
+          <div className="max-w-sm mx-auto">
+            <button
+              onClick={tourPurchased ? handleStartTour : handleQuickCheckout}
+              disabled={isCheckingOut}
+              className="btn-primary text-lg"
+            >
+              {tourPurchased
+                ? <>Start Tour <span aria-hidden>→</span></>
+                : isCheckingOut
+                  ? 'Opening Secure Checkout…'
+                  : <>Unlock Full Tour · ${tourConfig.pricing.defaultAmount} <span aria-hidden>→</span></>}
+            </button>
+          </div>
+
+          <div className="mt-10 pt-7 border-t border-white/15">
+            <p className="text-sm text-white/70 mb-1">Questions?</p>
             <a
               href={`mailto:${tourConfig.support.email}`}
-              className="text-lg font-semibold hover:underline"
-              style={{color: '#d4967d'}}
+              className="text-base font-semibold text-terracotta hover:underline"
             >
               {tourConfig.support.email}
             </a>
@@ -668,8 +589,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
                     setRestoreMessage(null);
                     setShowRestoreModal(true);
                   }}
-                  className="text-sm font-medium hover:underline"
-                  style={{color: '#495a58'}}
+                  className="text-sm font-medium text-white/70 hover:text-white underline underline-offset-4 bg-transparent border-none cursor-pointer"
                 >
                   Already purchased? Restore access
                 </button>
@@ -677,40 +597,32 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             )}
           </div>
         </div>
-        <div className="bc-muted-bg text-white py-6 px-6">
-          <div className="text-center">
-            <p className="text-sm" style={{color: '#d4967d'}}>
-              Powered by Basecamp Data Analytics
-            </p>
-          </div>
-        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-ink py-5 px-6 text-center">
+        <p className="text-xs font-semibold uppercase text-terracotta" style={{ letterSpacing: '0.18em' }}>
+          Powered by Basecamp Data Analytics
+        </p>
       </footer>
 
       {/* Sticky bottom CTA - keeps purchase one tap away once hero scrolls off */}
       {showStickyCta && !tourPurchased && (
-        <div
-          className="fixed bottom-0 left-0 right-0 z-40 px-4 py-3"
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.97)',
-            backdropFilter: 'blur(12px)',
-            boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.12)',
-            borderTop: '2px solid #d4967d',
-          }}
-        >
+        <div className="fixed bottom-0 left-0 right-0 z-40 px-4 py-3 bg-cream/95 backdrop-blur-md border-t border-sage/20 shadow-[0_-6px_24px_rgba(0,0,0,0.12)]">
           <div className="max-w-md mx-auto flex items-center gap-3">
             <div className="flex-shrink-0">
-              <p className="text-sm font-bold leading-tight" style={{color: '#303636'}}>
+              <p className="text-sm font-bold leading-tight text-ink">
                 {tourConfig.stats.stops} stops · {tourConfig.stats.duration} min
               </p>
-              <p className="text-xs" style={{color: '#495a58'}}>Pay what you want</p>
+              <p className="text-xs text-sage">Pay what you want</p>
             </div>
             <button
               onClick={handleQuickCheckout}
               disabled={isCheckingOut}
-              className="flex-1 px-4 py-3 rounded-xl text-base font-bold text-white disabled:opacity-70"
-              style={{backgroundColor: '#d4967d'}}
+              className="btn-primary flex-1 text-base"
+              style={{ padding: '0.8rem 1.25rem' }}
             >
-              {isCheckingOut ? 'Opening Checkout…' : `Unlock Full Tour – $${tourConfig.pricing.defaultAmount}`}
+              {isCheckingOut ? 'Opening Checkout…' : `Unlock Tour · $${tourConfig.pricing.defaultAmount}`}
             </button>
           </div>
         </div>
@@ -718,21 +630,19 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
 
       {/* Restore Purchase Modal */}
       {showRestoreModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6">
+        <div className="fixed inset-0 bg-black/55 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-7">
             <div className="flex items-start justify-between mb-2">
-              <h3 className="text-lg font-bold" style={{color: '#303636'}}>
-                Restore Your Purchase
-              </h3>
+              <h3 className="display-h text-xl">Restore your purchase</h3>
               <button
                 onClick={() => setShowRestoreModal(false)}
                 aria-label="Close"
-                className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+                className="text-sage/60 hover:text-sage text-xl leading-none bg-transparent border-none cursor-pointer"
               >
                 ✕
               </button>
             </div>
-            <p className="text-sm mb-4" style={{color: '#495a58'}}>
+            <p className="text-sm text-sage mb-5">
               Enter the email address you used at checkout and we'll look up your purchase.
             </p>
             <input
@@ -744,16 +654,13 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
               }}
               placeholder="you@example.com"
               autoFocus
-              className="w-full p-3 rounded-xl border-2 text-base mb-3"
-              style={{borderColor: '#d4967d', color: '#303636'}}
+              className="input-line mb-5"
             />
             {restoreMessage && (
               <p
-                className="text-sm mb-3 px-3 py-2 rounded-lg"
-                style={{
-                  backgroundColor: restoreMessage.type === 'error' ? '#fee2e2' : '#e8f5e8',
-                  color: restoreMessage.type === 'error' ? '#991b1b' : '#166534',
-                }}
+                className={`text-sm mb-4 px-3 py-2 rounded-xl ${
+                  restoreMessage.type === 'error' ? 'bg-red-100 text-red-900' : 'bg-green-100 text-green-900'
+                }`}
               >
                 {restoreMessage.text}
               </p>
@@ -761,8 +668,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             <button
               onClick={handleRestorePurchase}
               disabled={isRestoring || !restoreEmail.trim()}
-              className="w-full px-6 py-3 rounded-xl text-white font-bold disabled:opacity-50"
-              style={{backgroundColor: '#d4967d'}}
+              className="btn-primary text-base"
             >
               {isRestoring ? 'Checking your purchase…' : 'Restore Access'}
             </button>
