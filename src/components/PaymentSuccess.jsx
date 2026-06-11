@@ -120,7 +120,7 @@ function PaymentSuccess() {
           <div className="bc-card-bg rounded-2xl p-6 shadow-lg max-w-md mx-auto">
             <p className="mb-4" style={{color: '#495a58'}}>
               This can happen on a weak connection. If you were charged, your
-              purchase is safe — try again or contact {tourConfig.support.email}.
+              purchase is safe. Try again or contact {tourConfig.support.email}.
             </p>
             <button
               onClick={runVerification}
@@ -161,7 +161,7 @@ function PaymentSuccess() {
           You're all set
         </h1>
         <p className="font-serif italic text-white/85 mt-2" style={{ fontSize: '1.05rem' }}>
-          {tourConfig.stats.stops} stories are yours — for life.
+          {tourConfig.stats.stops} stories, yours for life.
         </p>
       </header>
 
@@ -232,7 +232,7 @@ function PaymentSuccess() {
 
               {downloadStatus === 'completed' && (
                 <p className="font-semibold text-green-800 bg-green-100 rounded-xl px-4 py-3">
-                  ✓ Download complete — you're ready for anywhere
+                  ✓ Download complete. You're ready for anywhere.
                 </p>
               )}
 

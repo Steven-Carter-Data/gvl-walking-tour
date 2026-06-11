@@ -190,8 +190,8 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
                 Still deciding? No pressure.
               </p>
               <p className="text-xs text-white/85">
-                It really is pay what you want — even ${tourConfig.pricing.presetAmounts[0]} unlocks
-                all {tourConfig.stats.stops} stops. Or try Stop 1 free on the map first.
+                It really is pay what you want. Even ${tourConfig.pricing.presetAmounts[0]} unlocks
+                all {tourConfig.stats.stops} stops, or you can try Stop 1 free on the map first.
               </p>
               <div className="flex gap-2 mt-2.5">
                 <button
@@ -274,8 +274,8 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             <div className="max-w-sm mx-auto mb-5">
               <span className="inline-block px-4 py-2 rounded-full text-sm font-bold bg-white/95 text-ink shadow-lg">
                 {proximity === 'near'
-                  ? '📍 You’re just steps from the starting point — perfect timing!'
-                  : '🗓️ Planning a visit? Buy once — lifetime access, tour whenever you arrive.'}
+                  ? '📍 You’re just steps from the starting point. Perfect timing!'
+                  : '🗓️ Planning a visit? Buy once and tour whenever you arrive. Lifetime access.'}
               </span>
             </div>
           )}
@@ -307,7 +307,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
                   className="w-full text-sm font-semibold text-white underline underline-offset-4 decoration-terracotta decoration-2 bg-transparent border-none cursor-pointer py-1"
                   style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}
                 >
-                  Or explore the map first — Stop 1 is free
+                  Or explore the map first. Stop 1 is free.
                 </button>
               </>
             )}
@@ -326,7 +326,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
               <div className="rounded-3xl px-6 py-5 text-center bg-white/95 backdrop-blur shadow-2xl">
                 <p className="font-display uppercase text-ink text-xl mb-1">Like what you hear?</p>
                 <p className="text-sm text-sage mb-4">
-                  That's one minute of {tourConfig.stats.duration} — there's a story like this at every stop.
+                  That's one minute of {tourConfig.stats.duration}. There's a story like this at every stop.
                 </p>
                 <button
                   onClick={handleQuickCheckout}
@@ -395,7 +395,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
           You Want
         </h2>
         <p className="font-serif italic text-white/95 mt-3 max-w-xs mx-auto" style={{ fontSize: '1.05rem' }}>
-          No fixed cost, no pressure — just great stories at whatever value you decide.
+          No fixed cost, no pressure. Just great stories at whatever value you decide.
         </p>
       </section>
 
@@ -441,9 +441,9 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
 
           <div className="space-y-9">
             {[
-              { num: '1', title: 'Pay what you want', detail: 'Quick secure checkout — no app to download, no account to create.' },
+              { num: '1', title: 'Pay what you want', detail: 'Quick secure checkout. No app to download, no account to create.' },
               { num: '2', title: 'Walk the route', detail: `Follow the map ${tourConfig.stats.distance} miles through Falls Park and downtown.` },
-              { num: '3', title: 'Stories find you', detail: 'GPS triggers the audio as you arrive at each stop — or tap to play manually.' },
+              { num: '3', title: 'Stories find you', detail: 'GPS triggers the audio as you arrive at each stop, or tap to play it manually.' },
             ].map((item) => (
               <div key={item.num} className="flex items-start gap-5">
                 <span className="ghost-num" aria-hidden>{item.num}</span>
@@ -530,9 +530,9 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
                 “
               </span>
               <p className="font-serif italic text-ink text-[17px] leading-relaxed pt-2">
-                I live right here in Greenville County, and I love sharing the stories behind this incredible city — from its textile mill origins to the vibrant downtown you see today.
+                Hi, I'm Steven. Greenville is home for me, and a few of these stops still give me goosebumps every time I walk past them. Think of this tour as a stroll with a friend who can't wait to show you around.
               </p>
-              <p className="kicker mt-3" style={{ fontSize: '0.7rem' }}>Your Greenville local</p>
+              <p className="kicker mt-3" style={{ fontSize: '0.7rem' }}>Steven Carter · Greenville Local</p>
             </div>
           </div>
         </section>

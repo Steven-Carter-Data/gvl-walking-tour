@@ -265,7 +265,7 @@ function PricingSelection({ onBack }) {
             </button>
           ) : (
             <p className="text-sm text-sage max-w-xs mx-auto">
-              Choose any amount above and continue — you can enter your promo
+              Choose any amount above and continue. You can enter your promo
               code on the secure payment page and your discount will be
               applied there.
             </p>

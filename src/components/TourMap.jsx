@@ -819,7 +819,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                               fontWeight: 'bold',
                               margin: '8px 0 0 0'
                             }}>
-                              🎁 Free sample — listen on us!
+                              🎁 Free sample, on us!
                             </p>
                           )}
                           <button
@@ -1203,7 +1203,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                     fontWeight: '700',
                     margin: '0 0 2px 0'
                   }}>
-                    🎁 Stop 1 is free — give it a listen!
+                    🎁 Stop 1 is free. Give it a listen!
                   </p>
                   <p style={{
                     color: '#495a58',

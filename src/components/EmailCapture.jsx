@@ -61,7 +61,7 @@ function EmailCapture({ source = 'landing', title, subtitle }) {
       <p className="kicker mb-3">For Later</p>
       <h2 className="display-h text-3xl mb-2">{title || 'Not touring today?'}</h2>
       <p className="text-sage text-[15px] mb-6">
-        {subtitle || "Leave your email and we'll keep your tour link ready for your visit — no spam, just the link."}
+        {subtitle || "Leave your email and we'll keep your tour link ready for your visit. No spam, just the link."}
       </p>
       <div className="flex items-end gap-3">
         <input

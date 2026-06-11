@@ -541,7 +541,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false, nextStop
                       margin: '0 0 16px 0',
                       lineHeight: 1.5
                     }}>
-                      There are {totalStops - 1} more stories like this waiting along the route —
+                      There are {totalStops - 1} more stories like this waiting along the route,
                       and you pick the price.
                     </p>
                     <button
@@ -578,7 +578,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false, nextStop
                       margin: '0 0 16px 0',
                       lineHeight: 1.5
                     }}>
-                      Head to Stop {nextStop.order} on the map — the story starts
+                      Head to Stop {nextStop.order} on the map. The story starts
                       automatically when you arrive.
                     </p>
                     <button
@@ -624,7 +624,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false, nextStop
                       color: '#303636',
                       margin: '0 0 8px 0'
                     }}>
-                      That's the final stop — you did it!
+                      That's the final stop. You did it!
                     </h4>
                     <p style={{
                       color: '#495a58',
