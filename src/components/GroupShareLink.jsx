@@ -32,8 +32,8 @@ function GroupShareLink() {
   };
 
   const getShareUrl = () => {
-    if (!shareCode) return 'https://falls-park-tour.vercel.app';
-    return `https://falls-park-tour.vercel.app/?group=${shareCode}`;
+    if (!shareCode) return window.location.origin;
+    return `${window.location.origin}/?group=${shareCode}`;
   };
 
   const handleCopyLink = async () => {

@@ -5,7 +5,7 @@
   <!-- Homepage (Main App) -->
   <url>
     <loc>https://tours.basecampdataanalytics.com/</loc>
-    <lastmod>2026-06-10</lastmod>
+    <lastmod>2026-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -13,6 +13,118 @@
       <image:title>Falls Park Self-Guided Walking Tour Greenville SC</image:title>
       <image:caption>GPS-triggered audio walking tour of Falls Park and Downtown Greenville, South Carolina</image:caption>
     </image:image>
+  </url>
+
+  <!-- Topic landing pages -->
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/falls-park-history.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/greenville-sc-audio-tour.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/greenville-walking-tours.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/downtown-greenville-tour.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/things-to-do-greenville-sc.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/liberty-bridge-greenville.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/reedy-river-greenville.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/greenville-sc-family-activities.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/greenville-sc-date-ideas.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Tour stop pages -->
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/liberty-bridge.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/reedy-river-falls.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/falls-park-gardens.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/wyche-pavilion.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/peace-center.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/main-street-greenville.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/courthouse-poinsett-hotel.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/west-end-district.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tours.basecampdataanalytics.com/stops/shoeless-joe-jackson.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
 </urlset>
