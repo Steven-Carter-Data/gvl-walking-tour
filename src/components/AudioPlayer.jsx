@@ -132,14 +132,16 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
         
         await audio.play();
         setPlaying(true);
+        setShowPlayPrompt(false);
       } catch (error) {
         console.error('Audio playback failed:', error.message);
-        
+
         // Try alternative approach
         try {
           audio.currentTime = 0;
           await audio.play();
           setPlaying(true);
+          setShowPlayPrompt(false);
         } catch (altError) {
           console.error('Alternative playback failed:', altError.message);
         }
@@ -230,6 +232,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
             }}>
               <button
                 onClick={togglePlay}
+                aria-label={playing ? 'Pause narration' : 'Play narration'}
                 style={{
                   width: '56px',
                   height: '56px',
@@ -642,6 +645,23 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                 </div>
               </div>
 
+              {/* Tap-to-play prompt when the browser blocked autoplay */}
+              {showPlayPrompt && !playing && (
+                <div style={{
+                  background: '#fef3c7',
+                  border: '1px solid #f59e0b',
+                  borderRadius: '12px',
+                  padding: '12px 16px',
+                  marginBottom: '16px',
+                  textAlign: 'center',
+                  color: '#92400e',
+                  fontSize: '14px',
+                  fontWeight: '600'
+                }}>
+                  Tap the play button below to start the narration
+                </div>
+              )}
+
               {/* Control Buttons */}
               <div style={{
                 display: 'flex',
@@ -652,6 +672,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
               }}>
                 <button
                   onClick={skipBackward}
+                  aria-label="Skip back 15 seconds"
                   style={{
                     padding: '16px',
                     background: '#f9fafb',
@@ -665,9 +686,10 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                 >
                   ⏪ 15s
                 </button>
-                
+
                 <button
                   onClick={togglePlay}
+                  aria-label={playing ? 'Pause narration' : 'Play narration'}
                   style={{
                     width: '80px',
                     height: '80px',
@@ -679,14 +701,16 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                     justifyContent: 'center',
                     border: 'none',
                     cursor: 'pointer',
-                    fontSize: '28px'
+                    fontSize: '28px',
+                    boxShadow: showPlayPrompt && !playing ? '0 0 0 4px #fcd34d' : 'none'
                   }}
                 >
                   {playing ? '⏸️' : '▶️'}
                 </button>
-                
+
                 <button
                   onClick={skipForward}
+                  aria-label="Skip forward 15 seconds"
                   style={{
                     padding: '16px',
                     background: '#f9fafb',

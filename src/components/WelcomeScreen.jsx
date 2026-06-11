@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import tourConfig from '../config/tourConfig.js';
+import { verifyPayment, ACCESS_SESSION_KEY } from '../utils/stripe.js';
 
 // Fix for default markers in React Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -41,7 +42,41 @@ const previewStartIcon = new L.Icon({
 
 function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStartTourMap }) {
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const audioRef = useRef(null);
+
+  // Regain access on a new device using the email from checkout
+  const handleRestorePurchase = async () => {
+    const email = window.prompt('Enter the email address you used at checkout:');
+    if (!email) return;
+
+    setIsRestoring(true);
+    try {
+      const response = await fetch('/api/restore-purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json();
+
+      if (data.found && data.session_id) {
+        const result = await verifyPayment(data.session_id);
+        if (result.success) {
+          localStorage.setItem(ACCESS_SESSION_KEY, data.session_id);
+          localStorage.setItem('tour_access', 'granted');
+          window.location.href = '/?tour=true';
+          return;
+        }
+      }
+      alert(`No purchase found for that email. If you believe this is an error, contact ${tourConfig.support.email}`);
+    } catch (error) {
+      console.error('Restore purchase error:', error);
+      alert('Could not check your purchase right now. Please try again.');
+    } finally {
+      setIsRestoring(false);
+    }
+  };
 
   // Calculate map bounds that encompass all tour stops with tighter zoom
   const calculateTourBounds = () => {
@@ -75,7 +110,7 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
           await audioRef.current.play();
           setIsPreviewPlaying(true);
         }
-      } catch (error) {
+      } catch {
         console.log('Audio autoplay prevented - user interaction required');
       }
     }
@@ -89,9 +124,14 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
     }
   };
 
-  const handleQuickCheckout = () => {
-    if (onQuickCheckout) {
-      onQuickCheckout(tourConfig.pricing.defaultAmount);
+  const handleQuickCheckout = async () => {
+    if (onQuickCheckout && !isCheckingOut) {
+      setIsCheckingOut(true);
+      try {
+        await onQuickCheckout(tourConfig.pricing.defaultAmount);
+      } finally {
+        setIsCheckingOut(false);
+      }
     }
   };
 
@@ -177,13 +217,14 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
                 {/* Quick Checkout - Primary CTA */}
                 <button
                   onClick={handleQuickCheckout}
-                  className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white transition-all duration-200 hover:transform hover:scale-105 shadow-2xl"
+                  disabled={isCheckingOut}
+                  className="w-full px-8 py-4 rounded-xl text-xl font-bold text-white transition-all duration-200 hover:transform hover:scale-105 shadow-2xl disabled:opacity-70"
                   style={{
                     backgroundColor: '#d4967d',
                     boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
                   }}
                 >
-                  Continue with ${tourConfig.pricing.defaultAmount}
+                  {isCheckingOut ? 'Opening Secure Checkout…' : `Unlock Full Tour – $${tourConfig.pricing.defaultAmount}`}
                 </button>
 
                 {/* Choose Your Price - Secondary CTA */}
@@ -379,13 +420,18 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
           </p>
           <button
             onClick={tourPurchased ? handleStartTour : handleQuickCheckout}
-            className="w-full px-6 py-3 rounded-xl text-lg font-bold transition-all duration-200 hover:transform hover:scale-105"
+            disabled={isCheckingOut}
+            className="w-full px-6 py-3 rounded-xl text-lg font-bold transition-all duration-200 hover:transform hover:scale-105 disabled:opacity-70"
             style={{
               backgroundColor: 'white',
               color: '#d4967d',
             }}
           >
-            {tourPurchased ? 'Start Tour' : `Get Started - $${tourConfig.pricing.defaultAmount}`}
+            {tourPurchased
+              ? 'Start Tour'
+              : isCheckingOut
+                ? 'Opening Secure Checkout…'
+                : `Unlock Full Tour – $${tourConfig.pricing.defaultAmount}`}
           </button>
         </div>
       </main>
@@ -404,6 +450,18 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             >
               {tourConfig.support.email}
             </a>
+            {!tourPurchased && (
+              <p className="mt-3">
+                <button
+                  onClick={handleRestorePurchase}
+                  disabled={isRestoring}
+                  className="text-sm font-medium hover:underline disabled:opacity-50"
+                  style={{color: '#495a58'}}
+                >
+                  {isRestoring ? 'Checking your purchase…' : 'Already purchased? Restore access'}
+                </button>
+              </p>
+            )}
           </div>
         </div>
         <div className="bc-muted-bg text-white py-6 px-6">

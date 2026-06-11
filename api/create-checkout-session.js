@@ -35,13 +35,22 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Validate minimum price (Stripe enforces $0.50 minimum for USD)
-    if (price < 0.50) {
-      return res.status(400).json({ error: 'Minimum price is $0.50 (Stripe requirement)' });
+    // Reject unknown tours instead of silently falling back
+    const tourConfig = TOUR_CONFIGS[tourId];
+    if (!tourConfig) {
+      return res.status(400).json({ error: 'Unknown tour' });
     }
 
-    // Get tour config or use default
-    const tourConfig = TOUR_CONFIGS[tourId] || TOUR_CONFIGS['falls-park-greenville'];
+    // Server-side price bounds: Stripe minimum is $0.50; cap pay-what-you-want
+    // amounts to prevent tampered or accidental extreme charges
+    const numericPrice = Number(price);
+    if (!Number.isFinite(numericPrice) || numericPrice < 0.50 || numericPrice > 200) {
+      return res.status(400).json({ error: 'Price must be between $0.50 and $200' });
+    }
+
+    if (currency.toLowerCase() !== 'usd') {
+      return res.status(400).json({ error: 'Unsupported currency' });
+    }
 
     // Get product name based on group type
     const getProductName = (groupType) => {
@@ -72,7 +81,7 @@ export default async function handler(req, res) {
                 `${req.headers.origin}/images/stripe-checkout-image.jpg`
               ],
             },
-            unit_amount: Math.round(price * 100), // Convert to cents
+            unit_amount: Math.round(numericPrice * 100), // Convert to cents
           },
           quantity: 1,
         },
@@ -80,14 +89,20 @@ export default async function handler(req, res) {
       mode: 'payment',
       success_url: `${req.headers.origin}/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin}/?cancelled=true`,
+      // Promo/discount codes are managed in the Stripe Dashboard (Products →
+      // Coupons → Promotion codes) and entered by the customer on the Stripe
+      // checkout page. 100%-off codes complete with payment_status
+      // 'no_payment_required', which verify-payment accepts.
+      allow_promotion_codes: true,
       metadata: {
         tourId,
         groupType: groupType || 'individual',
         groupSize: groupSize || '1',
-        paymentAmount: price.toString(),
+        paymentAmount: numericPrice.toString(),
         isCustomAmount: req.body.isCustomAmount ? 'true' : 'false',
       },
-      customer_creation: 'if_required',
+      // Always create a Customer so purchases can be restored by email later
+      customer_creation: 'always',
       billing_address_collection: 'auto',
     });
 

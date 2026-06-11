@@ -10,6 +10,12 @@
     },
     "api/verify-payment.js": {
       "maxDuration": 10
+    },
+    "api/stripe-webhook.js": {
+      "maxDuration": 10
+    },
+    "api/restore-purchase.js": {
+      "maxDuration": 10
     }
   },
   "headers": [

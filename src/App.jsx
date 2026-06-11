@@ -6,7 +6,7 @@ import AudioPlayer from './components/AudioPlayer';
 import PaymentSuccess from './components/PaymentSuccess';
 import AdminPanel from './components/AdminPanel';
 import tourConfig from './config/tourConfig.js';
-import { createPaymentSession } from './utils/stripe.js';
+import { createPaymentSession, hasStoredAccess, revalidateAccess, revokeAccess } from './utils/stripe.js';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState(() => {
@@ -25,10 +25,9 @@ function App() {
     return 'welcome';
   });
   const [userLocation, setUserLocation] = useState(null);
-  const [tourPurchased, setTourPurchased] = useState(() => {
-    return localStorage.getItem('tour_access') === 'granted' ||
-           localStorage.getItem('tourPurchased') === 'true';
-  });
+  // Optimistic local check so offline users aren't blocked; a background
+  // re-verification against Stripe below revokes claims the server rejects
+  const [tourPurchased, setTourPurchased] = useState(() => hasStoredAccess());
   const [currentStop, setCurrentStop] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUnlocked, setAudioUnlocked] = useState(false);
@@ -37,10 +36,7 @@ function App() {
   // Check for payment status changes
   useEffect(() => {
     const checkPaymentStatus = () => {
-      const hasAccess = localStorage.getItem('tour_access') === 'granted' ||
-                       localStorage.getItem('tourPurchased') === 'true';
-
-      if (hasAccess && !tourPurchased) {
+      if (hasStoredAccess() && !tourPurchased) {
         console.log('Payment found in localStorage, updating state');
         setTourPurchased(true);
 
@@ -55,6 +51,25 @@ function App() {
     window.addEventListener('storage', checkPaymentStatus);
     return () => window.removeEventListener('storage', checkPaymentStatus);
   }, [tourPurchased]);
+
+  // Re-verify the stored purchase against Stripe once per load. Network
+  // failures keep access (offline tour use); only a definitive server
+  // rejection revokes it.
+  useEffect(() => {
+    if (!hasStoredAccess()) return;
+
+    let cancelled = false;
+    revalidateAccess().then((result) => {
+      if (cancelled) return;
+      if (result === 'invalid') {
+        console.warn('Stored tour access failed verification, revoking');
+        revokeAccess();
+        setTourPurchased(false);
+        setCurrentScreen((screen) => (screen === 'map' ? 'welcome' : screen));
+      }
+    });
+    return () => { cancelled = true; };
+  }, []);
 
   // GPS tracking - only start when on map screen
   useEffect(() => {
@@ -141,12 +156,6 @@ function App() {
     source.start(0);
     setAudioUnlocked(true);
     console.log('Audio unlocked for autoplay');
-  };
-
-  const handlePurchaseComplete = () => {
-    setTourPurchased(true);
-    localStorage.setItem('tourPurchased', 'true');
-    setCurrentScreen('map');
   };
 
   const handleStopTriggered = (stop) => {

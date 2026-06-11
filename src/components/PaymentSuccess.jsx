@@ -1,41 +1,47 @@
 import { useState, useEffect } from 'react';
-import { verifyPayment } from '../utils/stripe.js';
+import { verifyPayment, ACCESS_SESSION_KEY } from '../utils/stripe.js';
 import { audioPreloader } from '../utils/audioPreloader.js';
 import { ga4 } from '../services/analytics.js';
 import tourConfig from '../config/tourConfig.js';
 
 function PaymentSuccess() {
   const [paymentStatus, setPaymentStatus] = useState('verifying');
-  const [sessionDetails, setSessionDetails] = useState(null);
   const [showDownloadOption, setShowDownloadOption] = useState(false);
   const [downloadStatus, setDownloadStatus] = useState('idle');
   const [downloadProgress, setDownloadProgress] = useState(0);
 
-  useEffect(() => {
+  const runVerification = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('session_id');
 
-    if (sessionId) {
-      verifyPayment(sessionId).then(result => {
-        if (result.success) {
-          setPaymentStatus('success');
-          setSessionDetails(result.session);
-          localStorage.setItem('tour_access', 'granted');
-          localStorage.setItem('payment_session', JSON.stringify(result.session));
-          ga4.purchase(sessionId, result.session?.amount_total / 100 || tourConfig.pricing.defaultAmount);
-
-          // Auto-start background preload (non-blocking)
-          startBackgroundPreload();
-        } else {
-          setPaymentStatus('failed');
-        }
-      }).catch(error => {
-        console.error('Payment verification error:', error);
-        setPaymentStatus('failed');
-      });
-    } else {
+    if (!sessionId) {
       setPaymentStatus('failed');
+      return;
     }
+
+    setPaymentStatus('verifying');
+    verifyPayment(sessionId).then(result => {
+      if (result.success) {
+        setPaymentStatus('success');
+        localStorage.setItem(ACCESS_SESSION_KEY, sessionId);
+        localStorage.setItem('tour_access', 'granted');
+        localStorage.setItem('payment_session', JSON.stringify(result.session));
+        ga4.purchase(sessionId, result.session?.amount_total / 100 || tourConfig.pricing.defaultAmount);
+
+        // Auto-start background preload (non-blocking)
+        startBackgroundPreload();
+      } else {
+        setPaymentStatus('failed');
+      }
+    }).catch(error => {
+      console.error('Payment verification error:', error);
+      setPaymentStatus('failed');
+    });
+  };
+
+  useEffect(() => {
+    runVerification();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startBackgroundPreload = async () => {
@@ -44,7 +50,7 @@ function PaymentSuccess() {
       await audioPreloader.preloadAudioFiles(audioUrls, () => {});
       localStorage.setItem('tour_content_downloaded', 'true');
       localStorage.setItem('download_timestamp', Date.now().toString());
-    } catch (error) {
+    } catch {
       console.log('Background preload failed, will stream instead');
     }
   };
@@ -109,12 +115,20 @@ function PaymentSuccess() {
         <div className="px-6 py-8 text-center">
           <div className="bc-card-bg rounded-2xl p-6 shadow-lg max-w-md mx-auto">
             <p className="mb-4" style={{color: '#495a58'}}>
-              If you believe this is an error, please contact support.
+              This can happen on a weak connection. If you were charged, your
+              purchase is safe — try again or contact {tourConfig.support.email}.
             </p>
             <button
-              onClick={() => window.location.href = '/'}
-              className="w-full px-6 py-3 rounded-xl text-white font-semibold"
+              onClick={runVerification}
+              className="w-full px-6 py-3 rounded-xl text-white font-semibold mb-3"
               style={{backgroundColor: '#d4967d'}}
+            >
+              Try Again
+            </button>
+            <button
+              onClick={() => window.location.href = '/'}
+              className="w-full px-6 py-3 rounded-xl font-semibold border-2"
+              style={{color: '#495a58', borderColor: '#495a58'}}
             >
               Return to Home
             </button>

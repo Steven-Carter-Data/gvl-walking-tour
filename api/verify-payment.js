@@ -17,15 +17,17 @@ export default async function handler(req, res) {
   try {
     const { session_id } = req.query;
 
-    if (!session_id) {
-      return res.status(400).json({ error: 'Missing session_id' });
+    if (!session_id || !/^cs_\w+$/.test(session_id) || session_id.length > 200) {
+      return res.status(400).json({ status: 'invalid', error: 'Invalid session_id' });
     }
 
     // Retrieve the checkout session from Stripe
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
-    // Check payment status
-    const isComplete = session.payment_status === 'paid';
+    // 'paid' for normal purchases; 'no_payment_required' when a 100%-off
+    // promotion code was applied at checkout
+    const isComplete = session.payment_status === 'paid' ||
+                       session.payment_status === 'no_payment_required';
 
     res.status(200).json({
       status: isComplete ? 'complete' : 'incomplete',
@@ -41,7 +43,12 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Payment verification error:', error);
-    
+
+    // Session id doesn't exist in Stripe — a definitive "no", not a server error
+    if (error.code === 'resource_missing' || error.statusCode === 404) {
+      return res.status(404).json({ status: 'invalid', error: 'Session not found' });
+    }
+
     if (error.type === 'StripeAuthenticationError') {
       console.error('Stripe Authentication Error - Invalid API key');
       return res.status(500).json({ 

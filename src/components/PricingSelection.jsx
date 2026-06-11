@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createPaymentSession } from '../utils/stripe.js';
 import tourConfig from '../config/tourConfig.js';
+import { ga4 } from '../services/analytics.js';
 
 function PricingSelection({ onBack }) {
   const [selectedAmount, setSelectedAmount] = useState(tourConfig.pricing.defaultAmount);
   const [customAmount, setCustomAmount] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [promoCode, setPromoCode] = useState('');
-  const [showPromoInput, setShowPromoInput] = useState(false);
+  const [showPromoInfo, setShowPromoInfo] = useState(false);
+
+  // Funnel event: welcome → pricing drop-off is measurable from this
+  useEffect(() => {
+    ga4.event('pricing_page_viewed');
+  }, []);
 
   const handleAmountSelect = (amount) => {
     setSelectedAmount(amount);
@@ -31,42 +36,11 @@ function PricingSelection({ onBack }) {
     }
   };
 
-  const handlePromoCodeSubmit = async () => {
-    try {
-      const response = await fetch('/api/validate-promo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: promoCode }),
-      });
-      const result = await response.json();
-
-      if (result.valid) {
-        localStorage.setItem('tour_access', 'granted');
-        localStorage.setItem('promo_used', promoCode.toUpperCase());
-        localStorage.setItem('payment_session', JSON.stringify({
-          amount_total: 0,
-          payment_status: 'promo_code',
-          metadata: { promo_code: promoCode.toUpperCase() }
-        }));
-        window.location.href = '/?tour=true';
-      } else {
-        alert('Invalid promo code. Please try again.');
-      }
-    } catch (error) {
-      console.error('Promo validation error:', error);
-      alert('Unable to validate promo code. Please try again.');
-    }
-  };
-
   const handleContinue = async () => {
-    if (promoCode.trim()) {
-      handlePromoCodeSubmit();
-      return;
-    }
-
     const finalAmount = showCustomInput ? parseFloat(customAmount) : selectedAmount;
     if (finalAmount >= tourConfig.pricing.minimum) {
       setIsProcessing(true);
+      ga4.beginCheckout(finalAmount);
       try {
         const paymentData = {
           type: 'individual',
@@ -263,51 +237,23 @@ function PricingSelection({ onBack }) {
           </p>
         </div>
 
-        {/* Promo Code - Minimal */}
+        {/* Promo Code - applied on the Stripe checkout page */}
         <div className="bc-card-bg rounded-2xl p-5 shadow-lg">
           <div className="text-center">
-            {!showPromoInput ? (
+            {!showPromoInfo ? (
               <button
-                onClick={() => setShowPromoInput(true)}
+                onClick={() => setShowPromoInfo(true)}
                 className="text-sm font-medium hover:underline"
                 style={{color: '#d4967d'}}
               >
                 Have a promo code?
               </button>
             ) : (
-              <div className="space-y-3">
-                <div className="flex items-center justify-center gap-3">
-                  <input
-                    type="text"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                    className="px-4 py-2 text-center text-base font-bold rounded-xl border-2 uppercase w-32"
-                    style={{borderColor: '#d4967d'}}
-                    placeholder="CODE"
-                    autoFocus
-                  />
-                  <button
-                    onClick={handlePromoCodeSubmit}
-                    disabled={!promoCode.trim()}
-                    className={`px-4 py-2 rounded-xl text-white font-semibold transition-all duration-200 ${
-                      promoCode.trim() ? 'hover:transform hover:scale-105' : 'opacity-50 cursor-not-allowed'
-                    }`}
-                    style={{backgroundColor: '#d4967d'}}
-                  >
-                    Apply
-                  </button>
-                </div>
-                <button
-                  onClick={() => {
-                    setShowPromoInput(false);
-                    setPromoCode('');
-                  }}
-                  className="text-xs opacity-60 hover:opacity-100"
-                  style={{color: '#495a58'}}
-                >
-                  Cancel
-                </button>
-              </div>
+              <p className="text-sm" style={{color: '#495a58'}}>
+                Choose any amount above and continue — you can enter your promo
+                code on the secure payment page and your discount will be
+                applied there.
+              </p>
             )}
           </div>
         </div>
