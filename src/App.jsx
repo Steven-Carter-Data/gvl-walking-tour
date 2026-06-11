@@ -1,12 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import WelcomeScreen from './components/WelcomeScreen';
-import PricingSelection from './components/PricingSelection';
-import TourMap from './components/TourMap';
-import AudioPlayer from './components/AudioPlayer';
-import PaymentSuccess from './components/PaymentSuccess';
-import AdminPanel from './components/AdminPanel';
 import tourConfig from './config/tourConfig.js';
+
+// Only the landing screen loads eagerly — everything else splits out of the
+// initial bundle so first paint on a QR scan stays fast
+const PricingSelection = lazy(() => import('./components/PricingSelection'));
+const TourMap = lazy(() => import('./components/TourMap'));
+const AudioPlayer = lazy(() => import('./components/AudioPlayer'));
+const PaymentSuccess = lazy(() => import('./components/PaymentSuccess'));
+const AdminPanel = lazy(() => import('./components/AdminPanel'));
+
+// Branded full-screen loader for lazy screen transitions
+const ScreenLoader = () => (
+  <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: '#e5e3dc'}}>
+    <div className="text-center">
+      <div
+        className="animate-spin rounded-full h-10 w-10 border-b-2 mx-auto mb-3"
+        style={{borderColor: '#d4967d'}}
+      ></div>
+      <p className="text-sm font-semibold" style={{color: '#495a58'}}>Loading…</p>
+    </div>
+  </div>
+);
 import { createPaymentSession, hasStoredAccess, revalidateAccess, revokeAccess } from './utils/stripe.js';
+import { getAudioToken } from './utils/audioAccess.js';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState(() => {
@@ -28,6 +45,18 @@ function App() {
   // Optimistic local check so offline users aren't blocked; a background
   // re-verification against Stripe below revokes claims the server rejects
   const [tourPurchased, setTourPurchased] = useState(() => hasStoredAccess());
+  // Stripe checkout sends users back with ?cancelled=true when they abandon
+  // payment — our warmest audience, so greet them with a win-back message
+  const [checkoutCancelled, setCheckoutCancelled] = useState(() =>
+    new URLSearchParams(window.location.search).get('cancelled') === 'true'
+  );
+
+  // Clean the cancelled flag out of the URL so refresh/share doesn't re-show it
+  useEffect(() => {
+    if (checkoutCancelled) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [checkoutCancelled]);
   const [currentStop, setCurrentStop] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUnlocked, setAudioUnlocked] = useState(false);
@@ -66,6 +95,10 @@ function App() {
         revokeAccess();
         setTourPurchased(false);
         setCurrentScreen((screen) => (screen === 'map' ? 'welcome' : screen));
+      } else {
+        // Pre-warm the signed-audio token so the first geofence trigger
+        // doesn't wait on a network round-trip (and offline visits reuse it)
+        getAudioToken();
       }
     });
     return () => { cancelled = true; };
@@ -163,7 +196,8 @@ function App() {
     setIsPlaying(true);
   };
 
-  // Quick checkout handler - processes payment with default amount
+  // Quick checkout handler - processes payment with default amount.
+  // Returns the session result so callers can surface errors inline.
   const handleQuickCheckout = async (amount) => {
     try {
       const paymentData = {
@@ -180,11 +214,16 @@ function App() {
       if (!result.success) {
         throw new Error(result.error || 'Payment session failed');
       }
+      return result;
     } catch (error) {
       console.error('Quick checkout error:', error);
-      alert('Payment processing failed. Please try again.');
+      return { success: false, error: error.message };
     }
   };
+
+  // The stop the narration should guide the listener to after the current one
+  const getNextStop = (stop) =>
+    tourConfig.stops.find((s) => s.order === stop.order + 1) || null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -193,21 +232,28 @@ function App() {
           onScreenChange={() => setCurrentScreen('pricing')}
           onQuickCheckout={handleQuickCheckout}
           tourPurchased={tourPurchased}
-          onStartTourMap={() => setCurrentScreen('map')}
+          onStartTourMap={() => handleScreenChange('map')}
+          checkoutCancelled={checkoutCancelled}
+          onDismissCancelled={() => setCheckoutCancelled(false)}
         />
       )}
 
       {currentScreen === 'pricing' && (
-        <PricingSelection
-          onBack={() => setCurrentScreen('welcome')}
-        />
+        <Suspense fallback={<ScreenLoader />}>
+          <PricingSelection
+            onBack={() => setCurrentScreen('welcome')}
+          />
+        </Suspense>
       )}
 
       {currentScreen === 'success' && (
-        <PaymentSuccess />
+        <Suspense fallback={<ScreenLoader />}>
+          <PaymentSuccess />
+        </Suspense>
       )}
 
       {currentScreen === 'map' && (
+        <Suspense fallback={<ScreenLoader />}>
         <TourMap
           userLocation={userLocation}
           locationError={locationError}
@@ -236,23 +282,39 @@ function App() {
           tourPurchased={tourPurchased}
           onStopTriggered={handleStopTriggered}
           onBack={() => handleScreenChange('welcome')}
+          onUnlock={() => setCurrentScreen('pricing')}
         />
+        </Suspense>
       )}
 
       {isPlaying && currentStop && (
+        <Suspense fallback={null}>
         <AudioPlayer
           stop={currentStop}
           isPlaying={isPlaying}
           audioUnlocked={audioUnlocked}
+          nextStop={getNextStop(currentStop)}
+          tourPurchased={tourPurchased}
+          onPlayNext={handleStopTriggered}
+          onUnlock={() => {
+            setIsPlaying(false);
+            setCurrentStop(null);
+            setCurrentScreen('pricing');
+          }}
           onClose={() => {
             setIsPlaying(false);
             setCurrentStop(null);
           }}
         />
+        </Suspense>
       )}
 
-      {/* Admin panel - only shows with ?admin=true */}
-      <AdminPanel />
+      {/* Admin panel - gated here too so its chunk never downloads for visitors */}
+      {new URLSearchParams(window.location.search).get('admin') === 'true' && (
+        <Suspense fallback={null}>
+          <AdminPanel />
+        </Suspense>
+      )}
     </div>
   );
 }

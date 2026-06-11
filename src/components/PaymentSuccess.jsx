@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { verifyPayment, ACCESS_SESSION_KEY } from '../utils/stripe.js';
 import { audioPreloader } from '../utils/audioPreloader.js';
+import { getSignedAudioUrl } from '../utils/audioAccess.js';
 import { ga4 } from '../services/analytics.js';
 import tourConfig from '../config/tourConfig.js';
 
@@ -45,8 +46,10 @@ function PaymentSuccess() {
   }, []);
 
   const startBackgroundPreload = async () => {
-    const audioUrls = tourConfig.stops.map(stop => stop.audio_url);
     try {
+      const audioUrls = await Promise.all(
+        tourConfig.stops.map(stop => getSignedAudioUrl(stop.audio_url))
+      );
       await audioPreloader.preloadAudioFiles(audioUrls, () => {});
       localStorage.setItem('tour_content_downloaded', 'true');
       localStorage.setItem('download_timestamp', Date.now().toString());
@@ -65,9 +68,10 @@ function PaymentSuccess() {
     setDownloadStatus('downloading');
     setDownloadProgress(0);
 
-    const audioUrls = tourConfig.stops.map(stop => stop.audio_url);
-
     try {
+      const audioUrls = await Promise.all(
+        tourConfig.stops.map(stop => getSignedAudioUrl(stop.audio_url))
+      );
       const result = await audioPreloader.preloadAudioFiles(
         audioUrls,
         (progress) => setDownloadProgress(progress)

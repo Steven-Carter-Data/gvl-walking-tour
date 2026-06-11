@@ -1,5 +1,16 @@
 import ReactGA from 'react-ga4';
-import { logAnalyticsEvent } from './firestore.js';
+
+// Firestore (and the whole Firebase SDK) loads on first use instead of at
+// startup — it's a large dependency and analytics writes are never urgent
+const logAnalyticsEvent = async (eventData) => {
+  try {
+    const { logAnalyticsEvent: log } = await import('./firestore.js');
+    return await log(eventData);
+  } catch (error) {
+    console.error('Analytics module load failed:', error);
+    return false;
+  }
+};
 
 // Initialize GA4 - Replace with your actual Measurement ID from Google Analytics
 const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID;

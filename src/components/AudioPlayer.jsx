@@ -1,15 +1,42 @@
 import { useState, useRef, useEffect } from 'react';
+import tourConfig from '../config/tourConfig.js';
+import { getSignedAudioUrl, isFreeAudio } from '../utils/audioAccess.js';
 
-function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
+function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false, nextStop = null, tourPurchased = true, onPlayNext, onUnlock }) {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showPlayPrompt, setShowPlayPrompt] = useState(false);
+  const [showNextUp, setShowNextUp] = useState(false);
   const [showSources, setShowSources] = useState(false);
   const [sourcesText, setSourcesText] = useState('');
   const audioRef = useRef(null);
+  const totalStops = tourConfig.stats.stops;
+  // Paid audio needs a signed URL (free files resolve synchronously)
+  const [audioSrc, setAudioSrc] = useState(() =>
+    isFreeAudio(stop.audio_url) ? stop.audio_url : null
+  );
+
+  // Reset the "up next" card when a new stop starts playing
+  useEffect(() => {
+    setShowNextUp(false);
+  }, [stop.id]);
+
+  // Resolve the (possibly signed) audio URL whenever the stop changes
+  useEffect(() => {
+    let cancelled = false;
+    if (isFreeAudio(stop.audio_url)) {
+      setAudioSrc(stop.audio_url);
+      return;
+    }
+    setAudioSrc(null);
+    getSignedAudioUrl(stop.audio_url).then((url) => {
+      if (!cancelled) setAudioSrc(url);
+    });
+    return () => { cancelled = true; };
+  }, [stop.audio_url]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -20,12 +47,11 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
     const handleEnded = () => {
       setPlaying(false);
       setCurrentTime(0);
-      // Auto-close audio player when audio finishes
-      setTimeout(() => {
-        onClose();
-      }, 1000); // Brief delay to show completion
+      // Guide the listener onward instead of dropping them back on the map
+      setIsMinimized(false);
+      setShowNextUp(true);
     };
-    const handleError = (e) => {
+    const handleError = () => {
       console.error('Audio loading error:', audio.error?.message || 'Unknown error');
     };
 
@@ -44,6 +70,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
 
   // Autoplay when geofence triggered and audio is unlocked
   useEffect(() => {
+    if (!audioSrc) return; // wait for the signed URL to resolve
     if (isPlaying && audioRef.current && audioUnlocked) {
       const audio = audioRef.current;
       
@@ -90,7 +117,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
     } else if (isPlaying && !audioUnlocked) {
       setShowPlayPrompt(true);
     }
-  }, [isPlaying, stop.title, audioUnlocked]);
+  }, [isPlaying, stop.title, audioUnlocked, audioSrc]);
 
   const togglePlay = async () => {
     const audio = audioRef.current;
@@ -236,7 +263,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                 style={{
                   width: '56px',
                   height: '56px',
-                  background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                  background: 'linear-gradient(135deg, #d4967d, #b87a5e)',
                   color: 'white',
                   borderRadius: '16px',
                   display: 'flex',
@@ -261,10 +288,10 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                 </div>
                 <div style={{
                   fontSize: '14px',
-                  color: '#4f46e5',
+                  color: '#495a58',
                   fontWeight: '600'
                 }}>
-                  🎧 Premium Audio Experience
+                  🎧 {tourConfig.shortName}
                 </div>
               </div>
             </div>
@@ -278,8 +305,8 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                 onClick={() => setIsMinimized(false)}
                 style={{
                   padding: '12px',
-                  background: '#e0e7ff',
-                  color: '#4338ca',
+                  background: '#e5e3dc',
+                  color: '#495a58',
                   borderRadius: '16px',
                   border: 'none',
                   cursor: 'pointer',
@@ -326,7 +353,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(67, 56, 202, 0.4))',
+          background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(73, 90, 88, 0.5))',
           backdropFilter: 'blur(12px)',
           cursor: 'pointer'
         }}
@@ -376,8 +403,8 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                   onClick={() => setIsMinimized(true)}
                   style={{
                     padding: '12px',
-                    background: '#e0e7ff',
-                    color: '#4338ca',
+                    background: '#e5e3dc',
+                    color: '#495a58',
                     borderRadius: '16px',
                     border: 'none',
                     cursor: 'pointer',
@@ -415,7 +442,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                     <div style={{
                       width: '64px',
                       height: '64px',
-                      background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                      background: 'linear-gradient(135deg, #d4967d, #b87a5e)',
                       borderRadius: '24px',
                       display: 'flex',
                       alignItems: 'center',
@@ -451,15 +478,15 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                       color: '#111827',
                       margin: '0 0 4px 0'
                     }}>
-                      Historic Stop {stop.order}
+                      Stop {stop.order} of {totalStops}
                     </h2>
                     <p style={{
-                      color: '#2563eb',
+                      color: '#495a58',
                       fontWeight: 'bold',
                       fontSize: '18px',
                       margin: 0
                     }}>
-                      🎧 Premium Audio Experience
+                      🎧 {tourConfig.shortName}
                     </p>
                   </div>
                 </div>
@@ -486,7 +513,148 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
           <div style={{
             padding: '32px'
           }}>
-            {/* Images Section Removed - Audio-First Launch */}
+            {/* Up Next / Unlock card - shown when narration finishes */}
+            {showNextUp && (
+              <div style={{
+                backgroundColor: '#ffffff',
+                borderRadius: '24px',
+                padding: '24px',
+                marginBottom: '32px',
+                border: '2px solid #d4967d',
+                boxShadow: '0 4px 12px rgba(212, 150, 125, 0.25)',
+                textAlign: 'center'
+              }}>
+                {!tourPurchased ? (
+                  <>
+                    <div style={{ fontSize: '36px', marginBottom: '8px' }}>🎁</div>
+                    <h4 style={{
+                      fontSize: '20px',
+                      fontWeight: '900',
+                      color: '#303636',
+                      margin: '0 0 8px 0'
+                    }}>
+                      Enjoyed your free story?
+                    </h4>
+                    <p style={{
+                      color: '#495a58',
+                      fontSize: '15px',
+                      margin: '0 0 16px 0',
+                      lineHeight: 1.5
+                    }}>
+                      There are {totalStops - 1} more stories like this waiting along the route —
+                      and you pick the price.
+                    </p>
+                    <button
+                      onClick={() => onUnlock && onUnlock()}
+                      style={{
+                        backgroundColor: '#d4967d',
+                        color: 'white',
+                        border: 'none',
+                        padding: '14px 24px',
+                        borderRadius: '12px',
+                        fontSize: '16px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        width: '100%'
+                      }}
+                    >
+                      Unlock All {totalStops} Stops
+                    </button>
+                  </>
+                ) : nextStop ? (
+                  <>
+                    <div style={{ fontSize: '36px', marginBottom: '8px' }}>🚶</div>
+                    <h4 style={{
+                      fontSize: '20px',
+                      fontWeight: '900',
+                      color: '#303636',
+                      margin: '0 0 8px 0'
+                    }}>
+                      Up next: {nextStop.title}
+                    </h4>
+                    <p style={{
+                      color: '#495a58',
+                      fontSize: '15px',
+                      margin: '0 0 16px 0',
+                      lineHeight: 1.5
+                    }}>
+                      Head to Stop {nextStop.order} on the map — the story starts
+                      automatically when you arrive.
+                    </p>
+                    <button
+                      onClick={onClose}
+                      style={{
+                        backgroundColor: '#d4967d',
+                        color: 'white',
+                        border: 'none',
+                        padding: '14px 24px',
+                        borderRadius: '12px',
+                        fontSize: '16px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        width: '100%',
+                        marginBottom: '8px'
+                      }}
+                    >
+                      Show Me the Way
+                    </button>
+                    <button
+                      onClick={() => onPlayNext && onPlayNext(nextStop)}
+                      style={{
+                        backgroundColor: 'transparent',
+                        color: '#495a58',
+                        border: 'none',
+                        padding: '8px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                        width: '100%'
+                      }}
+                    >
+                      Already there? Play it now
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ fontSize: '36px', marginBottom: '8px' }}>🎉</div>
+                    <h4 style={{
+                      fontSize: '20px',
+                      fontWeight: '900',
+                      color: '#303636',
+                      margin: '0 0 8px 0'
+                    }}>
+                      That's the final stop — you did it!
+                    </h4>
+                    <p style={{
+                      color: '#495a58',
+                      fontSize: '15px',
+                      margin: '0 0 16px 0',
+                      lineHeight: 1.5
+                    }}>
+                      {totalStops} stories, {tourConfig.stats.distance} miles of Greenville history.
+                      Thanks for walking with us.
+                    </p>
+                    <button
+                      onClick={onClose}
+                      style={{
+                        backgroundColor: '#d4967d',
+                        color: 'white',
+                        border: 'none',
+                        padding: '14px 24px',
+                        borderRadius: '12px',
+                        fontSize: '16px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        width: '100%'
+                      }}
+                    >
+                      Back to the Map
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
 
             {/* Stop Info */}
             <div style={{
@@ -523,8 +691,8 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                   </h3>
                   
                   <span style={{
-                    background: '#e0e7ff',
-                    color: '#4338ca',
+                    background: '#e5e3dc',
+                    color: '#495a58',
                     padding: '8px 16px',
                     borderRadius: '16px',
                     fontWeight: 'bold',
@@ -532,7 +700,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                     display: 'inline-block',
                     marginBottom: '16px'
                   }}>
-                    📍 Historical Stop {stop.order} of 8
+                    📍 Stop {stop.order} of {totalStops}
                   </span>
                   
                   <p style={{
@@ -555,25 +723,6 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
               border: '1px solid #f3f4f6',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
             }}>
-              <div style={{
-                textAlign: 'center',
-                marginBottom: '32px'
-              }}>
-                <h4 style={{
-                  fontSize: '24px',
-                  fontWeight: '900',
-                  color: '#111827',
-                  marginBottom: '8px',
-                  margin: '0 0 8px 0'
-                }}>
-                  Premium Audio Controls
-                </h4>
-                <p style={{
-                  color: '#6b7280',
-                  margin: 0
-                }}>Professional Historical Experience</p>
-              </div>
-              
               {/* Progress Section */}
               <div style={{
                 marginBottom: '32px'
@@ -587,7 +736,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                     <div style={{
                       fontSize: '24px',
                       fontWeight: '900',
-                      color: '#4338ca'
+                      color: '#495a58'
                     }}>{formatTime(currentTime)}</div>
                     <div style={{
                       fontSize: '12px',
@@ -612,7 +761,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                     <div style={{
                       fontSize: '24px',
                       fontWeight: '900',
-                      color: '#7c3aed'
+                      color: '#d4967d'
                     }}>{formatTime(duration)}</div>
                     <div style={{
                       fontSize: '12px',
@@ -636,7 +785,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                   <div 
                     style={{
                       height: '16px',
-                      background: 'linear-gradient(to right, #4f46e5, #7c3aed)',
+                      background: 'linear-gradient(to right, #d4967d, #b87a5e)',
                       borderRadius: '8px',
                       width: `${progressPercent}%`,
                       transition: 'width 0.3s'
@@ -681,7 +830,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                     cursor: 'pointer',
                     fontSize: '16px',
                     fontWeight: 'bold',
-                    color: '#4f46e5'
+                    color: '#495a58'
                   }}
                 >
                   ⏪ 15s
@@ -693,7 +842,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                   style={{
                     width: '80px',
                     height: '80px',
-                    background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                    background: 'linear-gradient(135deg, #d4967d, #b87a5e)',
                     color: 'white',
                     borderRadius: '50%',
                     display: 'flex',
@@ -719,7 +868,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                     cursor: 'pointer',
                     fontSize: '16px',
                     fontWeight: 'bold',
-                    color: '#4f46e5'
+                    color: '#495a58'
                   }}
                 >
                   15s ⏩
@@ -738,11 +887,11 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
                   onClick={handleSpeedChange}
                   style={{
                     padding: '12px 24px',
-                    background: '#e0e7ff',
-                    color: '#4338ca',
+                    background: '#e5e3dc',
+                    color: '#495a58',
                     fontWeight: 'bold',
                     borderRadius: '12px',
-                    border: '1px solid #a5b4fc',
+                    border: '1px solid #d4967d',
                     cursor: 'pointer',
                     fontSize: '16px'
                   }}
@@ -947,7 +1096,7 @@ function AudioPlayer({ stop, isPlaying, onClose, audioUnlocked = false }) {
           {/* Hidden Audio Element */}
           <audio
             ref={audioRef}
-            src={stop.audio_url}
+            src={audioSrc || undefined}
             preload="metadata"
           />
         </div>

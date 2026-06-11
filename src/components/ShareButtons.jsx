@@ -1,9 +1,10 @@
 import { ga4 } from '../services/analytics.js';
+import tourConfig from '../config/tourConfig.js';
 
 function ShareButtons({ title, text, url }) {
-  const shareUrl = url || 'https://falls-park-tour.vercel.app';
-  const shareTitle = title || 'Falls Park Self-Guided Walking Tour';
-  const shareText = text || 'Just discovered an amazing self-guided tour of Falls Park in Greenville, SC! GPS-triggered audio at historic stops. Check it out:';
+  const shareUrl = url || tourConfig.share.url;
+  const shareTitle = title || tourConfig.share.title;
+  const shareText = text || tourConfig.share.text;
 
   const encodedUrl = encodeURIComponent(shareUrl);
   const encodedText = encodeURIComponent(shareText);

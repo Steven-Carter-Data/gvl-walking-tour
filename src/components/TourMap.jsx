@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { getCompleteTourRoute } from '../services/routingService';
 import { ga4 } from '../services/analytics.js';
+import tourConfig from '../config/tourConfig.js';
 import ReviewPrompt from './ReviewPrompt.jsx';
 import ShareButtons from './ShareButtons.jsx';
 import GroupShareLink from './GroupShareLink.jsx';
@@ -74,14 +75,21 @@ const startingPointIcon = new L.Icon({
   iconAnchor: [30, 30],
 });
 
-const lockedStopIcon = new L.Icon({
-  iconUrl: 'data:image/svg+xml;base64=' + btoa(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#6B7280" width="32" height="32">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+// Locked stop icon for visitors who haven't purchased yet — numbered, with a
+// lock badge so the full route still reads as an itinerary worth unlocking
+const createLockedStopIcon = (order) => new L.Icon({
+  iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+      <circle cx="24" cy="24" r="22" fill="#ffffff" stroke="#6B7280" stroke-width="4"/>
+      <circle cx="24" cy="24" r="16" fill="#6B7280"/>
+      <text x="24" y="29" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">${order}</text>
+      <circle cx="37" cy="11" r="10" fill="#d4967d"/>
+      <rect x="33" y="10" width="8" height="6.5" rx="1.5" fill="#ffffff"/>
+      <path d="M34.8 10V8.6a2.2 2.2 0 0 1 4.4 0V10" fill="none" stroke="#ffffff" stroke-width="1.6"/>
     </svg>
   `),
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
+  iconSize: [48, 48],
+  iconAnchor: [24, 24],
 });
 
 function LocationTracker({ userLocation, tourStops, tourPurchased, onStopTriggered, onStopCompleted }) {
@@ -89,10 +97,12 @@ function LocationTracker({ userLocation, tourStops, tourPurchased, onStopTrigger
   const [triggeredStops, setTriggeredStops] = useState(new Set());
 
   useEffect(() => {
-    if (!userLocation || !tourPurchased) return;
+    if (!userLocation) return;
 
-    // Check if user is within any stop's radius
+    // Check if user is within any stop's radius. Stop 1 is the free sample,
+    // so it triggers even before purchase; the rest require the full tour.
     tourStops.forEach(stop => {
+      if (!tourPurchased && stop.order !== 1) return;
       const distance = calculateDistance(
         userLocation.lat,
         userLocation.lng,
@@ -228,8 +238,12 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * c; // Distance in meters
 }
 
-function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tourPurchased, onStopTriggered, onBack }) {
-  const [showWelcomeAudio, setShowWelcomeAudio] = useState(true);
+function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tourPurchased, onStopTriggered, onBack, onUnlock }) {
+  // Only interrupt with the welcome audio once — returning users go straight
+  // to the map (purchasers only; preview visitors never see it)
+  const [showWelcomeAudio, setShowWelcomeAudio] = useState(
+    () => tourPurchased && !localStorage.getItem('welcome_audio_seen')
+  );
   const [welcomeAudioPlaying, setWelcomeAudioPlaying] = useState(false);
   const welcomeAudioRef = useRef(null);
   const [showRouteReference, setShowRouteReference] = useState(false);
@@ -554,11 +568,19 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
 
   const arrowMarkers = generateArrowMarkers();
 
+  // Stop 1 is playable by everyone as a free on-location sample
+  const canPlayStop = (stop) => tourPurchased || stop.order === 1;
+
   const handleStopClick = (stop) => {
     setSelectedStop(stop);
-    if (tourPurchased) {
+    if (canPlayStop(stop)) {
       onStopTriggered(stop);
     }
+  };
+
+  const dismissWelcomeAudio = () => {
+    localStorage.setItem('welcome_audio_seen', 'true');
+    setShowWelcomeAudio(false);
   };
 
   return (
@@ -609,7 +631,7 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                 </div>
               </div>
               <button
-                onClick={() => setShowWelcomeAudio(false)}
+                onClick={dismissWelcomeAudio}
                 className="p-1 text-gray-400 hover:text-gray-600 rounded"
               >
                 ✕
@@ -632,7 +654,10 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
             <audio
               ref={welcomeAudioRef}
               src="/audio/0_welcome.wav"
-              onEnded={() => setWelcomeAudioPlaying(false)}
+              onEnded={() => {
+                setWelcomeAudioPlaying(false);
+                localStorage.setItem('welcome_audio_seen', 'true');
+              }}
               onPause={() => setWelcomeAudioPlaying(false)}
               preload="metadata"
             />
@@ -751,8 +776,12 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
 
           {/* Tour stop markers */}
           {tourStops.map((stop) => {
-            // Create numbered icon for each stop
-            const numberedIcon = stop.order === 1 ? startingPointIcon : new L.Icon({
+            const unlocked = canPlayStop(stop);
+
+            // Create numbered icon for each stop; locked stops show a lock badge
+            const numberedIcon = stop.order === 1 ? startingPointIcon
+              : !unlocked ? createLockedStopIcon(stop.order)
+              : new L.Icon({
               iconUrl: 'data:image/svg+xml;base64,' + btoa(`
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
                   <circle cx="24" cy="24" r="22" fill="#ffffff" stroke="#16A34A" stroke-width="4"/>
@@ -778,23 +807,67 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                       <h3><strong>Stop {stop.order}: {stop.title}</strong></h3>
                       <p>{stop.description}</p>
                       <p><em>~{Math.floor(stop.duration_sec_estimate / 60)} minutes</em></p>
-                      <button
-                        onClick={() => onStopTriggered(stop)}
-                        style={{
-                          backgroundColor: '#2563eb',
-                          color: 'white',
-                          padding: '8px 16px',
-                          border: 'none',
-                          borderRadius: '8px',
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          fontWeight: 'bold',
-                          width: '100%',
-                          marginTop: '8px'
-                        }}
-                      >
-                        🎧 Play Audio
-                      </button>
+                      {unlocked ? (
+                        <>
+                          {!tourPurchased && stop.order === 1 && (
+                            <p style={{
+                              backgroundColor: '#e8f5e8',
+                              color: '#166534',
+                              padding: '6px 10px',
+                              borderRadius: '8px',
+                              fontSize: '13px',
+                              fontWeight: 'bold',
+                              margin: '8px 0 0 0'
+                            }}>
+                              🎁 Free sample — listen on us!
+                            </p>
+                          )}
+                          <button
+                            onClick={() => onStopTriggered(stop)}
+                            style={{
+                              backgroundColor: '#d4967d',
+                              color: 'white',
+                              padding: '8px 16px',
+                              border: 'none',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                              fontSize: '14px',
+                              fontWeight: 'bold',
+                              width: '100%',
+                              marginTop: '8px'
+                            }}
+                          >
+                            🎧 Play Audio
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <p style={{
+                            color: '#6B7280',
+                            fontSize: '13px',
+                            margin: '8px 0 0 0'
+                          }}>
+                            🔒 This story is part of the full tour
+                          </p>
+                          <button
+                            onClick={() => onUnlock && onUnlock()}
+                            style={{
+                              backgroundColor: '#d4967d',
+                              color: 'white',
+                              padding: '8px 16px',
+                              border: 'none',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                              fontSize: '14px',
+                              fontWeight: 'bold',
+                              width: '100%',
+                              marginTop: '8px'
+                            }}
+                          >
+                            Unlock All {tourStops.length} Stops
+                          </button>
+                        </>
+                      )}
                     </div>
                   </Popup>
                 </Marker>
@@ -804,8 +877,8 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                   center={[stop.coordinates.lat, stop.coordinates.lng]}
                   radius={stop.radius_m}
                   pathOptions={{
-                    color: '#16A34A',
-                    fillColor: '#16A34A',
+                    color: unlocked ? '#16A34A' : '#6B7280',
+                    fillColor: unlocked ? '#16A34A' : '#6B7280',
                     fillOpacity: 0.1,
                     weight: 1,
                   }}
@@ -1095,6 +1168,68 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                     📤 Share
                   </button>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Preview mode unlock banner - shown to visitors who haven't purchased */}
+        {!tourPurchased && (
+          <div style={{
+            position: 'absolute',
+            bottom: '12px',
+            left: '12px',
+            right: '12px',
+            zIndex: 30
+          }}>
+            <div style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.97)',
+              borderRadius: '16px',
+              padding: '16px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              border: '2px solid #d4967d',
+              backdropFilter: 'blur(8px)'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px'
+              }}>
+                <div style={{ flex: 1 }}>
+                  <p style={{
+                    color: '#303636',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    margin: '0 0 2px 0'
+                  }}>
+                    🎁 Stop 1 is free — give it a listen!
+                  </p>
+                  <p style={{
+                    color: '#495a58',
+                    fontSize: '12px',
+                    margin: 0
+                  }}>
+                    Tap the START marker to hear a full story
+                  </p>
+                </div>
+                <button
+                  onClick={() => onUnlock && onUnlock()}
+                  style={{
+                    backgroundColor: '#d4967d',
+                    color: 'white',
+                    border: 'none',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0
+                  }}
+                >
+                  Unlock All {tourStops.length}
+                </button>
               </div>
             </div>
           </div>
@@ -1453,9 +1588,9 @@ function TourMap({ userLocation, locationError, onRetryLocation, tourStops, tour
                 ✕
               </button>
               <ShareButtons
-                title="Falls Park Self-Guided Walking Tour"
+                title={tourConfig.share.title}
                 text={`I'm exploring Falls Park in Greenville, SC with this amazing self-guided tour! ${completedStops.size}/${tourStops.length} stops completed. Check it out:`}
-                url="https://falls-park-tour.vercel.app"
+                url={tourConfig.share.url}
               />
             </div>
           </div>

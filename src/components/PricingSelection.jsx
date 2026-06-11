@@ -9,6 +9,8 @@ function PricingSelection({ onBack }) {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showPromoInfo, setShowPromoInfo] = useState(false);
+  const [customAmountError, setCustomAmountError] = useState(null);
+  const [paymentError, setPaymentError] = useState(null);
 
   // Funnel event: welcome → pricing drop-off is measurable from this
   useEffect(() => {
@@ -31,8 +33,9 @@ function PricingSelection({ onBack }) {
     if (amount >= tourConfig.pricing.minimum) {
       setSelectedAmount(amount);
       setShowCustomInput(false);
+      setCustomAmountError(null);
     } else {
-      alert(`Minimum amount is $${tourConfig.pricing.minimum.toFixed(2)}`);
+      setCustomAmountError(`Minimum amount is $${tourConfig.pricing.minimum.toFixed(2)}`);
     }
   };
 
@@ -40,6 +43,7 @@ function PricingSelection({ onBack }) {
     const finalAmount = showCustomInput ? parseFloat(customAmount) : selectedAmount;
     if (finalAmount >= tourConfig.pricing.minimum) {
       setIsProcessing(true);
+      setPaymentError(null);
       ga4.beginCheckout(finalAmount);
       try {
         const paymentData = {
@@ -58,9 +62,11 @@ function PricingSelection({ onBack }) {
         }
       } catch (error) {
         console.error('Payment error:', error);
-        alert('Payment processing failed. Please try again.');
+        setPaymentError('We couldn’t open the secure checkout page. Please check your connection and try again.');
         setIsProcessing(false);
       }
+    } else if (showCustomInput) {
+      setCustomAmountError(`Minimum amount is $${tourConfig.pricing.minimum.toFixed(2)}`);
     }
   };
 
@@ -162,7 +168,10 @@ function PricingSelection({ onBack }) {
                   min={tourConfig.pricing.minimum}
                   step="0.01"
                   value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value)}
+                  onChange={(e) => {
+                    setCustomAmount(e.target.value);
+                    setCustomAmountError(null);
+                  }}
                   className="w-24 p-3 text-center text-xl font-bold rounded-xl border-2"
                   style={{borderColor: '#d4967d'}}
                   placeholder="0.00"
@@ -179,7 +188,24 @@ function PricingSelection({ onBack }) {
               <p className="text-xs text-center mt-2" style={{color: '#495a58'}}>
                 Minimum: ${tourConfig.pricing.minimum.toFixed(2)}
               </p>
+              {customAmountError && (
+                <p className="text-sm text-center mt-2 font-semibold px-3 py-2 rounded-lg" style={{
+                  backgroundColor: '#fee2e2',
+                  color: '#991b1b',
+                }}>
+                  {customAmountError}
+                </p>
+              )}
             </div>
+          )}
+
+          {paymentError && (
+            <p className="text-sm text-center mb-3 font-semibold px-3 py-2 rounded-lg" style={{
+              backgroundColor: '#fee2e2',
+              color: '#991b1b',
+            }}>
+              {paymentError}
+            </p>
           )}
 
           {/* Continue Button */}
