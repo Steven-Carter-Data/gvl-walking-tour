@@ -345,14 +345,25 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
             ) : (
               <button onClick={handlePreviewPlay} className="btn-glass">
                 <span className="text-lg" aria-hidden>{isPreviewPlaying ? '⏸' : '▶'}</span>
-                {isPreviewPlaying ? 'Pause Audio Preview' : 'Hear a 1-Minute Sample'}
+                {isPreviewPlaying ? 'Pause Audio Preview' : 'About the Tour'}
               </button>
             )}
           </div>
 
           {/* Trust signals */}
           <div className="max-w-sm mx-auto mt-5 flex items-center justify-center flex-wrap gap-x-4 gap-y-1.5">
-            {['Secure Stripe checkout', 'No app needed', 'Lifetime access'].map((signal) => (
+            <span
+              className="inline-flex items-center gap-2 text-[11px] font-bold uppercase text-white/85"
+              style={{ letterSpacing: '0.14em', textShadow: '0 1px 6px rgba(0,0,0,0.9)' }}
+            >
+              Secure Stripe checkout
+              {/* Apple Pay / Google Pay are surfaced automatically by Stripe's
+                  hosted Checkout (payment_method_types: ['card']) on supported
+                  devices — these marks signal that to the user up front. */}
+              <img src="/images/apple-pay.svg" alt="Apple Pay accepted" className="h-[18px] w-auto" />
+              <img src="/images/google-pay.svg" alt="Google Pay accepted" className="h-[18px] w-auto" />
+            </span>
+            {['No app needed', 'Lifetime access'].map((signal) => (
               <span
                 key={signal}
                 className="text-[11px] font-bold uppercase text-white/85"
