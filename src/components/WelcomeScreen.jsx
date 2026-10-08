@@ -613,7 +613,10 @@ function WelcomeScreen({ onScreenChange, onQuickCheckout, tourPurchased, onStart
       {/* Footer */}
       <footer className="bg-ink py-5 px-6 text-center">
         <p className="text-xs font-semibold uppercase text-terracotta" style={{ letterSpacing: '0.18em' }}>
-          Powered by Basecamp Data Analytics
+          Powered by{' '}
+          <a href="https://basecampdataanalytics.com/" className="underline underline-offset-4 hover:text-cream">
+            Basecamp Data Analytics
+          </a>
         </p>
       </footer>
 
